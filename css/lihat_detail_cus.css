@@ -1,0 +1,229 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800|Cinzel:400,700");*{box-sizing:border-box;-webkit-font-smoothing:antialiased}html,body{margin:0;min-height:100%;font-family:Poppins,sans-serif;background:#f6f7ef;color:#3e244b}body{overflow-x:hidden}:root{--purple:#3e244b;--sidebar:#3e1e4b;--purple2:#794691;--light:#e6dbeb;--border:#e4dce8}
+.detail-page{display:flex;min-height:100vh}.sidebar{width:226px;min-width:226px;min-height:100vh;background:var(--sidebar);color:#fff;padding:28px 15px 24px;display:flex;flex-direction:column;align-items:center;position:sticky;top:0}.brand{width:100%;display:flex;flex-direction:column;align-items:center;text-align:center}.logo-nouva{width:88px;height:88px;border-radius:20px;object-fit:cover}.brand-name{margin-top:8px;font-family:Cinzel,serif;font-size:27px;font-weight:700;line-height:1}.brand-tagline{margin-top:5px;font-family:Cinzel,serif;font-size:9px;white-space:nowrap}.menu{width:100%;display:flex;flex-direction:column;gap:7px;margin-top:42px}.menu-link{width:100%;min-height:48px;display:flex;align-items:center;gap:12px;padding:9px 12px;border-radius:10px;color:#f6f7f2;text-decoration:none}.menu-link img{width:28px;height:28px;object-fit:contain;flex:none}.menu-link span{font-size:13px;white-space:nowrap}.menu-link:hover,.menu-link.active{background:rgba(255,255,255,.13)}
+.main-content{flex:1;min-width:0;padding:30px clamp(18px,2.5vw,42px) 40px}.top-header{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;margin-bottom:20px}.back-link{color:#794691;text-decoration:none;font-size:12px}.greeting{text-align:right}.greeting h1{font-size:18px;margin:0}.greeting p{margin:3px 0;color:#77637f;font-size:12px}.hero{display:flex;align-items:center;justify-content:space-between;gap:20px;background:#fff;border:1px solid var(--border);border-radius:15px;padding:22px;margin-bottom:14px}.eyebrow{font-size:10px;font-weight:700;letter-spacing:1px;color:#8d61a2}.hero h2{font-size:25px;margin:4px 0}.hero p{max-width:700px;font-size:12px;line-height:1.7;color:#786b80;margin:0}.status{padding:9px 13px;border-radius:20px;background:#f1e5f7;color:#8851a5;font-size:11px;white-space:nowrap}.status.sedang-dijahit{background:#e6efff;color:#3778e7}
+.reference-card{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;background:#eee7f2;border-radius:12px;padding:17px 20px;margin-bottom:15px}.reference-card div{display:flex;flex-direction:column;gap:5px}.reference-card span,.info-grid span,.detail-field span{font-size:10px;color:#81728a}.reference-card strong{font-size:13px}.reference-card small{font-size:9px;color:#897b91}
+.content-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(270px,.8fr);gap:15px;align-items:start}.card{background:#fff;border:1px solid var(--border);border-radius:13px;padding:19px;min-width:0}.section-title h3,.card h3{margin:0;font-size:16px}.section-title p{margin:4px 0 16px;font-size:11px;color:#897b91}.product-summary{display:flex;align-items:center;gap:16px;padding:15px;background:#faf8fb;border-radius:10px;margin-bottom:16px}.garment{width:95px;height:115px;border-radius:9px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px;color:white;font-size:9px;font-weight:700;flex:none;background:linear-gradient(90deg,#d9b45c,#f2dda0 35%,#2e2434 36% 66%,#e5c46d 67%)}.display-garment{background:linear-gradient(90deg,#c7a174,#e5a04c 35%,#d64030 36% 65%,#e9d1a5 66%)}.custom-garment{background:linear-gradient(90deg,#b9a1cb,#e0c9eb 35%,#542d69 36% 65%,#c4acd3 66%)}.product-summary h3{font-size:15px;margin:0 0 5px}.product-summary p{font-size:11px;line-height:1.6;color:#81728a;margin:0 0 8px}.price{font-size:16px}.info-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:4px 0 15px;border-bottom:1px solid #eee8f1}.info-grid div{display:flex;flex-direction:column;gap:5px}.info-grid strong,.detail-field strong{font-size:11px}.detail-extra{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding-top:15px}.detail-field{display:flex;flex-direction:column;gap:5px}.detail-field.wide{grid-column:1/-1}.side-column{display:flex;flex-direction:column;gap:15px}.payment-card h3,.progress-card h3{margin-bottom:15px}.pay-row{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid #eee8f1;font-size:11px}.pay-row strong{font-size:11px}.payment-status{font-size:10px;color:#9b690b;background:#fff2d5;padding:5px 8px;border-radius:12px}.muted{font-size:9px;line-height:1.5;color:#897b91;margin:13px 0 0}.progress{list-style:none;padding:0;margin:0 0 0 5px}.progress li{position:relative;padding:0 0 19px 25px;border-left:2px solid #e6dce9}.progress li:last-child{border-left-color:transparent;padding-bottom:0}.progress li:before{content:"";position:absolute;left:-7px;top:1px;width:10px;height:10px;border-radius:50%;background:#d9c9e2;border:2px solid white}.progress li.done:before,.progress li.current:before{background:#8851a5}.progress li b{display:block;font-size:11px}.progress li small{display:block;margin-top:3px;color:#897b91;font-size:10px}.back-button{display:inline-block;margin-top:18px;padding:10px 14px;border:1px solid #d7c6e1;border-radius:8px;color:#794691;text-decoration:none;font-size:11px}
+@media(max-width:950px){.sidebar{width:190px;min-width:190px}.content-grid{grid-template-columns:1fr}.side-column{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.reference-card{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.detail-page{display:block}.sidebar{position:relative;width:100%;min-width:0;min-height:auto;padding:18px 14px}.logo-nouva{width:60px;height:60px}.brand-name{font-size:22px}.menu{margin-top:20px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.menu-link{min-height:42px}.main-content{padding:20px 13px}.hero{align-items:flex-start;flex-direction:column}.hero h2{font-size:21px}.reference-card{grid-template-columns:repeat(2,minmax(0,1fr))}.side-column{display:flex}.info-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.top-header{flex-direction:column}.greeting{text-align:left}}
+@media(max-width:450px){.menu{grid-template-columns:1fr}.reference-card{grid-template-columns:1fr 1fr}.card{padding:14px}.product-summary{align-items:flex-start}.garment{width:72px;height:95px}}
+
+
+/* Revisi halaman Detail Pesanan Custom */
+.top-header{display:none !important}
+.main-content{padding-top:30px}
+.hero{margin-top:0}
+.payment-note{
+  padding:10px 12px;
+  margin-top:13px;
+  border-radius:8px;
+  background:#faf7fc;
+  color:#786b80;
+  font-size:10px;
+  line-height:1.65;
+}
+.progress li{padding-bottom:17px}
+.progress li b{line-height:1.4}
+@media(max-width:700px){
+  .main-content{padding:18px 12px 30px}
+  .hero{gap:12px;padding:17px}
+  .hero h2{font-size:20px}
+  .hero p{font-size:11px}
+  .reference-card{gap:12px;padding:14px}
+  .content-grid{grid-template-columns:minmax(0,1fr)}
+  .card{padding:14px}
+  .back-button{margin-top:16px}
+}
+
+
+/* Rincian custom diselaraskan dengan halaman detail pesanan pemilik */
+.custom-product-item{border:1px solid #e4dce8;border-radius:11px;overflow:hidden;background:#fff}
+.custom-product-heading{display:flex;align-items:center;gap:11px;padding:12px;background:#fbf9fc;border:1px solid #e4dce8;border-radius:10px}
+.product-number{width:34px;height:34px;display:grid;place-items:center;flex:none;border-radius:50%;background:#7941b5;color:#fff;font-weight:700;font-size:14px}
+.custom-product-heading-text{flex:1;min-width:0}
+.custom-product-heading h3{margin:0;font-size:13px}
+.custom-product-heading p{margin:3px 0 0;color:#897b91;font-size:10px}
+.item-price{font-size:12px;white-space:nowrap;color:#542b91}
+.product-detail-layout{display:grid;grid-template-columns:170px minmax(0,1fr);gap:10px;padding:11px}
+.model-panel,.detail-box,.reference-image-card{min-width:0;border:1px solid #e4dce8;border-radius:8px;padding:9px;background:#fff}
+.field-label,.detail-box span{display:block;color:#81728a;font-size:9px;margin-bottom:6px}
+.model-panel .garment{width:100%;height:116px;border-radius:6px}
+.product-detail-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.detail-box{display:flex;flex-direction:column;justify-content:center;gap:2px;background:#fff}
+.detail-box span{margin:0;font-size:9px}
+.detail-box strong{font-size:10px;overflow-wrap:anywhere}
+.reference-images-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:0 11px 11px}
+.reference-image-card{padding:8px}
+.image-placeholder,.motif-placeholder{min-height:64px;display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;border:1px dashed #d8c9e2;border-radius:6px;background:#faf8fb;color:#897b91;font-size:9px}
+.motif-placeholder{background:linear-gradient(135deg,#eee3f5,#cdb2e1 40%,#7941b5 41% 55%,#eadcf2 56%);color:#fff;font-weight:700}
+.detail-description{margin:0 11px 12px;padding:10px;border:1px solid #e4dce8;border-radius:8px}
+.detail-description p{margin:0;color:#3e244b;font-size:10px;line-height:1.6}
+.size-color-section{margin:0 11px 12px;border:1px solid #ded3e4;border-radius:8px;overflow:hidden}
+.size-color-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px;background:#fbf9fc}
+.size-color-heading h4{margin:0;font-size:11px}
+.size-color-heading p{margin:3px 0 0;color:#897b91;font-size:9px}
+.total-pcs{font-size:10px;font-weight:700;white-space:nowrap;color:#542b91}
+.table-scroll{width:100%;overflow-x:auto}
+.size-color-table{width:100%;border-collapse:collapse;font-size:10px;text-align:center;white-space:nowrap}
+.size-color-table th,.size-color-table td{padding:8px 10px;border:1px solid #e4dce8}
+.size-color-table thead th{background:#e9e0ed;font-weight:700}
+.size-color-table tbody td:first-child{text-align:left;padding-left:14px}
+.size-color-table tfoot th{background:#f4eff6;font-weight:700}
+.color-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+.purple-dot{background:#7941b5}
+.table-note{margin:0;padding:8px 10px;background:#fbf9fc;color:#897b91;font-size:9px;line-height:1.5}
+@media(max-width:950px){.product-detail-layout{grid-template-columns:140px minmax(0,1fr)}.product-detail-fields{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.custom-product-heading{align-items:flex-start;flex-wrap:wrap}.item-price{margin-left:45px}.product-detail-layout{grid-template-columns:1fr}.model-panel .garment{max-width:180px}.product-detail-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.reference-images-grid{grid-template-columns:1fr}.size-color-heading{align-items:flex-start;flex-direction:column}}
+@media(max-width:420px){.product-detail-fields{grid-template-columns:1fr}.custom-product-heading h3{font-size:12px}.item-price{margin-left:0}}
+
+
+/* ==========================================================
+   NOUVA RESPONSIVE SIDEBAR — disamakan dengan sidebar patokan
+   Desktop/laptop: sidebar vertikal tetap di kiri.
+   HP (<=760px): bottom navigation dengan logo Dashboard di tengah.
+   ========================================================== */
+.mobile-dashboard-logo { display: none; }
+
+@media screen and (max-width: 760px) {
+  .detail-page {
+    display: block !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+  }
+
+  .sidebar {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 58px !important;
+    min-height: 58px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    z-index: 9999 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    background: var(--sidebar, #3e1e4b) !important;
+    overflow: visible !important;
+  }
+
+  .sidebar .brand { display: none !important; }
+
+  .sidebar .menu {
+    width: 100% !important;
+    max-width: none !important;
+    height: 58px !important;
+    margin: 0 !important;
+    padding: 0 4px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    justify-content: space-around !important;
+    gap: 0 !important;
+  }
+
+  .sidebar .menu-link {
+    position: relative !important;
+    flex: 1 1 20% !important;
+    width: 20% !important;
+    min-width: 0 !important;
+    height: 58px !important;
+    min-height: 58px !important;
+    padding: 6px 1px 4px !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 3px !important;
+    text-align: center !important;
+    background: transparent !important;
+    overflow: visible !important;
+  }
+
+  /* Urutan HP: Katalog, Pesanan, Dashboard, Custom, Pengaturan */
+  .sidebar .menu-link[href="katalog.html"] { order: 1 !important; }
+  .sidebar .menu-link[href="pesanan_saya.html"] { order: 2 !important; }
+  .sidebar .menu-link.dashboard-menu-link { order: 3 !important; }
+  .sidebar .menu-link[href="pes_cus.html"] { order: 4 !important; }
+  .sidebar .menu-link[href="peng_pel.html"] { order: 5 !important; }
+
+  .sidebar .menu-link img {
+    display: block !important;
+    width: 22px !important;
+    height: 22px !important;
+    object-fit: contain !important;
+    flex: 0 0 auto !important;
+  }
+
+  .sidebar .menu-link span {
+    display: block !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    color: #fff !important;
+    font-size: 7px !important;
+    line-height: 1.15 !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .sidebar .menu-link.dashboard-menu-link {
+    justify-content: flex-end !important;
+    padding-bottom: 7px !important;
+  }
+
+  .sidebar .menu-link.dashboard-menu-link .desktop-dashboard-icon {
+    display: none !important;
+  }
+
+  .sidebar .menu-link.dashboard-menu-link .mobile-dashboard-logo {
+    display: block !important;
+    position: absolute !important;
+    left: 50% !important;
+    top: -34px !important;
+    bottom: auto !important;
+    transform: translateX(-50%) !important;
+    width: 62px !important;
+    height: 62px !important;
+    padding: 5px !important;
+    object-fit: contain !important;
+    background: #fff !important;
+    border: 3px solid var(--sidebar, #3e1e4b) !important;
+    outline: 2px solid #fff !important;
+    border-radius: 22px !important;
+    box-shadow: 0 1px 0 2px var(--sidebar, #3e1e4b) !important;
+    z-index: 10001 !important;
+  }
+
+  .sidebar .menu-link.dashboard-menu-link span {
+    position: relative !important;
+    z-index: 1 !important;
+  }
+
+  /* Sisakan ruang agar konten tidak tertutup navigasi HP */
+  .main-content {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding-bottom: 100px !important;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .sidebar .menu-link img {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .sidebar .menu-link span { font-size: 6.5px !important; }
+
+  .sidebar .menu-link.dashboard-menu-link .mobile-dashboard-logo {
+    width: 70px !important;
+    height: 70px !important;
+    top: -31px !important;
+    border-radius: 20px !important;
+  }
+}

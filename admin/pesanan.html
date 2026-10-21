@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="id">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <title>Pesanan - NOUVA</title>
+  <link href="../globals.css" rel="stylesheet"/>
+  <link href="../css/pesanan.css" rel="stylesheet"/>
+ </head>
+ <body>
+  <div class="app">
+   <aside class="sidebar">
+    <div class="brand">
+     <img alt="Logo Nouva" class="logo-nouva-FIKS" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/logo-nouva-fiks-2.png"/>
+     <div class="brand-name">NOUVA</div>
+     <div class="brand-tagline">NOU Menuju Inovasi</div>
+    </div>
+
+    <div class="admin-profile">
+     <img alt="Admin" class="profile" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/profile.png"/>
+     <div class="admin-name">Admin</div>
+    </div>
+
+    <nav aria-label="Menu aplikasi" class="menu">
+     <a class="menu-link dashboard-menu-link" href="dashboard_admin.html">
+        <img class="desktop-dashboard-icon" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--3--1.png" alt="">
+        <img class="mobile-dashboard-logo" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/logo-nouva-fiks-2.png" alt="">
+        <span>Dashboard</span>
+      </a>
+     <a class="menu-link active" href="pesanan.html"><img alt="" src="https://c.animaapp.com/P7Ah09FQ/img/image-removebg-preview--12--3@2x.png"/><span>Pesanan</span></a>
+     <a class="menu-link" href="produksi.html"><img alt="" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--13--1.png"/><span>Produksi Jahit</span></a>
+     <a class="menu-link" href="produk.html"><img alt="" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--14--1.png"/><span>Produk</span></a>
+     <a class="menu-link" href="pemasaran.html"><img alt="" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--17--1.png"/><span>Pemasaran</span></a>
+     <a class="menu-link" href="pembukuan.html"><img alt="" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--18--1.png"/><span>Pembukuan</span></a>
+     <a class="menu-link" href="pengaturan.html"><img alt="" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--15--1.png"/><span>Pengaturan</span></a>
+    </nav>
+   </aside>
+   
+   <main>
+    <header>
+     <div>
+      <h1>
+       Daftar Pesanan
+      </h1>
+      <p>
+       Kelola dan pilah pesanan dengan lebih mudah
+      </p>
+     </div>
+    </header>
+    <section class="group-card">
+     <h2>
+      Pilih Kelompok Pemesanan
+     </h2>
+     <div class="groups">
+      <button class="group selected" data-group="all" type="button">
+       <em class="all">
+        ✦
+       </em>
+       <span>
+        <b>
+         Semua
+        </b>
+        <small>
+         Jumlah
+         <strong id="nAll">
+          10
+         </strong>
+        </small>
+       </span>
+      </button>
+      <button class="group" data-group="instansi" type="button">
+       <em class="inst">
+        ▦
+       </em>
+       <span>
+        <b>
+         Instansi
+        </b>
+        <small>
+         Jumlah
+         <strong id="nInst">
+          5
+         </strong>
+        </small>
+       </span>
+      </button>
+      <button class="group" data-group="individu" type="button">
+       <em class="ind">
+        ●
+       </em>
+       <span>
+        <b>
+         Individu
+        </b>
+        <small>
+         Jumlah
+         <strong id="nInd">
+          5
+         </strong>
+        </small>
+       </span>
+      </button>
+     </div>
+    </section>
+    <div class="table-section-title">
+     <b>
+      Daftar Pesanan
+     </b>
+     <small id="filterLabel">
+      Semua pesanan
+     </small>
+    </div>
+    <div class="toolbar">
+     <div></div>
+     <a class="input" href="input_pes.html">
+      ＋ Input Pesanan
+     </a>
+    </div>
+    <section class="table-card">
+     <div class="scroll" id="scroll">
+      <table>
+       <thead>
+        <tr>
+         <th>
+          No
+         </th>
+         <th>
+          Pemesan
+         </th>
+         <th>
+          Pesanan
+         </th>
+         <th>
+          Jumlah
+         </th>
+         <th class="sort" id="deadline" title="Klik untuk mengurutkan deadline">
+          <span>Deadline</span>
+          <span class="deadline-sort" id="arrow" aria-label="Urutkan deadline" title="Klik: terbaru → terlama → default">⇅</span>
+         </th>
+         <th class="status-header">
+          <span>Status</span>
+          <select id="statusFilter" class="status-select" aria-label="Pilih status">
+           <option value="all">Semua</option>
+           <option value="Diproses">Diproses</option>
+           <option value="Siap Diambil">Siap Diambil</option>
+           <option value="Selesai">Selesai</option>
+          </select>
+         </th>
+         <th>
+          Aksi
+         </th>
+        </tr>
+       </thead>
+       <tbody id="body">
+        <tr data-date="2026-10-12" data-group="instansi" data-status="Diproses">
+         <td>
+          1
+         </td>
+         <td>
+          <b>
+           SDN 27
+          </b>
+          <small>
+           instansi
+          </small>
+         </td>
+         <td>
+          Seragam Karawo
+         </td>
+         <td>
+          50 pcs
+         </td>
+         <td class="date">
+          12 Oktober 2026
+         </td>
+         <td>
+          <span class="badge blue">
+           ● Diproses
+          </span>
+         </td>
+         <td>
+          <a class="detail" href="detail_pesanan.html?id=1">
+           Lihat Detail ›
+          </a>
+         </td>
+        </tr>
+        <tr data-date="2026-11-10" data-group="individu" data-status="Diproses">
+         <td>
+          2
+         </td>
+         <td>
+          <b>
+           Ayu
+          </b>
+          <small>
+           individu
+          </small>
+         </td>
+         <td>
+          Kemeja Karawo
+         </td>
+         <td>
+          2 pcs
+         </td>
+         <td class="date">
+          10 November 2026
+         </td>
+         <td>
+          <span class="badge blue">
+           ● Diproses
+          </span>
+         </td>
+         <td>
+          <a class="detail" href="detail_pesanan.html?id=2">
+           Lihat Detail ›
+          </a>
+         </td>
+        </tr>
+        <tr data-date="2026-03-31" data-group="instansi" data-status="Selesai">
+         <td>
+          3
+         </td>
+         <td>
+          <b>
+           Dinas Kesehatan
+          </b>
+          <small>
+           instansi
+          </small>
+         </td>
+         <td>
+          Seragam Karawo
+         </td>
+         <td>
+          75 pcs
+         </td>
+         <td class="date">
+          31 Maret 2026
+         </td>
+         <td>
+          <span class="badge green">
+           ● Selesai
+          </span>
+         </td>
+         <td>
+          <a class="detail" href="detail_pesanan.html?id=3">
+           Lihat Detail ›
+          </a>
+         </td>
+        </tr>
+        <tr data-date="2026-07-31" data-group="individu" data-status="Siap Diambil">
+         <td>
+          4
+         </td>
+         <td>
+          <b>
+           Siti
+          </b>
+          <small>
+           individu
+          </small>
+         </td>
+         <td>
+          Blus Karawo
+         </td>
+         <td>
+          1 pcs
+         </td>
+         <td class="date">
+          31 Juli 2026
+         </td>
+         <td>
+          <span class="badge orange">
+           ● Siap Diambil
+          </span>
+         </td>
+         <td>
+          <a class="detail" href="detail_pesanan.html?id=4">
+           Lihat Detail ›
+          </a>
+         </td>
+        </tr>
+        <tr data-date="2026-09-28" data-group="instansi" data-status="Diproses">
+         <td>
+          5
+         </td>
+         <td>
+          <b>
+           SMK Negeri 1 Gorontalo
+          </b>
+          <small>
+           instansi
+          </small>
+         </td>
+         <td>
+          Jas Karawo
+         </td>
+         <td>
+          30 pcs
+         </td>
+         <td class="date">
+          28 September 2026
+         </td>
+         <td>
+          <span class="badge blue">
+           ● Diproses
+          </span>
+         </td>
+         <td>
+          <a class="detail" href="detail_pesanan.html?id=5">
+           Lihat Detail ›
+          </a>
+         </td>
+        </tr>
+        <tr data-date="2026-06-18" data-group="individu" data-status="Selesai">
+         <td>
+          6
+         </td>
+         <td>
+          <b>
+           Rina
+          </b>
+          <small>
+           individu
+          </small>
+         </td>
+         <td>
+          Selendang Karawo
+         </td>
+         <td>
+          3 pcs
+         </td>
+         <td class="date">
+          18 Juni 2026
+         </td>
+         <td>
+          <span class="badge green">
+           ● Selesai
+          </span>
+         </td>
+         <td>
+          <a class="detail" href="detail_pesanan.html?id=6">
+           Lihat Detail ›
+          </a>
+         </td>
+        </tr>
+        <tr data-date="2026-10-05" data-group="instansi" data-status="Siap Diambil">
+         <td>
+          7
+         </td>
+         <td>
+          <b>
+           Kantor Kecamatan Suwawa
+          </b>
+          <small>
+           instansi
+          </small>
+         </td>
+         <td>
+          Batik Karawo
+         </td>
+         <td>
+          20 pcs
+         </td>
+         <td class="date">
+          5 Oktober 2026
+         </td>
+         <td>
+          <span class="badge orange">
+           ● Siap Diambil
+          </span>
+         </td>
+         <td>
+          <a class="detail" href="detail_pesanan.html?id=7">
+           Lihat Detail ›
+          </a>
+         </td>
+        </tr>
+        <tr data-date="2026-12-02" data-group="individu" data-status="Diproses">
+         <td>
+          8
+         </td>
+         <td>
+          <b>
+           Fitria
+          </b>
+          <small>
+           individu
+          </small>
+         </td>
+         <td>
+          Kebaya Karawo
+         </td>
+         <td>
+          1 pcs
+         </td>
+         <td class="date">
+          2 Desember 2026
+         </td>
+         <td>
+          <span class="badge blue">
+           ● Diproses
+          </span>
+         </td>
+         <td>
+          <a class="detail" href="detail_pesanan.html?id=8">
+           Lihat Detail ›
+          </a>
+         </td>
+        </tr>
+        <tr data-date="2026-05-22" data-group="instansi" data-status="Selesai">
+         <td>
+          9
+         </td>
+         <td>
+          <b>
+           Dinas Pendidikan
+          </b>
+          <small>
+           instansi
+          </small>
+         </td>
+         <td>
+          Seragam Karawo
+         </td>
+         <td>
+          60 pcs
+         </td>
+         <td class="date">
+          22 Mei 2026
+         </td>
+         <td>
+          <span class="badge green">
+           ● Selesai
+          </span>
+         </td>
+         <td>
+          <a class="detail" href="detail_pesanan.html?id=9">
+           Lihat Detail ›
+          </a>
+         </td>
+        </tr>
+        <tr data-date="2026-08-20" data-group="individu" data-status="Siap Diambil">
+         <td>
+          10
+         </td>
+         <td>
+          <b>
+           Nadia
+          </b>
+          <small>
+           individu
+          </small>
+         </td>
+         <td>
+          Tunik Karawo
+         </td>
+         <td>
+          2 pcs
+         </td>
+         <td class="date">
+          20 Agustus 2026
+         </td>
+         <td>
+          <span class="badge orange">
+           ● Siap Diambil
+          </span>
+         </td>
+         <td>
+          <a class="detail" href="detail_pesanan.html?id=10">
+           Lihat Detail ›
+          </a>
+         </td>
+        </tr>
+       </tbody>
+      </table>
+     </div>
+     <footer>
+      <span id="range">
+       Menampilkan 1–5 dari 10 data
+      </span>
+      <small>
+       ↕ Geser tabel untuk melihat pesanan lainnya
+      </small>
+     </footer>
+    </section>
+   </main>
+  </div>
+  <script>
+   const rows=[...document.querySelectorAll('#body tr')],body=document.getElementById('body'),scroll=document.getElementById('scroll'),range=document.getElementById('range'),statusFilter=document.getElementById('statusFilter');let group='all',status='all',sort='none';
+function filtered(){return rows.filter(r=>(group==='all'||r.dataset.group===group)&&(status==='all'||r.dataset.status===status))}
+function render(reset=true){const f=filtered();rows.forEach(r=>r.hidden=!f.includes(r));if(reset)scroll.scrollTop=0;let n=f.length;if(!n)range.textContent='Menampilkan 0 dari 0 data';else{let first=Math.min(n,Math.floor(scroll.scrollTop/76)+1),last=Math.min(n,first+4);range.textContent=`Menampilkan ${first}–${last} dari ${n} data`}document.getElementById('filterLabel').textContent=(group==='all'?'Semua':group[0].toUpperCase()+group.slice(1))+(status==='all'?'':' • '+status)}
+document.querySelectorAll('.group').forEach(b=>b.onclick=()=>{document.querySelectorAll('.group').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');group=b.dataset.group;render()});
+statusFilter.onchange=()=>{status=statusFilter.value;render()};
+document.getElementById('deadline').onclick=()=>{sort=sort==='none'?'asc':sort==='asc'?'desc':'none';rows.sort((a,b)=>sort==='none'?+a.cells[0].textContent-+b.cells[0].textContent:(sort==='asc'?1:-1)*(new Date(a.dataset.date)-new Date(b.dataset.date))).forEach(r=>body.appendChild(r));document.getElementById('arrow').textContent=sort==='asc'?'↓':sort==='desc'?'↑':'⇅';document.getElementById('arrow').title=sort==='asc'?'Terbaru ke terlama':sort==='desc'?'Terlama ke terbaru':'Urutan awal';render()};
+scroll.onscroll=()=>render(false);document.getElementById('nAll').textContent=rows.length;document.getElementById('nInst').textContent=rows.filter(r=>r.dataset.group==='instansi').length;document.getElementById('nInd').textContent=rows.filter(r=>r.dataset.group==='individu').length;render(false);
+</script>
+ </body>
+</html>

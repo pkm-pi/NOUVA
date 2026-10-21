@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>Input Pesanan - NOUVA</title>
+  <link href="../globals.css" rel="stylesheet"/>
+  <link href="../css/input_pes.css" rel="stylesheet"/>
+</head>
+
+<body>
+  <div class="app">
+
+    <aside class="sidebar">
+      <div class="brand">
+        <img alt="Logo Nouva" class="logo-nouva-FIKS"
+             src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/logo-nouva-fiks-2.png"/>
+        <div class="brand-name">NOUVA</div>
+        <div class="brand-tagline">NOU Menuju Inovasi</div>
+      </div>
+
+      <div class="admin-profile">
+        <img alt="Admin" class="profile"
+             src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/profile.png"/>
+        <div class="admin-name">Admin</div>
+      </div>
+
+      <nav aria-label="Menu aplikasi" class="menu">
+        <a class="menu-link dashboard-menu-link" href="dashboard_admin.html">
+          <img class="desktop-dashboard-icon" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--3--1.png" alt="">
+          <img class="mobile-dashboard-logo" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/logo-nouva-fiks-2.png" alt="">
+          <span>Dashboard</span>
+        </a>
+        <a class="menu-link active" href="pesanan.html">
+          <img alt="" src="https://c.animaapp.com/P7Ah09FQ/img/image-removebg-preview--12--3@2x.png"/>
+          <span>Pesanan</span>
+        </a>
+        <a class="menu-link" href="produksi.html">
+          <img alt="" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--13--1.png"/>
+          <span>Produksi Jahit</span>
+        </a>
+        <a class="menu-link" href="produk.html">
+          <img alt="" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--14--1.png"/>
+          <span>Produk</span>
+        </a>
+        <a class="menu-link" href="pemasaran.html">
+          <img alt="" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--17--1.png"/>
+          <span>Pemasaran</span>
+        </a>
+        <a class="menu-link" href="pembukuan.html">
+          <img alt="" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--18--1.png"/>
+          <span>Pembukuan</span>
+        </a>
+        <a class="menu-link" href="pengaturan.html">
+          <img alt="" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--15--1.png"/>
+          <span>Pengaturan</span>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <header class="page-header">
+        <div class="title-wrap">
+          <a class="back-button back-title-button" href="pesanan.html" aria-label="Kembali ke daftar pesanan" title="Kembali ke daftar pesanan">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+          </a>
+          <div>
+            <h1>Input Pesanan</h1>
+            <p>Isi data pesanan baru</p>
+          </div>
+        </div>
+        <button class="save-button header-save-button" type="submit" form="orderForm">
+          Simpan Pesanan
+        </button>
+      </header>
+
+      <form id="orderForm" class="order-form">
+        <!-- DATA PEMESAN -->
+        <section class="top-grid">
+          <article class="card customer-card">
+            <div class="section-heading">
+              <span class="step">1.</span>
+              <div>
+                <h2>Data Pemesan</h2>
+                <p>Isi data pelanggan yang datang langsung ke toko</p>
+              </div>
+            </div>
+
+            <div class="customer-types" role="group" aria-label="Jenis pemesan">
+              <button class="customer-type selected" type="button" data-type="instansi">
+                <span class="type-dot instansi-dot"></span>
+                <strong>Instansi</strong>
+              </button>
+              <button class="customer-type" type="button" data-type="individu">
+                <span class="type-dot individu-dot"></span>
+                <strong>Individu</strong>
+              </button>
+            </div>
+
+            <div class="field-grid customer-fields">
+              <label class="field">
+                <span>Nama Pemesan</span>
+                <div class="input-shell">
+                  <input id="customerName" name="customerName" type="text" placeholder="Nama pemesan" required/>
+                </div>
+              </label>
+
+              <label class="field">
+                <span>Nomor HP Pemesan</span>
+                <div class="input-shell">
+                  <input id="phone" name="phone" type="tel" placeholder="08xxxxxxxxxx" required/>
+                </div>
+              </label>
+
+              <label class="field full-field" id="institutionField">
+                <span>Nama Instansi <small>(jika ada)</small></span>
+                <div class="input-shell">
+                  <input id="institutionName" name="institutionName" type="text" placeholder="Nama instansi"/>
+                </div>
+              </label>
+            </div>
+          </article>
+
+          <div class="right-top">
+            <article class="card date-card">
+              <div class="section-heading compact">
+                <span class="step">2.</span>
+                <h2>Data Pesanan</h2>
+              </div>
+
+              <div class="order-number-row">
+                <label class="field">
+                  <span>Nomor Referensi</span>
+                  <div class="input-shell readonly-shell">
+                    <input id="orderNumber" name="orderNumber" type="text" value="CUS-000-000" readonly/>
+                    <small>otomatis</small>
+                  </div>
+                </label>
+              </div>
+
+              <div class="date-grid">
+                <label class="field">
+                  <span>Tanggal Memesan</span>
+                  <div class="date-input">
+                    <img src="https://c.animaapp.com/XYqZOEOx/img/icon-1.svg" alt=""/>
+                    <input name="orderDate" type="date" required/>
+                  </div>
+                </label>
+                <label class="field">
+                  <span>Deadline Pesanan</span>
+                  <div class="date-input">
+                    <img src="https://c.animaapp.com/XYqZOEOx/img/icon-1.svg" alt=""/>
+                    <input name="deadline" type="date" required/>
+                  </div>
+                </label>
+              </div>
+            </article>
+
+            <article class="card note-card">
+              <div class="section-heading compact">
+                <span class="note-title">Catatan Pesanan</span>
+              </div>
+              <textarea name="note" placeholder="Tulis satu catatan untuk pesanan ini (opsional)"></textarea>
+            </article>
+          </div>
+        </section>
+
+        <!-- PRODUK -->
+        <section class="card products-card">
+          <div class="card-heading">
+            <div class="section-heading compact">
+              <span class="step">3.</span>
+              <div>
+                <h2>Data Produk yang Dipesan</h2>
+                <p>Tambahkan satu atau lebih produk karawo dalam pesanan ini</p>
+              </div>
+            </div>
+            <button class="add-product" id="addProduct" type="button">
+              <span class="plus-symbol">+</span>
+              Tambah Produk
+            </button>
+          </div>
+
+          <div id="productList" class="product-list"></div>
+
+          <div class="product-total-bar">
+            <span>Total Jumlah Produk</span>
+            <strong><span id="totalQty">0</span> pcs</strong>
+          </div>
+        </section>
+
+        <!-- PEMBAYARAN -->
+        <section class="card payment-card">
+          <div class="section-heading compact">
+            <span class="step">4.</span>
+            <div>
+              <h2>Data Pembayaran</h2>
+              <p>Isi pembayaran yang diterima dari pemesan</p>
+            </div>
+          </div>
+
+          <div class="payment-grid">
+            <div class="payment-box">
+              <span>Total Harga</span>
+              <strong id="totalPayment">Rp 0</strong>
+            </div>
+
+            <label class="payment-box editable">
+              <span>Nominal DP</span>
+              <input id="dpInput" name="dp" type="number" min="0" placeholder="Rp 0"/>
+            </label>
+
+            <div class="payment-box">
+              <span>Sisa Pembayaran</span>
+              <strong id="remainingPayment">Rp 0</strong>
+            </div>
+
+            <label class="payment-box status-box">
+              <span>Status Pembayaran</span>
+              <select id="paymentStatus" name="paymentStatus">
+                <option>Belum Lunas</option>
+                <option>Lunas</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="payment-proof-row">
+            <label class="field payment-proof-field">
+              <span>Bukti Pembayaran <small>(jika transfer)</small></span>
+              <div class="file-input-shell">
+                <input id="paymentProof" name="paymentProof" type="file" accept="image/*,.pdf"/>
+                <span id="paymentProofName">Belum ada file dipilih</span>
+                <button type="button" class="file-button" id="proofButton">Pilih File</button>
+              </div>
+            </label>
+          </div>
+        </section>
+      </form>
+    </main>
+  </div>
+
+  <template id="productTemplate">
+    <article class="product-item">
+      <div class="product-item-header">
+        <div>
+          <span class="product-index">Produk <b>1</b></span>
+          <p>Lengkapi detail produk yang dipesan</p>
+        </div>
+        <button type="button" class="delete-product" aria-label="Hapus produk">
+          <img src="https://c.animaapp.com/XYqZOEOx/img/trash-7.svg" alt=""/>
+          <span>Hapus</span>
+        </button>
+      </div>
+
+      <div class="product-fields">
+        <label class="field product-name-field">
+          <span>Nama Produk</span>
+          <div class="input-shell">
+            <input class="product-name" type="text" placeholder="Contoh: Kemeja Karawo"/>
+          </div>
+        </label>
+
+        <label class="field">
+          <span>Kategori Produk</span>
+          <div class="input-shell select-shell">
+            <select class="product-category">
+              <option value="">Pilih kategori</option>
+              <option>Kemeja</option>
+              <option>Blouse</option>
+              <option>Jas</option>
+              <option>Seragam</option>
+              <option>Outer</option>
+              <option>Dress</option>
+              <option>Rompi</option>
+              <option>Celana</option>
+              <option>Rok</option>
+              <option>Lainnya</option>
+            </select>
+          </div>
+        </label>
+
+        <label class="field">
+          <span>Ukuran Produk</span>
+          <div class="input-shell select-shell">
+            <select class="product-size">
+              <option value="">Pilih ukuran</option>
+              <option>XS</option><option>S</option><option>M</option>
+              <option>L</option><option>XL</option><option>XXL</option>
+              <option>XXXL</option><option>Custom</option>
+            </select>
+          </div>
+        </label>
+
+        <label class="field">
+          <span>Jumlah Pesanan (pcs)</span>
+          <div class="input-shell">
+            <input class="product-qty" type="number" min="1" value="" placeholder="Jumlah pcs"/>
+          </div>
+        </label>
+
+        <label class="field">
+          <span>Harga Produk</span>
+          <div class="input-shell currency-shell">
+            <span>Rp</span>
+            <input class="product-price" type="number" min="0" placeholder="Harga produk"/>
+          </div>
+        </label>
+
+        <label class="field">
+          <span>Jenis Kain</span>
+          <div class="input-shell select-shell">
+            <select class="fabric-type">
+              <option value="">Pilih kain</option>
+              <option>Katun</option>
+              <option>Rayon</option>
+              <option>Drill</option>
+              <option>Wol</option>
+              <option>Satin</option>
+              <option>Linen</option>
+              <option>Poliester</option>
+              <option value="custom">Custom</option>
+            </select>
+          </div>
+        </label>
+
+        <label class="field custom-fabric-field is-hidden">
+          <span>Jenis Kain Custom</span>
+          <div class="input-shell">
+            <input class="custom-fabric" type="text" placeholder="Tulis jenis kain"/>
+          </div>
+        </label>
+
+        <div class="field media-field">
+          <span>Foto/Gambar Model Pakaian dari Toko</span>
+          <label class="upload-box">
+            <input class="model-store-image" type="file" accept="image/*"/>
+            <span class="upload-icon">+</span>
+            <span class="upload-text">Pilih gambar dari toko</span>
+          </label>
+          <div class="preview-box store-preview"></div>
+        </div>
+
+        <div class="field media-field">
+          <span>Foto/Gambar Model Custom <small>(opsional)</small></span>
+          <label class="upload-box">
+            <input class="model-custom-image" type="file" accept="image/*"/>
+            <span class="upload-icon">+</span>
+            <span class="upload-text">Pilih gambar pelanggan</span>
+          </label>
+          <div class="preview-box custom-model-preview"></div>
+        </div>
+
+        <div class="field media-field motif-field">
+          <span>Motif Sulaman dari Toko</span>
+          <div class="motif-combo">
+            <input class="motif-store-name" type="text" placeholder="Nama motif sulaman"/>
+            <label class="mini-upload">
+              <input class="motif-store-image" type="file" accept="image/*"/>
+              <span>+ Foto Motif</span>
+            </label>
+          </div>
+          <div class="preview-box motif-store-preview"></div>
+        </div>
+
+        <div class="field media-field">
+          <span>Motif Sulaman Custom <small>(opsional)</small></span>
+          <div class="motif-combo">
+            <input class="motif-custom-name" type="text" placeholder="Nama motif custom"/>
+            <label class="mini-upload">
+              <input class="motif-custom-image" type="file" accept="image/*"/>
+              <span>+ Foto Motif</span>
+            </label>
+          </div>
+          <div class="preview-box motif-custom-preview"></div>
+        </div>
+
+        <div class="field media-field color-field">
+          <span>Warna Kain</span>
+          <div class="motif-combo">
+            <input class="fabric-color-name" type="text" placeholder="Nama warna kain"/>
+            <label class="mini-upload">
+              <input class="fabric-color-image" type="file" accept="image/*"/>
+              <span>+ Foto Warna</span>
+            </label>
+          </div>
+          <div class="preview-box fabric-color-preview"></div>
+        </div>
+
+        <label class="field description-field">
+          <span>Deskripsi Motif / Model / Pakaian Produk</span>
+          <textarea class="product-description" placeholder="Tulis detail motif, model, atau permintaan pakaian"></textarea>
+        </label>
+      </div>
+    </article>
+  </template>
+
+  <script>
+    const form = document.getElementById("orderForm");
+    const customerTypes = document.querySelectorAll(".customer-type");
+    const institutionField = document.getElementById("institutionField");
+    const institutionName = document.getElementById("institutionName");
+    const productList = document.getElementById("productList");
+    const productTemplate = document.getElementById("productTemplate");
+    const addProduct = document.getElementById("addProduct");
+    const totalQty = document.getElementById("totalQty");
+    const dpInput = document.getElementById("dpInput");
+    const totalPayment = document.getElementById("totalPayment");
+    const remainingPayment = document.getElementById("remainingPayment");
+    const paymentStatus = document.getElementById("paymentStatus");
+    const paymentProof = document.getElementById("paymentProof");
+    const paymentProofName = document.getElementById("paymentProofName");
+    const proofButton = document.getElementById("proofButton");
+
+    const rupiah = value => "Rp " + Number(value || 0).toLocaleString("id-ID");
+
+    function setCustomerType(type) {
+      customerTypes.forEach(item => item.classList.toggle("selected", item.dataset.type === type));
+      institutionField.classList.toggle("is-hidden", type !== "instansi");
+      institutionName.required = type === "instansi";
+      document.getElementById("customerName").placeholder =
+        type === "instansi" ? "Nama pemesan / penanggung jawab" : "Nama lengkap pemesan";
+    }
+
+    customerTypes.forEach(button => {
+      button.addEventListener("click", () => setCustomerType(button.dataset.type));
+    });
+
+    function updateProductIndexes() {
+      productList.querySelectorAll(".product-item").forEach((item, index) => {
+        item.querySelector(".product-index b").textContent = index + 1;
+      });
+    }
+
+    function updateTotals() {
+      let qty = 0;
+      let total = 0;
+
+      productList.querySelectorAll(".product-item").forEach(item => {
+        const q = Number(item.querySelector(".product-qty")?.value || 0);
+        const p = Number(item.querySelector(".product-price")?.value || 0);
+        qty += Math.max(0, q);
+        total += Math.max(0, q) * Math.max(0, p);
+      });
+
+      totalQty.textContent = qty;
+      totalPayment.textContent = rupiah(total);
+
+      const dp = Math.max(0, Number(dpInput.value || 0));
+      const remaining = Math.max(0, total - dp);
+      remainingPayment.textContent = rupiah(remaining);
+
+      if (remaining === 0 && total > 0) paymentStatus.value = "Lunas";
+      else if (dp < total) paymentStatus.value = "Belum Lunas";
+    }
+
+    function previewFile(input, preview) {
+      const file = input.files && input.files[0];
+      if (!file) {
+        preview.innerHTML = "";
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = event => {
+        preview.innerHTML = `<img src="${event.target.result}" alt="Preview"/>`;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function bindProduct(item) {
+      item.querySelector(".delete-product").addEventListener("click", () => {
+        const items = productList.querySelectorAll(".product-item");
+        if (items.length === 1) {
+          item.querySelectorAll("input, textarea, select").forEach(el => {
+            if (el.type === "file") el.value = "";
+            else el.value = "";
+          });
+          item.querySelectorAll(".preview-box").forEach(el => el.innerHTML = "");
+          updateTotals();
+          return;
+        }
+        item.remove();
+        updateProductIndexes();
+        updateTotals();
+      });
+
+      item.querySelectorAll(".product-qty, .product-price").forEach(input => {
+        input.addEventListener("input", updateTotals);
+      });
+
+      const fabricType = item.querySelector(".fabric-type");
+      const customFabricField = item.querySelector(".custom-fabric-field");
+      fabricType.addEventListener("change", () => {
+        customFabricField.classList.toggle("is-hidden", fabricType.value !== "custom");
+      });
+
+      const previews = [
+        [".model-store-image", ".store-preview"],
+        [".model-custom-image", ".custom-model-preview"],
+        [".motif-store-image", ".motif-store-preview"],
+        [".motif-custom-image", ".motif-custom-preview"],
+        [".fabric-color-image", ".fabric-color-preview"]
+      ];
+
+      previews.forEach(([inputSelector, previewSelector]) => {
+        const input = item.querySelector(inputSelector);
+        const preview = item.querySelector(previewSelector);
+        input.addEventListener("change", () => previewFile(input, preview));
+      });
+    }
+
+    function addProductCard() {
+      const fragment = productTemplate.content.cloneNode(true);
+      const item = fragment.querySelector(".product-item");
+      productList.appendChild(item);
+      bindProduct(item);
+      updateProductIndexes();
+    }
+
+    addProduct.addEventListener("click", addProductCard);
+    dpInput.addEventListener("input", updateTotals);
+
+    proofButton.addEventListener("click", () => paymentProof.click());
+    paymentProof.addEventListener("change", () => {
+      paymentProofName.textContent = paymentProof.files[0]?.name || "Belum ada file dipilih";
+    });
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+      alert("Pesanan siap disimpan.");
+    });
+
+    // Form dimulai kosong: satu kartu produk kosong siap diisi.
+    setCustomerType("instansi");
+    addProductCard();
+    updateTotals();
+  </script>
+</body>
+</html>

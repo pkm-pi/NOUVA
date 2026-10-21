@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pemasaran | NOUVA</title>
+  <link rel="stylesheet" href="../globals.css">
+  <link rel="stylesheet" href="../css/pemasaran.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <main class="pemasaran">
+    <!-- SIDEBAR ASLI: dipertahankan mengikuti sidebar_fiks -->
+    <aside class="sidebar">
+      <div class="brand">
+        <img class="logo-nouva-FIKS" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/logo-nouva-fiks-2.png" alt="Logo Nouva">
+        <div class="brand-name">NOUVA</div>
+        <div class="brand-tagline">NOU Menuju Inovasi</div>
+      </div>
+
+      <div class="admin-profile">
+        <img class="profile" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/profile.png" alt="Admin">
+        <div class="admin-name">Admin</div>
+      </div>
+
+      <nav class="menu" aria-label="Menu aplikasi">
+        <a class="menu-link dashboard-menu-link" href="dashboard_admin.html">
+          <img class="desktop-dashboard-icon" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--3--1.png" alt="">
+          <img class="mobile-dashboard-logo" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/logo-nouva-fiks-2.png" alt="">
+          <span>Dashboard</span>
+        </a>
+        <a class="menu-link" href="pesanan.html"><img src="https://c.animaapp.com/P7Ah09FQ/img/image-removebg-preview--12--3@2x.png" alt=""><span>Pesanan</span></a>
+        <a class="menu-link" href="produksi.html"><img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--13--1.png" alt=""><span>Produksi Jahit</span></a>
+        <a class="menu-link" href="produk.html"><img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--14--1.png" alt=""><span>Produk</span></a>
+        <a class="menu-link active" href="pemasaran.html" aria-current="page"><img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--17--1.png" alt=""><span>Pemasaran</span></a>
+        <a class="menu-link" href="pembukuan.html"><img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--18--1.png" alt=""><span>Pembukuan</span></a>
+        <a class="menu-link" href="pengaturan.html"><img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--15--1.png" alt=""><span>Pengaturan</span></a>
+      </nav>
+    </aside>
+
+    <section class="main-content" aria-labelledby="page-title">
+      <header class="header">
+        <div class="welcome">
+          <h1 id="page-title">Pemasaran</h1>
+          <p>Pantau target dan aktivitas pemasaran media sosial UtiKarawo</p>
+        </div>
+        <div class="header-actions">
+          <div class="month-picker">
+            <span>📅</span>
+            <select id="monthSelect" aria-label="Pilih bulan">
+                <option value="01">Januari</option>
+                <option value="02">Februari</option>
+                <option value="03">Maret</option>
+                <option value="04">April</option>
+                <option value="05">Mei</option>
+                <option value="06">Juni</option>
+                <option value="07" selected>Juli</option>
+                <option value="08">Agustus</option>
+                <option value="09">September</option>
+                <option value="10">Oktober</option>
+                <option value="11">November</option>
+                <option value="12">Desember</option>
+            </select>
+
+            <select id="yearSelect" aria-label="Pilih tahun">
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026" selected>2026</option>
+                <option value="2027">2027</option>
+                <option value="2028">2028</option>
+                <option value="2029">2029</option>
+                <option value="2030">2030</option>
+            </select>
+          </div>
+        </div>
+      </header>
+
+      <section class="panel target-panel" aria-labelledby="target-posting-title">
+        <div class="section-title-row">
+          <h2 id="target-posting-title">Target Posting Bulanan</h2>
+        </div>
+        <div class="target-grid">
+          <article class="target-card instagram">
+            <div class="platform-head">
+                <img src="https://cdn.simpleicons.org/instagram/E4405F" alt="Instagram">
+                <span>Instagram</span>
+            </div>
+            <div class="target-stats">
+              <div><small>Target</small><strong id="igTarget">10</strong><em>Posting</em></div>
+              <div><small>Tercapai</small><strong id="igDone">7</strong><em>Posting</em></div>
+              <div><small>Progress</small><strong id="igProgress">70%</strong><div class="progress-bar"><span id="igBar"></span></div></div>
+            </div>
+          </article>
+
+          <article class="target-card facebook">
+            <div class="platform-head">
+                <img src="https://cdn.simpleicons.org/facebook/1877F2" alt="Facebook">
+                <span>Facebook</span>
+            </div>
+            <div class="target-stats">
+              <div><small>Target</small><strong id="fbTarget">10</strong><em>Posting</em></div>
+              <div><small>Tercapai</small><strong id="fbDone">5</strong><em>Posting</em></div>
+              <div><small>Progress</small><strong id="fbProgress">50%</strong><div class="progress-bar"><span id="fbBar"></span></div></div>
+            </div>
+          </article>
+
+          <article class="target-card tiktok">
+            <div class="platform-head">
+                <img src="https://cdn.simpleicons.org/tiktok/000000" alt="TikTok">
+                <span>TikTok</span>
+            </div>
+            <div class="target-stats">
+              <div><small>Target</small><strong id="ttTarget">5</strong><em>Posting</em></div>
+              <div><small>Tercapai</small><strong id="ttDone">4</strong><em>Posting</em></div>
+              <div><small>Progress</small><strong id="ttProgress">80%</strong><div class="progress-bar"><span id="ttBar"></span></div></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <div class="content-grid">
+        <div class="left-column">
+          <section class="panel chart-panel" aria-labelledby="ringkasan-aktivitas-title">
+            <div class="panel-title-row">
+              <h2 id="ringkasan-aktivitas-title">Ringkasan Aktivitas</h2>
+              <span class="chart-note">Posting per minggu</span>
+            </div>
+            <div class="chart-wrap"><canvas id="activityChart"></canvas></div>
+          </section>
+
+          <section class="panel tips-panel" aria-labelledby="tips-pemasaran-title">
+            <h2 id="tips-pemasaran-title">Tips Pemasaran <span>💡</span></h2>
+            <ul>
+              <li>Usahakan posting secara rutin sesuai target.</li>
+              <li>Gunakan foto produk yang menarik.</li>
+              <li>Manfaatkan cerita pelanggan untuk konten testimoni.</li>
+              <li>Konsisten lebih penting daripada jumlah.</li>
+            </ul>
+          </section>
+        </div>
+
+        <section class="panel history-panel" aria-labelledby="riwayat-posting-title">
+          <div class="history-header">
+            <h2 id="riwayat-posting-title">Riwayat Posting</h2>
+            <button class="add-post-btn" type="button" id="openPostModal">+ Catat Postingan</button>
+          </div>
+
+          <div class="table-scroll" role="region" aria-label="Riwayat posting" tabindex="0">
+            <table>
+              <thead>
+                <tr>
+                  <th>Tanggal</th>
+                  <th>Platform</th>
+                  <th>Judul Konten</th>
+                  <th>Jenis Konten</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="historyBody"></tbody>
+            </table>
+          </div>
+          <div class="history-footer">
+            <span id="historyCount">Menampilkan 1–10 dari 16 data</span>
+            <span class="scroll-hint">↕ Scroll untuk melihat semua</span>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="postModal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <h2 id="modalTitle">Catat Postingan</h2>
+        <button type="button" class="close-btn" id="closePostModal" aria-label="Tutup">×</button>
+      </div>
+      <form id="postForm">
+        <label>Tanggal<input type="date" id="postDate" required></label>
+        <label>Platform
+          <select id="postPlatform" required>
+            <option value="Instagram">Instagram</option>
+            <option value="Facebook">Facebook</option>
+            <option value="TikTok">TikTok</option>
+          </select>
+        </label>
+        <label>Judul Konten<input type="text" id="postTitle" placeholder="Contoh: Kemeja Karawo Terbaru" required></label>
+        <label>Jenis Konten
+          <select id="postType" required>
+            <option>Produk</option>
+            <option>Promosi</option>
+            <option>Video</option>
+            <option>Testimoni</option>
+            <option>Edukasi</option>
+            <option>Behind The Scene</option>
+          </select>
+        </label>
+        <label>Status
+          <select id="postStatus" required>
+            <option value="Sudah Diposting">Sudah Diposting</option>
+            <option value="Belum Diposting">Belum Diposting</option>
+          </select>
+        </label>
+        <button class="save-btn" type="submit">Simpan Catatan</button>
+      </form>
+    </div>
+  </div>
+
+<script>
+const historyData = [
+  {date:'2026-07-16', platform:'Instagram', title:'Tunik Karawo Mix & Match', type:'Produk', status:'Sudah Diposting'},
+  {date:'2026-07-15', platform:'TikTok', title:'Tutorial Cara Pakai Karawo', type:'Video', status:'Sudah Diposting'},
+  {date:'2026-07-14', platform:'Facebook', title:'Promo Diskon Juli', type:'Promosi', status:'Sudah Diposting'},
+  {date:'2026-07-12', platform:'Instagram', title:'Blus Karawo Cream', type:'Produk', status:'Sudah Diposting'},
+  {date:'2026-07-11', platform:'TikTok', title:'Proses Menjahit Karawo', type:'Behind The Scene', status:'Sudah Diposting'},
+  {date:'2026-07-10', platform:'Facebook', title:'Testimoni Pelanggan', type:'Testimoni', status:'Sudah Diposting'},
+  {date:'2026-07-09', platform:'Instagram', title:'Proses Penjahitan Karawo', type:'Behind The Scene', status:'Sudah Diposting'},
+  {date:'2026-07-07', platform:'Instagram', title:'Kemeja Karawo', type:'Produk', status:'Sudah Diposting'},
+  {date:'2026-07-05', platform:'Facebook', title:'Tips Merawat Karawo', type:'Edukasi', status:'Sudah Diposting'},
+  {date:'2026-07-04', platform:'Instagram', title:'Gamis Karawo Ungu', type:'Produk', status:'Sudah Diposting'},
+  {date:'2026-07-03', platform:'TikTok', title:'Detail Motif Karawo', type:'Video', status:'Sudah Diposting'},
+  {date:'2026-07-02', platform:'Instagram', title:'Karawo untuk Acara Formal', type:'Promosi', status:'Sudah Diposting'},
+  {date:'2026-07-01', platform:'Facebook', title:'Kenali Motif Karawo', type:'Edukasi', status:'Sudah Diposting'},
+  {date:'2026-07-20', platform:'Instagram', title:'Koleksi Karawo Minggu Ini', type:'Produk', status:'Belum Diposting'},
+  {date:'2026-07-22', platform:'Facebook', title:'Behind The Scene Produksi', type:'Behind The Scene', status:'Belum Diposting'},
+  {date:'2026-07-24', platform:'TikTok', title:'Packing Pesanan Karawo', type:'Video', status:'Belum Diposting'}
+];
+
+const targets = { Instagram:10, Facebook:10, TikTok:5 };
+const monthSelect = document.getElementById('monthSelect');
+const yearSelect = document.getElementById('yearSelect');
+
+const historyBody = document.getElementById('historyBody');
+const historyCount = document.getElementById('historyCount');
+
+let activityChart;
+
+function formatDate(value) {
+    return new Date(value + 'T00:00:00').toLocaleDateString(
+        'id-ID',
+        {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+        }
+    );
+}
+
+function selectedMonthRows() {
+    const selectedPeriod =
+        `${yearSelect.value}-${monthSelect.value}`;
+
+    return historyData.filter(row =>
+        row.date.startsWith(selectedPeriod)
+    );
+}
+
+function updateTargets(rows){
+  const done = {Instagram:0, Facebook:0, TikTok:0};
+  rows.forEach(row => { if(row.status === 'Sudah Diposting') done[row.platform]++; });
+  const map = {Instagram:'ig', Facebook:'fb', TikTok:'tt'};
+  Object.keys(done).forEach(platform => {
+    const key = map[platform];
+    const target = targets[platform];
+    const percent = Math.min(100, Math.round(done[platform] / target * 100));
+    document.getElementById(key+'Target').textContent = target;
+    document.getElementById(key+'Done').textContent = done[platform];
+    document.getElementById(key+'Progress').textContent = percent + '%';
+    document.getElementById(key+'Bar').style.width = percent + '%';
+  });
+}
+
+function updateTable(rows){
+  const sorted = [...rows].sort((a,b) => b.date.localeCompare(a.date));
+  historyBody.innerHTML = sorted.map((row,index) => `
+    <tr>
+      <td>${formatDate(row.date)}</td>
+      <td><span class="platform-badge ${row.platform.toLowerCase().replace('tiktok','tiktok')}">${row.platform}</span></td>
+      <td class="title-cell">${row.title}</td>
+      <td>${row.type}</td>
+      <td>
+        <select class="status-select ${row.status === 'Sudah Diposting' ? 'posted' : 'not-posted'}" data-index="${historyData.indexOf(row)}" aria-label="Status posting">
+          <option value="Sudah Diposting" ${row.status === 'Sudah Diposting' ? 'selected' : ''}>Sudah Diposting</option>
+          <option value="Belum Diposting" ${row.status === 'Belum Diposting' ? 'selected' : ''}>Belum Diposting</option>
+        </select>
+      </td>
+    </tr>`).join('');
+  historyCount.textContent = `Menampilkan 1–${sorted.length} dari ${sorted.length} data`;
+  historyBody.querySelectorAll('.status-select').forEach(select => {
+    select.addEventListener('change', () => {
+      historyData[Number(select.dataset.index)].status = select.value;
+      refresh();
+    });
+  });
+}
+
+function weekNumber(date){
+  return Math.min(5, Math.floor((new Date(date + 'T00:00:00').getDate()-1)/7)+1);
+}
+
+function updateChart(rows){
+  const values = {Instagram:[0,0,0,0,0], Facebook:[0,0,0,0,0], TikTok:[0,0,0,0,0]};
+  rows.forEach(row => {
+    if(row.status === 'Sudah Diposting') values[row.platform][weekNumber(row.date)-1]++;
+  });
+
+  const ctx = document.getElementById('activityChart').getContext('2d');
+
+  const instagramGradient = ctx.createLinearGradient(0, 0, 0, 220);
+  instagramGradient.addColorStop(0, '#833AB4');
+  instagramGradient.addColorStop(0.5, '#E1306C');
+  instagramGradient.addColorStop(1, '#F77737');
+
+  const facebookGradient = ctx.createLinearGradient(0, 0, 0, 220);
+  facebookGradient.addColorStop(0, '#1877F2');
+  facebookGradient.addColorStop(1, '#8AB4F8');
+
+  const tiktokGradient = ctx.createLinearGradient(0, 0, 0, 220);
+  tiktokGradient.addColorStop(0, '#000000');
+  tiktokGradient.addColorStop(1, '#646464');
+
+  const data = {
+    labels:['Minggu 1','Minggu 2','Minggu 3','Minggu 4','Minggu 5'],
+    datasets:[
+        {
+            label: 'Instagram',
+            data: values.Instagram,
+            backgroundColor: instagramGradient,
+            borderRadius: 5,
+            barThickness: 10
+        },
+        {
+            label: 'Facebook',
+            data: values.Facebook,
+            backgroundColor: facebookGradient,
+            borderRadius: 5,
+            barThickness: 10
+        },
+        {
+            label: 'TikTok',
+            data: values.TikTok,
+            backgroundColor: tiktokGradient,
+            borderRadius: 5,
+            barThickness: 10
+        }
+    ]
+  };
+  if(activityChart) activityChart.destroy();
+  activityChart = new Chart(document.getElementById('activityChart'),{
+    type:'bar', data,
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',align:'start',labels:{usePointStyle: true,boxWidth: 9,font: {size: 11,weight: '600'
+    },
+    padding: 12
+}}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{beginAtZero:true,ticks:{stepSize:1,font:{size:8}},grid:{color:'#dedfd8'}}}}
+  });
+}
+
+function refresh() {
+    const rows = selectedMonthRows();
+
+    updateTargets(rows);
+    updateTable(rows);
+    updateChart(rows);
+}
+
+monthSelect.addEventListener('change', refresh);
+yearSelect.addEventListener('change', refresh);
+
+refresh();
+
+const modal = document.getElementById('postModal');
+document.getElementById('openPostModal').addEventListener('click',()=>{ modal.classList.add('show'); modal.setAttribute('aria-hidden','false'); });
+document.getElementById('closePostModal').addEventListener('click',()=>{ modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); });
+modal.addEventListener('click',e=>{ if(e.target===modal){ modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); }});
+
+document.getElementById('postForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  historyData.push({
+    date:document.getElementById('postDate').value,
+    platform:document.getElementById('postPlatform').value,
+    title:document.getElementById('postTitle').value.trim(),
+    type:document.getElementById('postType').value,
+    status:document.getElementById('postStatus').value
+  });
+  modal.classList.remove('show');
+  modal.setAttribute('aria-hidden','true');
+  e.target.reset();
+  refresh();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800|Cinzel:400,700");
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:#f7f7f0;font-family:"Poppins",sans-serif;color:#391e46}
+.login-page{width:100%;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:28px 16px}
+.login-container{width:100%;max-width:570px;text-align:center}
+.logo{width:95px;height:95px;object-fit:contain;background:#fff;border-radius:12px;margin-bottom:15px}
+h1{margin:0;color:#391e46;font-size:clamp(23px,4vw,32px);font-weight:700}
+.desc{margin:8px 0 22px;color:#555;font-size:15px;line-height:1.6}
+.login-card{background:#fff;border:2px solid #aaa;border-radius:6px;padding:25px 30px;text-align:left}
+label{display:block;color:#391e46;font-size:15px;font-weight:600;margin:0 0 7px}
+input{display:block;width:100%;min-height:44px;border:1px solid #ddd;border-radius:7px;margin:0 0 20px;padding:10px 12px;font:inherit;color:#391e46;background:#fff}
+input:focus{outline:2px solid #a78bfa;outline-offset:1px;border-color:#5b21b6}
+.btn{width:100%;min-height:44px;border:0;background:#5b21b6;color:#fff;border-radius:6px;display:flex;justify-content:center;align-items:center;text-decoration:none;font:inherit;font-weight:600;cursor:pointer}
+.btn:hover{background:#4c1d95}.btn:disabled{opacity:.7;cursor:wait}
+.switch{display:block;margin-top:16px;color:#391e46;text-decoration:none;font-size:14px}
+.switch:hover{text-decoration:underline}.secondary-switch{margin-top:10px}
+.register-prompt{margin:17px 0 0;font-size:14px}
+.message{margin:12px 0 0;font-size:13px;line-height:1.5;overflow-wrap:anywhere}
+.message:empty{display:none}.message.error{color:#b42318}.message.success{color:#167647}
+small{display:block;color:#666;margin:-14px 0 18px;font-size:12px}
+@media(max-width:520px){.login-card{padding:22px 18px}.desc{font-size:13px}}
+
+
+/* Responsif NOUVA: form tetap di tengah, lebih ringkas di layar HP */
+.login-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px 72px;
+  position: relative;
+}
+.login-container { width: min(100%, 520px); margin: auto; }
+.login-card {
+  width: 100%;
+  border-radius: 14px;
+  border-color: #e3d9e8;
+  padding: clamp(18px, 3vw, 28px);
+  box-shadow: 0 10px 28px rgba(57, 30, 70, .06);
+}
+.back-home {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 15px;
+  border: 1px solid #794691;
+  border-radius: 999px;
+  background: #fff;
+  color: #391e46;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 5px 16px rgba(57, 30, 70, .12);
+}
+.back-home:hover { background: #f1e8f5; }
+@media (max-width: 600px) {
+  .login-page { padding: 18px 14px 68px; }
+  .login-container { max-width: 390px; }
+  .logo { width: 72px; height: 72px; margin-bottom: 10px; }
+  h1 { font-size: clamp(21px, 6vw, 27px); line-height: 1.2; }
+  .desc { margin: 7px 0 16px; font-size: 12px; line-height: 1.45; }
+  .login-card { padding: 17px 15px; border-width: 1px; border-radius: 12px; }
+  label { font-size: 12px; margin-bottom: 5px; }
+  input { min-height: 40px; margin-bottom: 14px; padding: 9px 10px; font-size: 13px; }
+  .btn { min-height: 41px; font-size: 13px; }
+  .switch, .register-prompt { font-size: 12px; }
+  small { font-size: 10px; }
+  .back-home { right: 12px; bottom: 12px; min-height: 36px; padding: 0 12px; font-size: 11px; }
+}
+@media (max-width: 360px) {
+  .login-page { padding-left: 10px; padding-right: 10px; }
+  .login-container { max-width: 340px; }
+  .login-card { padding: 14px 12px; }
+}

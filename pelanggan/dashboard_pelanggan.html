@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard Pelanggan - NOUVA</title>
+  <link rel="stylesheet" href="../globals.css">
+  <link rel="stylesheet" href="../css/dashboard_pelanggan.css">
+</head>
+<body>
+  <div class="dashboard-pelanggan">
+
+    <!-- SIDEBAR: ukuran dan sistem mengikuti dashboard admin -->
+    <aside class="sidebar" aria-label="Navigasi utama pelanggan">
+      <div class="brand">
+        <img class="logo-nouva" src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/logo-nouva-fiks-2.png" alt="Logo Nouva">
+        <div class="brand-name">NOUVA</div>
+        <div class="brand-tagline">NOU MENUJU INOVASI</div>
+      </div>
+
+      <nav class="menu" aria-label="Menu pelanggan">
+        <a class="menu-link active dashboard-menu-link" href="dashboard_pelanggan.html" aria-current="page">
+          <img class="desktop-dashboard-icon" src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--3--1.png" alt="">
+          <img class="mobile-dashboard-logo" src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/logo-nouva-fiks-2.png" alt="">
+          <span>Dashboard</span>
+        </a>
+        <a class="menu-link" href="katalog.html">
+          <img src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--4--1.png" alt="">
+          <span>Katalog Produk</span>
+        </a>
+        <a class="menu-link" href="pesanan_saya.html">
+          <img src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--6--1.png" alt="">
+          <span>Pesanan Saya</span>
+        </a>
+        <a class="menu-link" href="pes_cus.html">
+          <img src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--5--1.png" alt="">
+          <span>Pesan Custom</span>
+        </a>
+        <a class="menu-link" href="peng_pel.html">
+          <img src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--9--1.png" alt="">
+          <span>Pengaturan</span>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <header class="header">
+        <div class="welcome">
+          <h1>Dashboard</h1>
+          <p>Selamat datang di UtiKarawo.</p>
+        </div>
+
+        <div class="header-actions">
+          <div class="profile-button" aria-label="Profil pelanggan">
+            <img src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--11--1.png" alt="Profil">
+          </div>
+        </div>
+      </header>
+
+      <section class="top-grid">
+        <article class="card order-card">
+          <div class="card-icon">
+            <img
+              class="order-card-icon"
+              src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--4--1.png"
+              alt=""
+            >
+          </div>
+          <div class="card-copy">
+            <h2>Pesanan Saya</h2>
+            <strong>2</strong>
+            <a href="pesanan_saya.html">Lihat Pesanan <span>→</span></a>
+          </div>
+        </article>
+
+        <article class="card custom-card">
+          <div class="card-icon custom-icon">
+            <img src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--5--1.png" alt="">
+          </div>
+          <div class="card-copy">
+            <h2>Ingin produk sesuai keinginan?</h2>
+            <p>Pilih bahan, warna, ukuran, dan motif favoritmu.<br>Kami siap wujudkan untukmu.</p>
+            <a class="primary-btn" href="pes_cus.html">Ajukan Pesan Custom</a>
+          </div>
+        </article>
+      </section>
+
+      <section class="content-grid">
+        <article class="card products-panel">
+          <div class="panel-heading">
+            <h2>Produk Unggulan</h2>
+            <a href="katalog.html">Lihat Semua <span>→</span></a>
+          </div>
+
+          <div class="product-list">
+            <article class="product-card">
+              <div class="product-image product-image-1"><span>Karawo</span></div>
+              <h3>Produk 1</h3>
+              <strong>Rp 250.000</strong>
+              <a href="katalog.html">LIHAT DETAIL</a>
+            </article>
+            <article class="product-card">
+              <div class="product-image product-image-2"><span>Karawo</span></div>
+              <h3>Produk 2</h3>
+              <strong>Rp 175.000</strong>
+              <a href="katalog.html">LIHAT DETAIL</a>
+            </article>
+            <article class="product-card">
+              <div class="product-image product-image-3"><span>Karawo</span></div>
+              <h3>Produk 3</h3>
+              <strong>Rp 225.000</strong>
+              <a href="katalog.html">LIHAT DETAIL</a>
+            </article>
+          </div>
+        </article>
+
+        <aside class="card status-panel">
+          <div class="panel-heading">
+            <h2>Status Pesanan</h2>
+          </div>
+
+          <div class="status-list">
+            <article class="status-card">
+              <strong>INV-2507-001</strong>
+              <span>Produk 1</span>
+              <small>16 Juli 2026</small>
+              <div class="status-badge waiting">Menunggu Dijahit</div>
+            </article>
+            <article class="status-card">
+              <strong>INV-2507-001</strong>
+              <span>Produk 2</span>
+              <small>14 Juli 2026</small>
+              <div class="status-badge working">Sedang Dijahit </div>
+            </article>
+          </div>
+
+          <a class="see-all-status" href="pesanan_saya.html">Lihat Selengkapnya <span>→</span></a>
+        </aside>
+      </section>
+
+      <section class="guide">
+        <div class="guide-copy">
+          <h2>PANDUAN PENGGUNAAN</h2>
+          <p>Pelajari cara menggunakan UtiKarawo dengan mudah!</p>
+        </div>
+        <a class="guide-btn" href="#" onclick="return false;">Buka Panduan</a>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

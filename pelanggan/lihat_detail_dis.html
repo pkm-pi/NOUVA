@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Detail Pesanan Display - NOUVA</title>
+  <link rel="stylesheet" href="../css/lihat_detail_dis.css">
+</head>
+<body>
+  <div class="detail-page">    
+    <aside class="sidebar">
+      <div class="brand">
+        <img class="logo-nouva" src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/logo-nouva-fiks-2.png" alt="Logo Nouva">
+        <div class="brand-name">NOUVA</div>
+        <div class="brand-tagline">NOU MENUJU INOVASI</div>
+      </div>
+
+      <nav class="menu" aria-label="Menu pelanggan">
+        <a class="menu-link dashboard-menu-link" href="dashboard_pelanggan.html">
+          <img class="desktop-dashboard-icon" src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--3--1.png" alt="">
+          <img class="mobile-dashboard-logo" src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/logo-nouva-fiks-2.png" alt="">
+          <span>Dashboard</span>
+        </a>
+        <a class="menu-link" href="katalog.html">
+          <img src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--4--1.png" alt="">
+          <span>Katalog Produk</span>
+        </a>
+        <a class="menu-link active" href="pesanan_saya.html">
+          <img src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--6--1.png" alt="">
+          <span>Pesanan Saya</span>
+        </a>
+        <a class="menu-link" href="pes_cus.html">
+          <img src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--5--1.png" alt="">
+          <span>Pesan Custom</span>
+        </a>
+        <a class="menu-link" href="peng_pel.html">
+          <img src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--9--1.png" alt="">
+          <span>Pengaturan</span>
+        </a>
+      </nav>
+    </aside>
+<main class="main-content">
+<section class="hero"><div><span class="eyebrow">DETAIL PESANAN</span><h2>Detail Pesanan Display</h2><p>Produk display yang kamu pilih dari katalog NOUVA. Pesanan ini sudah dikonfirmasi dan sedang diproses oleh tim kami.</p></div><span class="status dalam-proses">Dalam Proses</span></section>
+<section class="reference-card"><div><span>No. Referensi</span><strong>DIS-615-204</strong><small>Nomor referensi dibuat otomatis oleh sistem (contoh).</small></div><div><span>Tanggal Memesan</span><strong>28 Juni 2026</strong></div><div><span>Perkiraan selesai</span><strong>05 Juli 2026</strong></div><div><span>Total pesanan</span><strong>Rp 225.000</strong></div></section>
+<div class="content-grid"><section class="card product-card"><div class="section-title"><h3>Informasi Produk</h3><p>Rincian barang yang sudah kamu pesan</p></div><div class="product-summary"><div class="garment display-garment"><span>Karawo</span></div><div><h3>Setelan Karawo Display</h3><p>Produk display yang kamu pilih dari katalog NOUVA. Pesanan ini sudah dikonfirmasi dan sedang diproses oleh tim kami.</p><strong class="price">Rp 225.000</strong></div></div><div class="info-grid"><div><span>Kategori</span><strong>Setelan</strong></div><div><span>Ukuran</span><strong>M</strong></div><div><span>Warna</span><strong>Merah bata</strong></div><div><span>Motif</span><strong>Motif Karawo klasik</strong></div><div><span>Jenis Kain</span><strong>Katun Toyobo</strong></div><div><span>Jumlah</span><strong>1 set</strong></div></div><div class="detail-extra"></div></section>
+<aside class="side-column"><section class="card payment-card unpaid"><h3>Informasi Pembayaran</h3><div class="pay-row"><span>Total harga</span><strong>Rp 225.000</strong></div><div class="pay-row"><span>Uang muka (DP)</span><strong>Rp 100.000</strong></div><div class="pay-row"><span>Sisa pembayaran</span><strong>Rp 125.000</strong></div><div class="pay-row"><span>Status pembayaran</span><b class="payment-status">Belum Lunas</b></div><p class="payment-note unpaid-note">Pelunasan sisa pembayaran dapat dilakukan melalui transfer (TF) atau secara tunai (cash) saat mengambil barang.</p><p class="payment-note paid-note">Pembayaran sudah lunas. Barang sudah siap diambil sesuai informasi progres pesanan.</p></section>
+<section class="card progress-card"><h3>Progres Pesanan</h3><ol class="progress"><li class="done"><b>Pesanan diterima</b><small>Pesanan telah dikonfirmasi oleh tim kami</small></li><li class="current"><b>Siap diambil</b><small>Menunggu barang siap untuk diambil</small></li><li><b>Selesai</b><small>Pesanan telah diterima pelanggan</small></li></ol></section></aside></div>
+<a class="back-button" href="pesanan_saya.html">← Kembali ke Pesanan Saya</a></main></div>
+<script>
+/* Status pembayaran menentukan catatan yang ditampilkan. */
+(function () {
+  const statusElement = document.querySelector(".payment-status");
+  const noteElement = document.querySelector(".payment-note");
+  const paymentCard = document.querySelector(".payment-card");
+
+  if (!statusElement || !noteElement || !paymentCard) return;
+
+  const isPaid = statusElement.textContent.trim().toLowerCase() === "lunas";
+
+  paymentCard.classList.toggle("paid", isPaid);
+  paymentCard.classList.toggle("unpaid", !isPaid);
+
+  if (isPaid) {
+    noteElement.textContent =
+      "Pembayaran sudah lunas. Barang sudah siap diambil sesuai informasi progres pesanan.";
+  } else {
+    noteElement.textContent =
+      "Pelunasan sisa pembayaran dapat dilakukan melalui transfer (TF) atau secara tunai (cash) saat mengambil barang.";
+  }
+})();
+</script>
+
+</body></html>

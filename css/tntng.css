@@ -1,0 +1,533 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap");
+
+:root {
+  --purple: #391e46;
+  --purple-dark: #341f50;
+  --purple-text: #3e244b;
+  --lavender: #f1dff5;
+  --cream: #f6f7f2;
+  --shop-bg: #f2eef4;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+html, body {
+  margin: 0;
+  min-height: 100%;
+  width: 100%;
+  font-family: "Poppins", sans-serif;
+  color: var(--purple-text);
+}
+body { overflow-x: hidden; }
+a { text-decoration: none; }
+
+.tentang-kami {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  background: #fff;
+}
+
+.hero {
+  position: relative;
+  z-index: 0;
+  height: clamp(250px, 22vw, 330px);
+  width: 100%;
+  isolation: isolate;
+}
+.BAJU-PKM-INI,
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.BAJU-PKM-INI {
+  z-index: -2;
+  object-fit: cover;
+  object-position: center 43%;
+}
+.hero-overlay {
+  z-index: -1;
+  background: radial-gradient(75% 100% at 48% 45%, rgba(49,27,53,.83), rgba(57,26,63,.76) 65%, rgba(65,25,72,.62));
+}
+
+.brand {
+  position: absolute;
+  top: clamp(18px, 2.1vw, 30px);
+  left: clamp(18px, 2.3vw, 32px);
+  display: block;
+  width: clamp(54px, 6.5vw, 94px);
+  aspect-ratio: 1;
+  border-radius: clamp(12px, 1.2vw, 18px);
+  overflow: hidden;
+  background: #fff;
+}
+.logo-nouva-FIKS { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+.site-nav {
+  position: absolute;
+  top: clamp(24px, 3.5vw, 50px);
+  right: clamp(18px, 3.5vw, 50px);
+  z-index: 3;
+  width: min(589px, calc(100% - 150px));
+  min-height: 46px;
+  padding: 5px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(2px, .5vw, 8px);
+  border-radius: 999px;
+  background: var(--purple);
+}
+.site-nav a {
+  flex: 1 1 0;
+  min-width: 0;
+  color: #fff;
+  font-size: clamp(11px, 1.32vw, 19px);
+  font-weight: 500;
+  line-height: 1.15;
+  text-align: center;
+  white-space: nowrap;
+  padding: 8px 5px;
+  border-radius: 999px;
+}
+.site-nav a.active,
+.site-nav a:hover { font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+
+.content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  margin-top: -55px;
+  padding: clamp(28px, 3.2vw, 46px) clamp(20px, 4vw, 58px) 40px;
+  min-height: 600px;
+  background: var(--cream);
+  border-radius: clamp(38px, 6.5vw, 94px) clamp(18px, 2vw, 30px) 0 0;
+}
+.intro { max-width: 1100px; }
+.intro h1 {
+  margin: 0 0 8px;
+  color: var(--purple-dark);
+  font-size: clamp(34px, 5.2vw, 76px);
+  line-height: 1.12;
+  font-weight: 700;
+}
+.intro-copy {
+  max-width: 950px;
+  margin: 0;
+  font-size: clamp(14px, 1.5vw, 21px);
+  line-height: 1.65;
+}
+
+.purpose {
+  display: grid;
+  grid-template-columns: minmax(210px, .78fr) minmax(0, 1.55fr);
+  gap: clamp(20px, 3.5vw, 50px);
+  align-items: stretch;
+  margin-top: clamp(28px, 4vw, 58px);
+}
+.purpose-copy {
+  padding-right: clamp(16px, 2.5vw, 36px);
+  border-right: 1px solid #76528a;
+}
+.purpose-copy h2,
+.shop-copy h2 {
+  margin: 0 0 10px;
+  color: var(--purple-dark);
+  font-size: clamp(20px, 2vw, 29px);
+  line-height: 1.3;
+  font-weight: 700;
+}
+.purpose-copy p,
+.shop-copy p {
+  margin: 0;
+  font-size: clamp(14px, 1.5vw, 21px);
+  line-height: 1.65;
+}
+.benefits {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(6px, .7vw, 10px);
+  align-content: center;
+}
+.benefit-card {
+  min-width: 0;
+  min-height: clamp(120px, 12vw, 172px);
+  padding: 15px 8px 12px;
+  border-radius: clamp(12px, 1.4vw, 20px);
+  background: var(--lavender);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+}
+.benefit-card svg {
+  width: clamp(30px, 3.5vw, 50px);
+  height: clamp(30px, 3.5vw, 50px);
+  fill: none;
+  stroke: var(--purple);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: 0 0 auto;
+}
+.benefit-card p {
+  margin: 0;
+  font-size: clamp(10px, .9vw, 13px);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.shop-card {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(16px, 2vw, 28px);
+  width: 100%;
+  margin-top: clamp(34px, 5vw, 72px);
+  padding: clamp(18px, 3.2vw, 46px) clamp(18px, 4.5vw, 65px);
+  border-radius: clamp(28px, 4vw, 58px);
+  background: var(--shop-bg);
+}
+.shop-image {
+  display: block;
+  width: clamp(115px, 21vw, 304px);
+  aspect-ratio: 1.05 / 1;
+  flex: 0 0 auto;
+  border-radius: clamp(18px, 2.2vw, 32px);
+  object-fit: cover;
+}
+.shop-copy { min-width: 0; padding-top: 2px; }
+.shop-copy h2 { margin-bottom: 8px; }
+
+@media (max-width: 700px) {
+  .hero { height: 230px; }
+  .site-nav {
+    top: 22px;
+    right: 12px;
+    width: calc(100% - 96px);
+    min-height: 38px;
+    padding: 3px 5px;
+    gap: 0;
+  }
+  .site-nav a { font-size: clamp(9px, 2.5vw, 12px); padding: 7px 2px; }
+  .brand { top: 17px; left: 14px; width: 54px; border-radius: 12px; }
+  .content {
+    margin-top: -45px;
+    padding: 28px 18px 30px;
+    border-radius: 38px 18px 0 0;
+    min-height: 0;
+  }
+  .intro h1 { font-size: clamp(32px, 8vw, 42px); margin-bottom: 8px; }
+  .intro-copy { font-size: 14px; line-height: 1.6; }
+  .purpose {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+    margin-top: 28px;
+  }
+  .purpose-copy {
+    padding: 0 0 18px;
+    border-right: 0;
+    border-bottom: 1px solid #76528a;
+  }
+  .purpose-copy h2 { font-size: 22px; margin-bottom: 7px; }
+  .purpose-copy p { font-size: 14px; line-height: 1.6; }
+  .benefits { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .benefit-card {
+    min-height: 125px;
+    padding: 14px 10px;
+    border-radius: 16px;
+    gap: 8px;
+  }
+  .benefit-card svg { width: 38px; height: 38px; }
+  .benefit-card p { font-size: 12px; line-height: 1.4; }
+  .shop-card {
+    margin-top: 28px;
+    padding: 18px;
+    gap: 14px;
+    border-radius: 28px;
+  }
+  .shop-image { width: clamp(90px, 30vw, 135px); border-radius: 18px; }
+  .shop-copy h2 { font-size: 17px; margin-bottom: 6px; }
+  .shop-copy p { font-size: 13px; line-height: 1.5; }
+}
+
+@media (max-width: 360px) {
+  .site-nav { width: calc(100% - 82px); right: 8px; }
+  .site-nav a { font-size: 9px; }
+  .content { padding-left: 14px; padding-right: 14px; }
+  .shop-card { padding: 14px; gap: 11px; }
+  .shop-image { width: 88px; }
+  .shop-copy h2 { font-size: 15px; }
+  .shop-copy p { font-size: 12px; }
+}
+
+
+/* =========================================================
+   HEADER DISELARASKAN DENGAN INDEX — LAPTOP & HP
+   ========================================================= */
+.hero {
+  height: clamp(430px, 43.5vw, 626px);
+  isolation: isolate;
+}
+.BAJU-PKM-INI,
+.hero-overlay {
+  height: 100%;
+}
+.BAJU-PKM-INI {
+  object-fit: cover;
+  object-position: center center;
+}
+.hero-overlay {
+  background: radial-gradient(
+    70% 90% at 38% 45%,
+    rgba(49,27,53,.88) 0%,
+    rgba(57,26,63,.80) 48%,
+    rgba(65,25,72,.60) 100%
+  );
+}
+.brand {
+  top: clamp(22px, 2.1vw, 30px);
+  left: clamp(22px, 2.3vw, 32px);
+  width: clamp(58px, 5.2vw, 94px);
+  border-radius: clamp(12px, 1vw, 16px);
+}
+.site-nav {
+  top: clamp(30px, 3.5vw, 50px);
+  right: clamp(30px, 4vw, 70px);
+  width: min(589px, 42vw);
+  min-width: 300px;
+  min-height: 46px;
+  padding: 0 10px;
+  gap: clamp(6px, 1.3vw, 18px);
+}
+.site-nav a {
+  flex: 1 1 0;
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(13px, 1.8vw, 26px);
+  font-weight: 500;
+  padding: 7px 10px;
+  line-height: 1;
+}
+.site-nav a.active { font-weight: 700; }
+
+.content {
+  margin-top: clamp(-230px, -16vw, -185px);
+  padding: clamp(35px, 3.2vw, 48px) clamp(24px, 7.2vw, 104px) 45px;
+  border-radius: clamp(55px, 7.4vw, 107px) clamp(55px, 7.4vw, 107px) 0 0;
+  background: var(--cream);
+}
+.intro { max-width: 1100px; }
+.intro h1 {
+  font-size: clamp(34px, 5.2vw, 76px);
+  line-height: 1.12;
+}
+.intro-copy {
+  max-width: 950px;
+  font-size: clamp(14px, 1.5vw, 21px);
+  line-height: 1.65;
+}
+
+@media (max-width: 900px) {
+  .site-nav {
+    width: min(500px, 55vw);
+    min-width: 280px;
+  }
+}
+@media (max-width: 700px) {
+  .hero { height: 390px; }
+  .brand {
+    width: 58px;
+    top: 18px;
+    left: 18px;
+  }
+  .site-nav {
+    top: 20px;
+    right: 14px;
+    left: auto;
+    width: auto;
+    min-width: 0;
+    min-height: 38px;
+    padding: 0 5px;
+    gap: 2px;
+  }
+  .site-nav a {
+    flex: 0 1 auto;
+    font-size: 11px;
+    padding: 7px 7px;
+  }
+  .content {
+    margin-top: -105px;
+    padding: 28px 18px 30px;
+    border-radius: 42px 42px 0 0;
+  }
+  .intro h1 { font-size: clamp(32px, 8vw, 42px); }
+}
+@media (max-width: 430px) {
+  .site-nav { right: 10px; }
+  .site-nav a { font-size: 9px; padding: 6px 5px; }
+  .brand { width: 52px; }
+}
+
+/* =========================================================
+   FIX FINAL: PANEL KREM NAIK DRASTIS
+   Override terakhir agar tidak kalah oleh aturan .content lama.
+   ========================================================= */
+@media (min-width: 701px) {
+  .content {
+    margin-top: -330px !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .content {
+    margin-top: -220px !important;
+  }
+}
+
+
+/* FIX HP 2: bagian Tentang Uti Karawo tersusun vertikal: judul, foto, deskripsi */
+@media (max-width: 700px) {
+  .shop-card {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 14px !important;
+    padding: 20px !important;
+  }
+  .shop-copy {
+    display: contents !important;
+  }
+  .shop-copy h2 {
+    order: 1;
+    margin: 0 !important;
+    font-size: 22px !important;
+    line-height: 1.3 !important;
+  }
+  .shop-image {
+    order: 2;
+    width: 100% !important;
+    max-width: 100% !important;
+    aspect-ratio: 16 / 9 !important;
+    height: auto !important;
+    object-fit: cover !important;
+    border-radius: 18px !important;
+  }
+  .shop-copy p {
+    order: 3;
+    margin: 0 !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+  }
+}
+
+/* FIX FOTO TOKO UTi KARAWO: tampilkan gambar utuh, jangan dipotong */
+.shop-image {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  aspect-ratio: auto !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  border-radius: clamp(18px, 2.2vw, 32px);
+}
+
+/* Desktop/tablet: foto mengikuti rasio asli dan tetap sejajar dengan deskripsi */
+.shop-card {
+  align-items: flex-start;
+}
+.shop-image {
+  flex: 0 1 48%;
+  min-width: 0;
+}
+
+/* HP: judul, foto utuh, lalu deskripsi */
+@media (max-width: 700px) {
+  .shop-card {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 14px !important;
+    padding: 20px !important;
+  }
+  .shop-copy {
+    display: contents !important;
+  }
+  .shop-copy h2 {
+    order: 1;
+    margin: 0 !important;
+    font-size: 22px !important;
+    line-height: 1.3 !important;
+  }
+  .shop-image {
+    order: 2;
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 0 0 auto !important;
+    height: auto !important;
+    aspect-ratio: auto !important;
+    object-fit: contain !important;
+    border-radius: 18px !important;
+  }
+  .shop-copy p {
+    order: 3;
+    margin: 0 !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+  }
+}
+
+@media (min-width: 701px) {
+  .shop-image {
+    flex: 0 1 52%;
+    width: 52%;
+    max-width: 52%;
+    height: auto;
+    object-fit: contain;
+  }
+}
+
+/* FIX UKURAN FOTO TENTANG UTI KARAWO — FINAL
+   Laptop: foto sedikit lebih besar tetapi tetap berbagi ruang dengan deskripsi.
+   HP: batasi tinggi foto agar tidak mendominasi layar, tanpa memotong gambar.
+*/
+@media (min-width: 701px) {
+  .shop-card {
+    align-items: flex-start !important;
+  }
+
+  .shop-image {
+    flex: 0 1 52% !important;
+    width: 52% !important;
+    max-width: 52% !important;
+    height: auto !important;
+    max-height: none !important;
+    aspect-ratio: auto !important;
+    object-fit: contain !important;
+    background: transparent !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .shop-image {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 340px !important;
+    aspect-ratio: auto !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    background: transparent !important;
+    border-radius: 18px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .shop-image {
+    max-height: 250px !important;
+  }
+}

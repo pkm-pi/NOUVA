@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Edit Produk - Uti Karawo</title>
+  <link rel="stylesheet" href="../globals.css">
+  <link rel="stylesheet" href="../css/edit_dis.css">
+</head>
+<body>
+  <div class="dashboard-admin">
+
+    <!-- SIDEBAR: sengaja mengikuti struktur produk.html -->
+    <aside class="sidebar">
+      <div class="brand">
+        <img class="logo-nouva-FIKS" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/logo-nouva-fiks-2.png" alt="Logo Nouva">
+        <div class="brand-name">NOUVA</div>
+        <div class="brand-tagline">NOU Menuju Inovasi</div>
+      </div>
+
+      <div class="admin-profile">
+        <img class="profile" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/profile.png" alt="Admin">
+        <div class="admin-name">Admin</div>
+      </div>
+
+      <nav class="menu" aria-label="Menu aplikasi">
+        <a class="menu-link dashboard-menu-link" href="dashboard_admin.html">
+          <img class="desktop-dashboard-icon" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--3--1.png" alt="">
+          <img class="mobile-dashboard-logo" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/logo-nouva-fiks-2.png" alt="">
+          <span>Dashboard</span>
+        </a>
+        <a class="menu-link" href="pesanan.html">
+          <img src="https://c.animaapp.com/P7Ah09FQ/img/image-removebg-preview--12--3@2x.png" alt="">
+          <span>Pesanan</span>
+        </a>
+        <a class="menu-link" href="produksi.html">
+          <img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--13--1.png" alt="">
+          <span>Produksi Jahit</span>
+        </a>
+        <a class="menu-link active" href="produk.html" aria-current="page">
+          <img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--14--1.png" alt="">
+          <span>Produk</span>
+        </a>
+        <a class="menu-link" href="pemasaran.html">
+          <img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--17--1.png" alt="">
+          <span>Pemasaran</span>
+        </a>
+        <a class="menu-link" href="pembukuan.html">
+          <img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--18--1.png" alt="">
+          <span>Pembukuan</span>
+        </a>
+        <a class="menu-link" href="pengaturan.html">
+          <img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--15--1.png" alt="">
+          <span>Pengaturan</span>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="main-content edit-content">
+      <header class="header" aria-label="Navigasi halaman"></header>
+
+      <section class="edit-heading">
+        <a class="title-icon back-title-button" href="produk.html" aria-label="Kembali ke daftar produk" title="Kembali ke daftar produk"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H5M12 19l-7-7 7-7" /></svg></a>
+        <div>
+          <h1>Edit Produk</h1>
+          <p>Perbarui informasi produk sesuai kebutuhan.</p>
+        </div>
+      </section>
+
+      <div class="edit-layout">
+      <section class="edit-panel">
+        <div class="form-main">
+
+          <div class="product-media">
+            <div class="photo-label">Foto Utama</div>
+            <label class="main-photo edit-main-photo">
+              <input type="file" accept="image/*" class="hidden-file" data-photo="main">
+              <img id="mainProductImage" src="https://images.unsplash.com/photo-1596755389378-c31d21fd1273?auto=format&fit=crop&w=900&q=85" alt="Foto utama produk">
+            </label>
+
+            <div class="thumbnail-list" aria-label="Foto produk">
+              <label class="thumb active edit-thumb">
+                <input type="file" accept="image/*" class="hidden-file" data-photo="main-thumb">
+                <img class="thumb-image" data-thumb-index="0" src="https://images.unsplash.com/photo-1596755389378-c31d21fd1273?auto=format&fit=crop&w=300&q=80" alt="Foto utama">
+              </label>
+              <label class="thumb edit-thumb">
+                <input type="file" accept="image/*" class="hidden-file" data-photo="extra">
+                <img class="thumb-image" data-thumb-index="1" src="https://images.unsplash.com/photo-1603252110481-7ba873bf42ab?auto=format&fit=crop&w=300&q=80" alt="Foto tambahan">
+              </label>
+              <label class="thumb edit-thumb">
+                <input type="file" accept="image/*" class="hidden-file" data-photo="extra">
+                <img class="thumb-image" data-thumb-index="2" src="https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&w=300&q=80" alt="Foto tambahan">
+              </label>
+              <label class="thumb edit-thumb">
+                <input type="file" accept="image/*" class="hidden-file" data-photo="extra">
+                <img class="thumb-image" data-thumb-index="3" src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=300&q=80" alt="Foto tambahan">
+              </label>
+            </div>
+          </div>
+
+          <form class="product-form" id="editProductForm">
+            <div class="field full">
+              <label for="productName">Nama Produk</label>
+              <input id="productName" name="productName" value="" type="text">
+            </div>
+
+            <div class="field">
+              <label for="category">Kategori Produk</label>
+              <select id="category" name="category">
+                <option selected disabled>Pilih Kategori</option>
+                <option>Kemeja</option><option>Blouse</option><option>Jas</option><option>Dress</option><option>Atasan</option><option>Lainnya</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>Motif Sulaman Produk</label>
+              <div class="motif-box">
+                <label class="motif-image upload-color"><input id="motifImage" type="file" accept="image/*" class="hidden-file"><span>＋</span><small>Foto Motif</small></label>
+                <input id="motifName" name="motifName" type="text" placeholder="Nama motif sulaman">
+              </div>
+            </div>
+
+            <div class="field-grid two">
+              <div class="field">
+                <label for="price">Harga</label>
+                <input id="price" name="price" value="" type="text">
+              </div>
+              <div class="field">
+                <label for="stock">Stok</label>
+                <div class="input-suffix">
+                  <input id="stock" name="stock" value="" type="number" min="0">
+                  <span>pcs</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Warna Kain</label>
+              <div class="fabric-color-single">
+                <label class="color-image upload-color"><input id="fabricColorImage" type="file" accept="image/*" class="hidden-file"><span>＋</span><small>Foto Kain</small></label>
+                <input id="fabricColorName" name="fabricColorName" type="text" class="color-name-input" placeholder="Nama warna kain">
+              </div>
+            </div>
+
+            <div class="field-grid two size-fabric-row">
+              <div class="field">
+                <label>Ukuran Tersedia</label>
+                <div class="size-row">
+                  <button class="size-btn" type="button">S</button>
+                  <button class="size-btn" type="button">M</button>
+                  <button class="size-btn" type="button">L</button>
+                  <button class="size-btn" type="button">XL</button>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="jenisKain">Jenis Kain</label>
+                <input id="jenisKain" type="text" placeholder="Contoh: Katun, Sutra, Wol">
+              </div>
+            </div>
+
+
+            <div class="field full description-field">
+              <div class="label-row">
+                <label for="description">Deskripsi</label>
+                <span id="descriptionCount">0/500</span>
+              </div>
+              <textarea id="description" name="description" maxlength="500" placeholder="Masukkan deskripsi produk..."></textarea>
+            </div>
+          </form>
+        </div>
+
+        <div class="edit-footer">
+          <div class="last-updated">
+            <span class="info-icon">i</span>
+            <div>
+              <strong>Terakhir diperbarui</strong>
+              <small id="lastUpdated">12 Juni 2025, 10:24 oleh Admin</small>
+            </div>
+          </div>
+          <div class="footer-actions">
+            <button class="cancel-btn" type="button">Batal</button>
+            <button class="save-btn" type="button" onclick="document.getElementById('editProductForm').requestSubmit()">
+              <span aria-hidden="true">▣</span> Simpan Perubahan
+            </button>
+          </div>
+        </div>
+      </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+(function(){
+  const editData = JSON.parse(localStorage.getItem("editProductData") || "null") || {};
+  const $ = id => document.getElementById(id);
+  const value = v => v == null ? "" : String(v);
+
+  $("productName").value = value(editData.name || editData.productName);
+  $("price").value = value(editData.price || editData.harga).replace(/^Rp\s*/i, "");
+  $("stock").value = value(editData.stock || editData.stok);
+  $("motifName").value = value(editData.motifName || editData.motif);
+  $("fabricColorName").value = value(editData.fabricColorName || editData.colorName || editData.color);
+  $("jenisKain").value = value(editData.jenisKain || editData.fabricType);
+  $("description").value = value(editData.description);
+
+  if (editData.category) {
+    const category = $("category");
+    const option = [...category.options].find(o => o.value === editData.category || o.textContent.trim() === editData.category);
+    if (option) category.value = option.value;
+  }
+
+  const sizes = Array.isArray(editData.sizes)
+    ? editData.sizes.map(String)
+    : value(editData.sizes || editData.size).split(",").map(s => s.trim()).filter(Boolean);
+  document.querySelectorAll(".size-btn").forEach(btn => {
+    btn.classList.toggle("selected", sizes.includes(btn.textContent.trim()));
+  });
+
+  const image = editData.image || editData.mainImage;
+  if (image) {
+    $("mainProductImage").src = image;
+    const first = document.querySelector('.thumb-image[data-thumb-index="0"]');
+    if (first) first.src = image;
+  }
+
+  const photos = Array.isArray(editData.photos) ? editData.photos : [];
+  photos.slice(0,4).forEach((src,index) => {
+    const thumb = document.querySelector(`.thumb-image[data-thumb-index="${index}"]`);
+    if (thumb) thumb.src = src;
+    if (index === 0 && !image) $("mainProductImage").src = src;
+  });
+
+  if (editData.motifImage) setPreview($("motifImage").parentElement, editData.motifImage);
+  if (editData.fabricColorImage) setPreview($("fabricColorImage").parentElement, editData.fabricColorImage);
+
+  function setPreview(target,url){
+    target.style.backgroundImage = `url("${url}")`;
+    target.style.backgroundSize = "cover";
+    target.style.backgroundPosition = "center";
+    target.querySelectorAll("span,small").forEach(x => x.style.display = "none");
+  }
+
+  function previewFile(input){
+    const file = input.files && input.files[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    if (input.dataset.photo === "main") {
+      $("mainProductImage").src = url;
+      const first = document.querySelector('.thumb-image[data-thumb-index="0"]');
+      if (first) first.src = url;
+      return;
+    }
+    if (input.dataset.photo === "main-thumb") {
+      const img = input.closest(".thumb").querySelector("img");
+      img.src = url;
+      $("mainProductImage").src = url;
+      return;
+    }
+    const img = input.closest(".thumb")?.querySelector("img");
+    if (img) img.src = url;
+    else setPreview(input.parentElement,url);
+  }
+
+  document.querySelectorAll('[data-photo]').forEach(input =>
+    input.addEventListener("change", () => previewFile(input))
+  );
+
+  document.querySelectorAll(".upload-color input").forEach(input =>
+    input.addEventListener("change", () => previewFile(input))
+  );
+
+  document.querySelectorAll(".thumb").forEach(btn => {
+    btn.addEventListener("click", event => {
+      if (event.target.closest("input")) return;
+      document.querySelectorAll(".thumb").forEach(x => x.classList.remove("active"));
+      btn.classList.add("active");
+      const img = btn.querySelector("img");
+      if (img && img.src) $("mainProductImage").src = img.src;
+    });
+  });
+
+  document.querySelectorAll(".size-btn").forEach(btn =>
+    btn.addEventListener("click", () => btn.classList.toggle("selected"))
+  );
+
+  $("description").addEventListener("input", () => {
+    $("descriptionCount").textContent = `${$("description").value.length}/500`;
+  });
+  $("description").dispatchEvent(new Event("input"));
+
+  document.querySelector(".cancel-btn").addEventListener("click", () => {
+    window.location.href = "produk.html";
+  });
+
+  $("editProductForm").addEventListener("submit", event => {
+    event.preventDefault();
+
+    const updated = {
+      ...editData,
+      name: $("productName").value.trim(),
+      price: "Rp " + $("price").value.trim(),
+      stock: $("stock").value,
+      category: $("category").value,
+      motifName: $("motifName").value.trim(),
+      fabricColorName: $("fabricColorName").value.trim(),
+      sizes: [...document.querySelectorAll(".size-btn.selected")].map(btn => btn.textContent.trim()),
+      jenisKain: $("jenisKain").value.trim(),
+      description: $("description").value.trim(),
+      image: $("mainProductImage").src
+    };
+
+    localStorage.setItem("updatedProductData", JSON.stringify(updated));
+    alert("Perubahan produk berhasil disimpan.");
+    window.location.href = "produk.html";
+  });
+})();
+</script>
+</body>
+</html>

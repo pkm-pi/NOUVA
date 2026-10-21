@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Edit Pesanan - NOUVA</title>
+  <link rel="stylesheet" href="../css/edit_pes.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR: dipertahankan mengikuti detail_pesanan -->
+  <aside class="sidebar">
+    <div class="brand">
+      <img alt="Logo Nouva" class="logo-nouva-FIKS" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/logo-nouva-fiks-2.png">
+      <div class="brand-name">NOUVA</div>
+      <div class="brand-tagline">NOU Menuju Inovasi</div>
+    </div>
+
+    <div class="admin-profile">
+      <img alt="Admin" class="profile" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/profile.png">
+      <div class="admin-name">Admin</div>
+    </div>
+
+    <nav aria-label="Menu aplikasi" class="menu">
+      <a class="menu-link dashboard-menu-link" href="dashboard_admin.html">
+          <img class="desktop-dashboard-icon" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--3--1.png" alt="">
+          <img class="mobile-dashboard-logo" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/logo-nouva-fiks-2.png" alt="">
+          <span>Dashboard</span>
+        </a>
+      <a class="menu-link active" href="pesanan.html">
+        <img alt="" src="https://c.animaapp.com/P7Ah09FQ/img/image-removebg-preview--12--3@2x.png"><span>Pesanan</span>
+      </a>
+      <a class="menu-link" href="produksi.html">
+        <img alt="" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--13--1.png"><span>Produksi Jahit</span>
+      </a>
+      <a class="menu-link" href="produk.html">
+        <img alt="" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--14--1.png"><span>Produk</span>
+      </a>
+      <a class="menu-link" href="pemasaran.html">
+        <img alt="" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--17--1.png"><span>Pemasaran</span>
+      </a>
+      <a class="menu-link" href="pembukuan.html">
+        <img alt="" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--18--1.png"><span>Pembukuan</span>
+      </a>
+      <a class="menu-link" href="pengaturan.html">
+        <img alt="" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--15--1.png"><span>Pengaturan</span>
+      </a>
+    </nav>
+  </aside>
+
+  <main>
+    <header class="page-header">
+      <div class="page-title-group">
+        <a class="back-icon-btn back-title-button" id="backBtn" href="detail_pesanan.html?id=1" aria-label="Kembali ke detail pesanan" title="Kembali ke detail pesanan"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H5M12 19l-7-7 7-7" /></svg></a>
+        <div class="page-title-copy">
+          <h1>Edit Pesanan</h1>
+          <p>Ubah informasi pesanan sesuai kebutuhan</p>
+        </div>
+      </div>
+    </header>
+
+    <form id="editForm">
+
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <h2>Data Pemesan</h2>
+            <p>Informasi pelanggan yang melakukan pemesanan</p>
+          </div>
+        </div>
+        <div class="form-grid four">
+          <label class="field">
+            <span>Nama Pemesan</span>
+            <input id="customer" type="text" value="SDN 27">
+          </label>
+          <label class="field">
+            <span>Jenis Pemesan</span>
+            <select id="type">
+              <option>Instansi</option>
+              <option>Individu</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Nama Instansi</span>
+            <input id="institution" type="text" value="SDN 27">
+          </label>
+          <label class="field">
+            <span>Nomor HP</span>
+            <input id="phone" type="text" value="0812-3456-7890">
+          </label>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <h2>Informasi Pesanan</h2>
+            <p>Nomor pesanan, tanggal, deadline, dan status proses</p>
+          </div>
+        </div>
+        <div class="form-grid four">
+          <label class="field">
+            <span>No. Referensi</span>
+            <input id="invoice" type="text" value="CUS-000-001">
+          </label>
+          <label class="field">
+            <span>Tanggal Pesan</span>
+            <input id="orderDate" type="date" value="2026-09-25">
+          </label>
+          <label class="field">
+            <span>Deadline</span>
+            <input id="deadline" type="date" value="2026-10-12">
+          </label>
+          <label class="field">
+            <span>Status Pesanan</span>
+            <select id="status">
+              <option>Sedang Disulam</option>
+              <option>Sedang Dijahit</option>
+              <option>Siap Diambil</option>
+              <option>Selesai</option>
+            </select>
+          </label>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <h2>Rincian Pesanan</h2>
+            <p>Ubah detail setiap produk yang dipesan</p>
+          </div>
+          <button type="button" class="secondary-btn" id="addItemBtn">＋ Tambah Produk</button>
+        </div>
+        <div id="items"></div>
+      </section>
+
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <h2>Informasi Pembayaran</h2>
+            <p>Atur total harga, DP, dan sisa pembayaran</p>
+          </div>
+        </div>
+        <div class="form-grid three">
+          <label class="field">
+            <span>Total Harga</span>
+            <input id="total" type="number" min="0" value="12500000">
+          </label>
+          <label class="field">
+            <span>Nominal DP</span>
+            <input id="dp" type="number" min="0" value="7500000">
+          </label>
+          <label class="field">
+            <span>Status Pembayaran DP</span>
+            <select id="dpStatus">
+              <option>Lunas</option>
+              <option>Belum Lunas</option>
+            </select>
+          </label>
+        </div>
+        <div class="payment-preview">
+          <div>
+            <span>Sisa Pembayaran</span>
+            <strong id="remainingPreview">Rp 5.000.000</strong>
+          </div>
+          <div>
+            <span>Status Sisa</span>
+            <select id="remainingStatus">
+              <option>Belum Lunas</option>
+              <option>Lunas</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <h2>Progres Pesanan</h2>
+            <p>Pilih tahapan progres pesanan secara sederhana</p>
+          </div>
+        </div>
+        <div class="form-grid">
+          <label class="field">
+            <span>Tahapan Progres</span>
+            <select id="progressStage">
+              <option>Pesanan Diterima</option>
+              <option>Pembayaran DP</option>
+              <option>Proses</option>
+              <option>Siap Diambil</option>
+              <option>Selesai</option>
+            </select>
+          </label>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <h2>Catatan Pesanan</h2>
+            <p>Catatan yang diberikan saat pemesanan</p>
+          </div>
+        </div>
+        <label class="field">
+          <span>Catatan</span>
+          <textarea id="note" rows="4">Ukuran dan motif mengikuti kesepakatan.</textarea>
+        </label>
+      </section>
+
+      <div class="form-actions">
+        <a class="cancel-btn" id="cancelBtn" href="detail_pesanan.html?id=1">Batal</a>
+        <button class="save-btn" type="submit">✓ Simpan Perubahan</button>
+      </div>
+    </form>
+  </main>
+</div>
+
+<template id="itemTemplate">
+  <div class="edit-item">
+    <div class="item-head">
+      <div class="item-title">
+        <span class="item-number">1</span>
+        <div>
+          <strong>Produk Pesanan</strong>
+          <small>Detail pakaian, kain, motif, dan ukuran</small>
+        </div>
+      </div>
+      <button type="button" class="remove-item" title="Hapus produk">Hapus</button>
+    </div>
+
+    <div class="item-body">
+      <div class="product-top">
+        <div class="image-card">
+          <span>Model pakaian dari toko</span>
+          <div class="image-preview">
+            <img class="model-image" src="https://c.animaapp.com/XYqZOEOx/img/jumper-2@2x.png" alt="">
+          </div>
+          <label class="upload-btn">
+            Pilih gambar
+            <input class="model-upload" type="file" accept="image/*" hidden>
+          </label>
+        </div>
+
+        <div class="mini-fields">
+          <label class="field"><span>Nama Produk</span><input class="item-name-input" type="text"></label>
+          <label class="field"><span>Kategori</span><input class="item-category" type="text"></label>
+          <label class="field"><span>Jumlah</span><input class="item-qty" type="number" min="1"></label>
+          <label class="field"><span>Jenis Kain</span><input class="item-fabric" type="text"></label>
+          <label class="field"><span>Harga Produk</span><input class="item-price-input" type="number" min="0"></label>
+          <div class="field calculated"><span>Subtotal</span><strong class="item-subtotal">Rp 0</strong></div>
+        </div>
+      </div>
+
+      <div class="media-edit-grid">
+        <div class="image-card">
+          <span>Model custom pelanggan</span>
+          <div class="custom-preview empty"><em>Opsional • belum ada</em></div>
+          <label class="upload-btn">
+            Pilih gambar
+            <input class="custom-model-upload" type="file" accept="image/*" hidden>
+          </label>
+        </div>
+
+        <div class="image-card">
+          <span>Motif sulaman dari toko</span>
+          <div class="image-preview motif-preview">
+            <img class="motif-image" src="../img/motif_karawo_bunga.svg" alt="">
+          </div>
+          <label class="upload-btn">
+            Pilih gambar
+            <input class="motif-upload" type="file" accept="image/*" hidden>
+          </label>
+          <input class="motif-name" type="text" placeholder="Nama motif, contoh: Motif Bunga">
+        </div>
+
+        <div class="image-card">
+          <span>Motif custom pelanggan</span>
+          <div class="custom-preview empty"><em>Opsional • belum ada</em></div>
+          <label class="upload-btn">
+            Pilih gambar
+            <input class="custom-motif-upload" type="file" accept="image/*" hidden>
+          </label>
+        </div>
+      </div>
+
+      <label class="field description-field">
+        <span>Deskripsi Motif / Model / Pakaian</span>
+        <textarea class="item-description" rows="3"></textarea>
+      </label>
+
+      <div class="size-section">
+        <div class="sub-heading">
+          <strong>Ukuran & Warna</strong>
+          <button type="button" class="add-color-btn">＋ Tambah Warna</button>
+        </div>
+        <div class="size-table-wrap">
+          <table class="size-table">
+            <thead>
+              <tr><th>Warna</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>Total</th><th></th></tr>
+            </thead>
+            <tbody class="color-rows"></tbody>
+            <tfoot>
+              <tr class="totals-row">
+                <th>Total</th><th class="t-s">0</th><th class="t-m">0</th><th class="t-l">0</th><th class="t-xl">0</th><th class="t-all">0</th><th></th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+const initialItems = [
+  {
+    name:"Seragam Karawo", category:"Seragam", qty:20, price:625000,
+    description:"Seragam karawo untuk kebutuhan sekolah.",
+    fabric:"Katun", modelImage:"https://c.animaapp.com/XYqZOEOx/img/jumper-2@2x.png",
+    motif:"Motif Bunga", motifImage:"../img/motif_karawo_bunga.svg",
+    colors:[["Putih",2,3,2,1],["Cream",1,3,2,1],["Maroon",1,2,1,1]]
+  },
+  {
+    name:"Seragam Karawo", category:"Seragam", qty:15, price:625000,
+    description:"Seragam karawo dengan motif daun.",
+    fabric:"Katun", modelImage:"https://c.animaapp.com/XYqZOEOx/img/jumper-2@2x.png",
+    motif:"Motif Daun", motifImage:"../img/motif_karawo_daun.svg",
+    colors:[["Navy",1,2,2,1],["Putih",1,1,2,1],["Hitam",1,1,1,1]]
+  },
+  {
+    name:"Seragam Karawo", category:"Seragam", qty:15, price:625000,
+    description:"Seragam karawo dengan motif geometris.",
+    fabric:"Katun", modelImage:"https://c.animaapp.com/XYqZOEOx/img/jumper-2@2x.png",
+    motif:"Motif Geometris", motifImage:"../img/motif_karawo_geometris.svg",
+    colors:[["Maroon",2,2,2,1],["Hitam",2,3,2,1]]
+  }
+];
+
+const id = new URLSearchParams(location.search).get("id") || "1";
+document.getElementById("backBtn").href = `detail_pesanan.html?id=${id}`;
+document.getElementById("cancelBtn").href = `detail_pesanan.html?id=${id}`;
+
+function money(v){
+  return "Rp " + Number(v || 0).toLocaleString("id-ID");
+}
+
+function dateToISO(text){
+  const months = {Januari:0,Februari:1,Maret:2,April:3,Mei:4,Juni:5,Juli:6,Agustus:7,September:8,Oktober:9,November:10,Desember:11};
+  const p = String(text || "").split(" ");
+  if(p.length === 3 && months[p[1]] !== undefined){
+    const d = new Date(Number(p[2]), months[p[1]], Number(p[0]));
+    return d.toISOString().slice(0,10);
+  }
+  return text || "";
+}
+
+function isoToIndonesian(value){
+  if(!value) return "";
+  const [y,m,d] = value.split("-");
+  const months = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+  return `${Number(d)} ${months[Number(m)-1]} ${y}`;
+}
+
+function addColorRow(tbody, data=["Putih",0,0,0,0]){
+  const tr = document.createElement("tr");
+  tr.innerHTML = `
+    <td><input class="color-name" type="text" value="${data[0] || ""}"></td>
+    <td><input class="size s" type="number" min="0" value="${data[1] || 0}"></td>
+    <td><input class="size m" type="number" min="0" value="${data[2] || 0}"></td>
+    <td><input class="size l" type="number" min="0" value="${data[3] || 0}"></td>
+    <td><input class="size xl" type="number" min="0" value="${data[4] || 0}"></td>
+    <td class="row-total">0</td>
+    <td><button type="button" class="delete-row">×</button></td>`;
+  tbody.appendChild(tr);
+  tr.querySelectorAll("input").forEach(i => i.addEventListener("input", updateTable));
+  tr.querySelector(".delete-row").addEventListener("click", () => { tr.remove(); updateTable(); });
+  updateTable();
+}
+
+function updateTable(){
+  document.querySelectorAll(".edit-item").forEach(item => {
+    let totals=[0,0,0,0,0];
+    item.querySelectorAll(".color-rows tr").forEach(tr => {
+      const vals=[1,2,3,4].map(i => Number(tr.querySelectorAll("input")[i]?.value || 0));
+      const total=vals.reduce((a,b)=>a+b,0);
+      tr.querySelector(".row-total").textContent=total;
+      vals.forEach((v,i)=>totals[i+1]+=v);
+      totals[0]+=total;
+    });
+    item.querySelector(".t-s").textContent=totals[1];
+    item.querySelector(".t-m").textContent=totals[2];
+    item.querySelector(".t-l").textContent=totals[3];
+    item.querySelector(".t-xl").textContent=totals[4];
+    item.querySelector(".t-all").textContent=totals[0];
+
+    const qty=Number(item.querySelector(".item-qty").value||0);
+    const price=Number(item.querySelector(".item-price-input").value||0);
+    item.querySelector(".item-subtotal").textContent=money(qty*price);
+  });
+}
+
+function bindImage(input, target){
+  input.addEventListener("change", () => {
+    const file=input.files?.[0];
+    if(!file) return;
+    const url=URL.createObjectURL(file);
+    if(target.tagName==="IMG"){
+      target.src=url;
+    } else {
+      target.classList.remove("empty");
+      target.innerHTML=`<img src="${url}" alt="Gambar custom">`;
+    }
+  });
+}
+
+function addItem(data={}, index=0){
+  const node=document.getElementById("itemTemplate").content.cloneNode(true);
+  const item=node.querySelector(".edit-item");
+  item.dataset.index=index;
+  item.querySelector(".item-number").textContent=index+1;
+  item.querySelector(".item-name-input").value=data.name||"";
+  item.querySelector(".item-category").value=data.category||"";
+  item.querySelector(".item-qty").value=data.qty||1;
+  item.querySelector(".item-fabric").value=data.fabric||"";
+  item.querySelector(".item-price-input").value=data.price||0;
+  item.querySelector(".item-description").value=data.description||"";
+  item.querySelector(".motif-name").value=data.motif||"";
+
+  const model=item.querySelector(".model-image");
+  if(data.modelImage) model.src=data.modelImage;
+  const motif=item.querySelector(".motif-image");
+  if(data.motifImage) motif.src=data.motifImage;
+
+  const tbody=item.querySelector(".color-rows");
+  (data.colors?.length ? data.colors : [["Putih",0,0,0,0]]).forEach(c=>addColorRow(tbody,c));
+
+  item.querySelector(".add-color-btn").addEventListener("click",()=>addColorRow(tbody,["Warna baru",0,0,0,0]));
+  item.querySelector(".remove-item").addEventListener("click",()=>{
+    if(document.querySelectorAll(".edit-item").length===1){ alert("Minimal harus ada 1 produk."); return; }
+    item.remove(); renumberItems(); updateTable();
+  });
+
+  item.querySelectorAll(".item-qty,.item-price-input").forEach(x=>x.addEventListener("input",updateTable));
+  bindImage(item.querySelector(".model-upload"),model);
+  bindImage(item.querySelector(".motif-upload"),motif);
+  bindImage(item.querySelector(".custom-model-upload"),item.querySelectorAll(".custom-preview")[0]);
+  bindImage(item.querySelector(".custom-motif-upload"),item.querySelectorAll(".custom-preview")[1]);
+
+  document.getElementById("items").appendChild(item);
+  updateTable();
+}
+
+function renumberItems(){
+  document.querySelectorAll(".edit-item").forEach((el,i)=>{
+    el.dataset.index=i;
+    el.querySelector(".item-number").textContent=i+1;
+  });
+}
+
+function updateRemaining(){
+  const total=Number(document.getElementById("total").value||0);
+  const dp=Number(document.getElementById("dp").value||0);
+  document.getElementById("remainingPreview").textContent=money(Math.max(0,total-dp));
+}
+
+["total","dp"].forEach(x=>document.getElementById(x).addEventListener("input",updateRemaining));
+
+/* Ambil data tersimpan dari detail pesanan jika sebelumnya sudah diedit. */
+const savedRaw = localStorage.getItem(`nouva_edit_order_${id}`);
+let saved = null;
+try { saved = savedRaw ? JSON.parse(savedRaw) : null; } catch(e) { saved = null; }
+
+const savedItems = saved?.items?.length
+  ? saved.items.map((item, i) => ({...initialItems[i], ...item}))
+  : initialItems;
+
+const customer = saved?.customer ?? "SDN 27";
+const type = saved?.type ?? "Instansi";
+const institution = saved?.institution ?? "SDN 27";
+const phone = saved?.phone ?? "0812-3456-7890";
+const invoice = saved?.invoice ?? "CUS-000-001";
+const orderDate = saved?.orderDate ?? "2026-09-25";
+const deadline = saved?.deadline ?? "2026-10-12";
+const status = saved?.status ?? "Sedang Dijahit";
+const progressStage = saved?.progressStage ?? (
+  ["Sedang Disulam","Sedang Dijahit"].includes(status) ? "Proses" :
+  status === "Siap Diambil" ? "Siap Diambil" :
+  status === "Selesai" ? "Selesai" : "Pesanan Diterima"
+);
+
+document.getElementById("customer").value=customer;
+document.getElementById("type").value=type;
+document.getElementById("institution").value=institution;
+document.getElementById("phone").value=phone;
+document.getElementById("invoice").value=invoice;
+document.getElementById("orderDate").value=dateToISO(orderDate) || orderDate;
+document.getElementById("deadline").value=dateToISO(deadline) || deadline;
+document.getElementById("status").value=status;
+document.getElementById("progressStage").value=progressStage;
+document.getElementById("total").value=saved?.total ?? 12500000;
+document.getElementById("dp").value=saved?.dp ?? 7500000;
+document.getElementById("dpStatus").value=saved?.dpStatus ?? "Lunas";
+document.getElementById("remainingStatus").value=saved?.remainingStatus ?? "Belum Lunas";
+document.getElementById("note").value=saved?.note ?? "Ukuran dan motif mengikuti kesepakatan.";
+
+savedItems.forEach((x,i)=>addItem(x,i));
+
+document.getElementById("addItemBtn").addEventListener("click",()=>addItem({
+  name:"",category:"",qty:1,price:0,description:"",fabric:"",motif:""
+},document.querySelectorAll(".edit-item").length));
+
+document.getElementById("editForm").addEventListener("submit", e=>{
+  e.preventDefault();
+
+  const payload={
+    id,
+    customer:document.getElementById("customer").value,
+    type:document.getElementById("type").value,
+    institution:document.getElementById("institution").value,
+    phone:document.getElementById("phone").value,
+    invoice:document.getElementById("invoice").value,
+    orderDate:document.getElementById("orderDate").value,
+    deadline:document.getElementById("deadline").value,
+    status:document.getElementById("status").value,
+    progressStage:document.getElementById("progressStage").value,
+    total:Number(document.getElementById("total").value||0),
+    dp:Number(document.getElementById("dp").value||0),
+    dpStatus:document.getElementById("dpStatus").value,
+    remainingStatus:document.getElementById("remainingStatus").value,
+    note:document.getElementById("note").value,
+    items:[...document.querySelectorAll(".edit-item")].map(item=>({
+      name:item.querySelector(".item-name-input").value,
+      category:item.querySelector(".item-category").value,
+      qty:Number(item.querySelector(".item-qty").value||0),
+      fabric:item.querySelector(".item-fabric").value,
+      price:Number(item.querySelector(".item-price-input").value||0),
+      description:item.querySelector(".item-description").value,
+      motif:item.querySelector(".motif-name").value,
+      modelImage:item.querySelector(".model-image").src,
+      motifImage:item.querySelector(".motif-image").src,
+      colors:[...item.querySelectorAll(".color-rows tr")].map(tr=>[
+        tr.querySelector(".color-name").value,
+        Number(tr.querySelector(".s").value||0),
+        Number(tr.querySelector(".m").value||0),
+        Number(tr.querySelector(".l").value||0),
+        Number(tr.querySelector(".xl").value||0)
+      ])
+    }))
+  };
+
+  localStorage.setItem(`nouva_edit_order_${id}`,JSON.stringify(payload));
+  alert("Perubahan pesanan berhasil disimpan.");
+  window.location.href=`detail_pesanan.html?id=${id}`;
+});
+
+updateRemaining();
+</script>
+</body>
+</html>

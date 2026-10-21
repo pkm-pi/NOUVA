@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>Pesan Custom - NOUVA</title>
+  <link href="../globals.css" rel="stylesheet"/>
+  <link href="../css/pes_cus.css" rel="stylesheet"/>
+</head>
+
+<body>
+  <div class="app">
+
+    <aside class="sidebar">
+      <div class="brand">
+        <img class="logo-nouva" src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/logo-nouva-fiks-2.png" alt="Logo Nouva">
+        <div class="brand-name">NOUVA</div>
+        <div class="brand-tagline">NOU MENUJU INOVASI</div>
+      </div>
+
+      <nav class="menu" aria-label="Menu pelanggan">
+        <a class="menu-link dashboard-menu-link" href="dashboard_pelanggan.html">
+          <img class="desktop-dashboard-icon" src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--3--1.png" alt="">
+          <img class="mobile-dashboard-logo" src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/logo-nouva-fiks-2.png" alt="">
+          <span>Dashboard</span>
+        </a>
+        <a class="menu-link" href="katalog.html">
+          <img src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--4--1.png" alt="">
+          <span>Katalog Produk</span>
+        </a>
+        <a class="menu-link" href="pesanan_saya.html">
+          <img src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--6--1.png" alt="">
+          <span>Pesanan Saya</span>
+        </a>
+        <a class="menu-link active" href="pes_cus.html" aria-current="page">
+          <img src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--5--1.png" alt="">
+          <span>Pesan Custom</span>
+        </a>
+        <a class="menu-link" href="peng_pel.html">
+          <img src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--9--1.png" alt="">
+          <span>Pengaturan</span>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <header class="page-header">
+        <div class="title-wrap">
+          <div>
+            <h1>Pesan Custom</h1>
+            <p>Isi detail pesanan custom yang kamu inginkan</p>
+          </div>
+        </div>
+        <button class="save-button header-save-button" type="submit" form="orderForm">
+          Ajukan Pesanan
+        </button>
+      </header>
+
+      <form id="orderForm" class="order-form">
+        <!-- DATA PEMESAN -->
+        <section class="top-grid">
+          <article class="card customer-card">
+            <div class="section-heading">
+              <span class="step">1.</span>
+              <div>
+                <h2>Data Pemesan</h2>
+                <p>Isi data diri untuk pengajuan pesanan custom</p>
+              </div>
+            </div>
+
+            <div class="customer-types" role="group" aria-label="Jenis pemesan">
+              <button class="customer-type selected" type="button" data-type="instansi">
+                <span class="type-dot instansi-dot"></span>
+                <strong>Instansi</strong>
+              </button>
+              <button class="customer-type" type="button" data-type="individu">
+                <span class="type-dot individu-dot"></span>
+                <strong>Individu</strong>
+              </button>
+            </div>
+
+            <div class="field-grid customer-fields">
+              <label class="field">
+                <span>Nama Pemesan</span>
+                <div class="input-shell">
+                  <input id="customerName" name="customerName" type="text" placeholder="Nama pemesan" required/>
+                </div>
+              </label>
+
+              <label class="field">
+                <span>Nomor HP Pemesan</span>
+                <div class="input-shell">
+                  <input id="phone" name="phone" type="tel" placeholder="08xxxxxxxxxx" required/>
+                </div>
+              </label>
+
+              <label class="field full-field" id="institutionField">
+                <span>Nama Instansi <small>(jika ada)</small></span>
+                <div class="input-shell">
+                  <input id="institutionName" name="institutionName" type="text" placeholder="Nama instansi"/>
+                </div>
+              </label>
+            </div>
+          </article>
+
+          <div class="right-top">
+            <article class="card date-card">
+              <div class="section-heading compact">
+                <span class="step">2.</span>
+                <h2>Data Pesanan</h2>
+              </div>
+
+              <div class="order-number-row">
+                <label class="field">
+                  <span>Nomor Referensi</span>
+                  <div class="input-shell readonly-shell">
+                    <input id="orderNumber" name="orderNumber" type="text" value="CUS-000-000" readonly/>
+                    <small>otomatis</small>
+                  </div>
+                </label>
+              </div>
+
+              <div class="date-grid">
+                <label class="field">
+                  <span>Tanggal Memesan</span>
+                  <div class="date-input">
+                    <img src="https://c.animaapp.com/XYqZOEOx/img/icon-1.svg" alt=""/>
+                    <input name="orderDate" type="date" required/>
+                  </div>
+                </label>
+                <label class="field">
+                  <span>Deadline Pesanan</span>
+                  <div class="date-input">
+                    <img src="https://c.animaapp.com/XYqZOEOx/img/icon-1.svg" alt=""/>
+                    <input name="deadline" type="date" required/>
+                  </div>
+                </label>
+              </div>
+            </article>
+
+            <article class="card note-card">
+              <div class="section-heading compact">
+                <span class="note-title">Catatan Pesanan</span>
+              </div>
+              <textarea name="note" placeholder="Tulis satu catatan untuk pesanan ini (opsional)"></textarea>
+            </article>
+          </div>
+        </section>
+
+        <!-- PRODUK -->
+        <section class="card products-card">
+          <div class="card-heading">
+            <div class="section-heading compact">
+              <span class="step">3.</span>
+              <div>
+                <h2>Data Produk yang Dipesan</h2>
+                <p>Tambahkan satu atau lebih produk karawo dalam pesanan ini</p>
+              </div>
+            </div>
+            <button class="add-product" id="addProduct" type="button">
+              <span class="plus-symbol">+</span>
+              Tambah Produk
+            </button>
+          </div>
+
+          <div id="productList" class="product-list"></div>
+
+          <div class="product-total-bar">
+            <span>Total Jumlah Produk</span>
+            <strong><span id="totalQty">0</span> pcs</strong>
+          </div>
+        </section>
+
+        <div class="custom-price-notice" role="status">
+          <strong>Harga akan ditentukan oleh admin</strong>
+          <p>Setelah pesanan diajukan, admin akan memeriksa detail produk dan menentukan harga. Kamu bisa melihat harga dan catatan admin pada halaman Detail Pesanan Custom.</p>
+        </div>
+</form>
+    </main>
+  </div>
+
+  <template id="productTemplate">
+    <article class="product-item">
+      <div class="product-item-header">
+        <div>
+          <span class="product-index">Produk <b>1</b></span>
+          <p>Lengkapi detail produk yang dipesan</p>
+        </div>
+        <button type="button" class="delete-product" aria-label="Hapus produk">
+          <img src="https://c.animaapp.com/XYqZOEOx/img/trash-7.svg" alt=""/>
+          <span>Hapus</span>
+        </button>
+      </div>
+
+      <div class="product-fields">
+        <label class="field product-name-field">
+          <span>Nama Produk</span>
+          <div class="input-shell">
+            <input class="product-name" type="text" placeholder="Contoh: Kemeja Karawo"/>
+          </div>
+        </label>
+
+        <label class="field">
+          <span>Kategori Produk</span>
+          <div class="input-shell select-shell">
+            <select class="product-category">
+              <option value="">Pilih kategori</option>
+              <option>Kemeja</option>
+              <option>Blouse</option>
+              <option>Jas</option>
+              <option>Seragam</option>
+              <option>Outer</option>
+              <option>Dress</option>
+              <option>Rompi</option>
+              <option>Celana</option>
+              <option>Rok</option>
+              <option>Lainnya</option>
+            </select>
+          </div>
+        </label>
+
+        <label class="field">
+          <span>Ukuran Produk</span>
+          <div class="input-shell select-shell">
+            <select class="product-size">
+              <option value="">Pilih ukuran</option>
+              <option>XS</option><option>S</option><option>M</option>
+              <option>L</option><option>XL</option><option>XXL</option>
+              <option>XXXL</option><option>Custom</option>
+            </select>
+          </div>
+        </label>
+
+        <label class="field">
+          <span>Jumlah Pesanan (pcs)</span>
+          <div class="input-shell">
+            <input class="product-qty" type="number" min="1" value="" placeholder="Jumlah pcs"/>
+          </div>
+        </label>
+
+        <label class="field">
+          <span>Jenis Kain</span>
+          <div class="input-shell select-shell">
+            <select class="fabric-type">
+              <option value="">Pilih kain</option>
+              <option>Katun</option>
+              <option>Rayon</option>
+              <option>Drill</option>
+              <option>Wol</option>
+              <option>Satin</option>
+              <option>Linen</option>
+              <option>Poliester</option>
+              <option value="custom">Custom</option>
+            </select>
+          </div>
+        </label>
+
+        <label class="field custom-fabric-field is-hidden">
+          <span>Jenis Kain Custom</span>
+          <div class="input-shell">
+            <input class="custom-fabric" type="text" placeholder="Tulis jenis kain"/>
+          </div>
+        </label>
+
+        <div class="field media-field motif-field">
+          <span>Motif Sulaman dari Toko/Pelanggan</span>
+          <div class="motif-combo">
+            <input class="motif-store-name" type="text" placeholder="Nama motif sulaman"/>
+            <label class="mini-upload">
+              <input class="motif-store-image" type="file" accept="image/*"/>
+              <span>+ Foto Motif</span>
+            </label>
+          </div>
+          <div class="preview-box motif-store-preview"></div>
+        </div>
+
+        <div class="field media-field color-field">
+          <span>Warna Kain</span>
+          <div class="motif-combo">
+            <input class="fabric-color-name" type="text" placeholder="Nama warna kain"/>
+            <label class="mini-upload">
+              <input class="fabric-color-image" type="file" accept="image/*"/>
+              <span>+ Foto Warna</span>
+            </label>
+          </div>
+          <div class="preview-box fabric-color-preview"></div>
+        </div>
+
+        <div class="field media-field model-image-field">
+          <span>Foto/Gambar Model Pakaian dari Toko/Pelanggan</span>
+          <label class="upload-box">
+            <input class="model-custom-image" type="file" accept="image/*"/>
+            <span class="upload-icon">+</span>
+            <span class="upload-text">Pilih gambar pelanggan</span>
+          </label>
+          <div class="preview-box custom-model-preview"></div>
+        </div>
+
+        <label class="field description-field">
+          <span>Catatan tambahan Motif / Model / Pakaian Produk</span>
+          <textarea class="product-description" placeholder="Tulis detail motif, model, atau permintaan pakaian"></textarea>
+        </label>
+      </div>
+    </article>
+  </template>
+
+  <script>
+    const form = document.getElementById("orderForm");
+    const customerTypes = document.querySelectorAll(".customer-type");
+    const institutionField = document.getElementById("institutionField");
+    const institutionName = document.getElementById("institutionName");
+    const productList = document.getElementById("productList");
+    const productTemplate = document.getElementById("productTemplate");
+    const addProduct = document.getElementById("addProduct");
+    const totalQty = document.getElementById("totalQty");
+function setCustomerType(type) {
+      customerTypes.forEach(item => item.classList.toggle("selected", item.dataset.type === type));
+      institutionField.classList.toggle("is-hidden", type !== "instansi");
+      institutionName.required = type === "instansi";
+      document.getElementById("customerName").placeholder =
+        type === "instansi" ? "Nama pemesan / penanggung jawab" : "Nama lengkap pemesan";
+    }
+
+    customerTypes.forEach(button => {
+      button.addEventListener("click", () => setCustomerType(button.dataset.type));
+    });
+
+    function updateProductIndexes() {
+      productList.querySelectorAll(".product-item").forEach((item, index) => {
+        item.querySelector(".product-index b").textContent = index + 1;
+      });
+    }
+    function updateTotals() {
+      let qty = 0;
+      productList.querySelectorAll(".product-item").forEach(item => {
+        const q = Number(item.querySelector(".product-qty")?.value || 0);
+        qty += Math.max(0, q);
+      });
+      totalQty.textContent = qty;
+    }
+
+
+    function previewFile(input, preview) {
+      const file = input.files && input.files[0];
+      if (!file) {
+        preview.innerHTML = "";
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = event => {
+        preview.innerHTML = `<img src="${event.target.result}" alt="Preview"/>`;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function bindProduct(item) {
+      item.querySelector(".delete-product").addEventListener("click", () => {
+        const items = productList.querySelectorAll(".product-item");
+        if (items.length === 1) {
+          item.querySelectorAll("input, textarea, select").forEach(el => {
+            if (el.type === "file") el.value = "";
+            else el.value = "";
+          });
+          item.querySelectorAll(".preview-box").forEach(el => el.innerHTML = "");
+          updateTotals();
+          return;
+        }
+        item.remove();
+        updateProductIndexes();
+        updateTotals();
+      });
+
+      item.querySelectorAll(".product-qty").forEach(input => {
+        input.addEventListener("input", updateTotals);
+      });
+
+      const fabricType = item.querySelector(".fabric-type");
+      const customFabricField = item.querySelector(".custom-fabric-field");
+      fabricType.addEventListener("change", () => {
+        customFabricField.classList.toggle("is-hidden", fabricType.value !== "custom");
+      });
+
+      const previews = [
+        [".model-store-image", ".store-preview"],
+        [".model-custom-image", ".custom-model-preview"],
+        [".motif-store-image", ".motif-store-preview"],
+        [".motif-custom-image", ".motif-custom-preview"],
+        [".fabric-color-image", ".fabric-color-preview"]
+      ];
+
+      previews.forEach(([inputSelector, previewSelector]) => {
+        const input = item.querySelector(inputSelector);
+        const preview = item.querySelector(previewSelector);
+        input.addEventListener("change", () => previewFile(input, preview));
+      });
+    }
+
+    function addProductCard() {
+      const fragment = productTemplate.content.cloneNode(true);
+      const item = fragment.querySelector(".product-item");
+      productList.appendChild(item);
+      bindProduct(item);
+      updateProductIndexes();
+    }
+
+    addProduct.addEventListener("click", addProductCard);
+form.addEventListener("submit", event => {
+      event.preventDefault();
+      const products = [...productList.querySelectorAll(".product-item")].map(item => ({
+        name: item.querySelector(".product-name").value.trim(),
+        category: item.querySelector(".product-category").value,
+        size: item.querySelector(".product-size").value,
+        quantity: Number(item.querySelector(".product-qty").value || 0),
+        fabric: item.querySelector(".fabric-type").value === "custom"
+          ? item.querySelector(".custom-fabric").value.trim()
+          : item.querySelector(".fabric-type").value,
+        motif: item.querySelector(".motif-store-name").value.trim(),
+        color: item.querySelector(".fabric-color-name").value.trim(),
+        description: item.querySelector(".product-description").value.trim(),
+        price: null
+      }));
+      const pendingOrder = {
+        reference: document.getElementById("orderNumber").value,
+        customerName: document.getElementById("customerName").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        customerType: document.querySelector(".customer-type.selected")?.dataset.type || "instansi",
+        institutionName: institutionName.value.trim(),
+        orderDate: form.elements.orderDate.value,
+        deadline: form.elements.deadline.value,
+        note: form.elements.note.value.trim(),
+        products,
+        totalPrice: null,
+        status: "Menunggu penetapan harga",
+        adminNote: "Menunggu admin menentukan harga pesanan custom.",
+        createdAt: new Date().toISOString()
+      };
+      try {
+        const saved = JSON.parse(localStorage.getItem("nouva_custom_orders") || "[]");
+        saved.push(pendingOrder);
+        localStorage.setItem("nouva_custom_orders", JSON.stringify(saved));
+        alert("Pesanan tersimpan sementara di browser ini. Harga masih - dan status menunggu admin menentukan harga.\n\nCatatan: agar pesanan benar-benar masuk ke akun admin/perangkat lain, halaman ini perlu dihubungkan ke database/backend.");
+      } catch (error) {
+        alert("Pesanan belum dapat disimpan di browser ini. Silakan coba lagi.");
+      }
+    });
+
+    // Form dimulai kosong: satu kartu produk kosong siap diisi.
+    setCustomerType("instansi");
+    document.getElementById("orderNumber").value = "CUS-" + Date.now().toString().slice(-6);
+    addProductCard();
+    updateTotals();
+  </script>
+  
+</body>
+</html>
+

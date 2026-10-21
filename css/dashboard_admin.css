@@ -1,0 +1,653 @@
+
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800|Cinzel:400,700|Inter:400,600,700");
+
+*{box-sizing:border-box;-webkit-font-smoothing:antialiased}
+html,body{margin:0;min-height:100%;font-family:"Poppins",sans-serif;background:#f6f7ef}
+body{overflow-x:hidden}
+
+:root{
+  --purple:#3e244b;
+  --purple-2:#794691;
+  --light-purple:#e6dbeb;
+  --bg:#f6f7ef;
+  --border:#d0d2c8;
+  --text:#10100d;
+}
+
+.dashboard-admin{
+  width:100%;
+  min-height:100vh;
+  background:var(--bg);
+  color:var(--text);
+  display:flex;
+  position:relative;
+}
+
+/* SIDEBAR */
+.sidebar{
+  width:155px;
+  min-width:175px;
+  min-height:100vh;
+  background:#3e1e4b;
+  color:#fff;
+  padding:28px 14px 24px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+
+.brand{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+}
+.logo-nouva-FIKS{
+  width:68px;
+  height:68px;
+  border-radius:16px;
+  object-fit:cover;
+  display:block;
+}
+.brand-name{
+  margin-top:7px;
+  font-family:"Cinzel",serif;
+  font-size:22px;
+  font-weight:700;
+  line-height:1;
+}
+.brand-tagline{
+  margin-top:4px;
+  font-family:"Cinzel",serif;
+  font-size:7.8px;
+  line-height:1;
+  white-space:nowrap;
+}
+.admin-profile{
+  margin:28px 0 22px;
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+}
+.profile{width:50px;height:50px;object-fit:contain}
+.admin-name{font-size:15px;font-weight:700;color:#fff}
+
+.menu{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+.menu-link{
+  width:100%;
+  min-height:39px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:7px 8px;
+  border-radius:9px;
+  color:#f6f7f2;
+  text-decoration:none;
+  transition:.18s ease;
+}
+.menu-link img{
+  width:28px;height:28px;object-fit:contain;flex:none;
+}
+.menu-link span{font-size:11px;line-height:1.15;white-space:nowrap}
+.menu-link:hover{background:rgba(255,255,255,.12);opacity:1}
+.menu-link.active{background:rgba(255,255,255,.10)}
+
+/* MAIN */
+.main-content{
+  flex:1;
+  min-width:0;
+  padding:28px clamp(18px,2.2vw,34px) 34px;
+}
+.header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:20px;
+  margin-bottom:16px;
+}
+.welcome h1{
+  margin:0;
+  color:var(--purple);
+  font-size:16px;
+  font-weight:800;
+}
+.welcome p{
+  margin:2px 0 0;
+  color:var(--purple);
+  font-size:12px;
+}
+.notification-btn{
+  width:36px;height:36px;
+  border:0;
+  background:transparent;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  flex:none;
+}
+.notification-btn:hover{background:var(--light-purple)}
+.notification-btn img{width:22px;height:22px}
+
+/* STAT CARDS */
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(130px,1fr)) minmax(250px,1.9fr);
+  gap:9px;
+  margin-bottom:12px;
+}
+.stat-card{
+  min-height:90px;
+  border:1.5px solid var(--border);
+  border-radius:13px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  background:transparent;
+  padding:9px;
+}
+.stat-icon{
+  width:40px;height:40px;
+  border-radius:50%;
+  background:var(--light-purple);
+  display:grid;
+  place-items:center;
+  margin-bottom:5px;
+}
+.stat-icon img{width:24px;height:24px}
+.stat-icon .revenue-icon{
+  width:24px;
+  height:24px;
+  color:#4f3a58;
+  display:block;
+}
+.stat-title{font-size:10px;font-weight:700;text-align:center}
+.stat-value{font-size:28px;font-weight:700;line-height:1.05;margin-top:5px}
+.stat-card.revenue .stat-value{font-size:21px}
+
+/* CHARTS */
+.chart-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.65fr) minmax(280px,1fr);
+  gap:9px;
+}
+.panel{
+  border:1.5px solid var(--border);
+  border-radius:13px;
+  background:transparent;
+  min-width:0;
+}
+.chart-panel{height:178px;padding:10px 12px;position:relative}
+.panel-title-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.panel-title{font-size:11px;font-weight:700;color:var(--text);margin:0}
+.filter-hari select{
+  width:80px;height:23px;
+  border:1px solid #d5d5d5;
+  border-radius:4px;
+  background:var(--bg);
+  color:#555;
+  font-size:8px;
+  text-align:center;
+  cursor:pointer;
+}
+.chart-wrap{height:135px;position:relative}
+#salesChart,#statusChart{width:100%!important;height:100%!important}
+
+.status-panel{padding:10px 12px}
+.status-chart-wrap{height:135px;position:relative}
+
+/* LOWER PANELS */
+.lower-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);
+  gap:9px;
+  margin-top:9px;
+}
+.table-panel{min-height:166px;padding:10px 11px}
+.table-heading{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:7px;
+}
+.table-heading h2{font-size:11px;margin:0;font-weight:700}
+.view-all{
+  font-size:9px;
+  font-weight:700;
+  color:var(--purple-2);
+  text-decoration:none;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.view-all:hover{text-decoration:underline}
+
+.table-scroll{width:100%;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-family:"Poppins",sans-serif;table-layout:fixed}
+th{
+  background:var(--light-purple);
+  color:var(--purple);
+  padding:7px 5px;
+  text-align:center;
+  font-weight:700;
+  font-size:10px; /* diperbesar */
+  border:1px solid #d0d0d0;
+  height:29px;
+}
+td{
+  padding:7px 5px;
+  text-align:center;
+  font-size:9px;
+  color:var(--purple);
+  border:1px solid #d0d0d0;
+  height:27px;
+  background:#fff;
+}
+tbody tr:nth-child(even) td{background:#fafafa}
+
+/* GUIDE */
+.guide{
+  margin-top:16px;
+  min-height:92px;
+  background:var(--light-purple);
+  border-radius:13px;
+  padding:18px 22px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+.guide-copy h2{margin:0;color:var(--purple);font-size:12px;font-weight:800}
+.guide-copy p{margin:2px 0 0;color:var(--purple);font-size:11px}
+.guide-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:82px;
+  height:30px;
+  padding:0 12px;
+  border-radius:5px;
+  background:#f6f8ef;
+  border:1px solid #f6f7ef;
+  color:var(--purple);
+  text-decoration:none;
+  font-size:9px;
+  font-weight:600;
+  cursor:pointer;
+}
+.guide-btn:hover{background:#fff;transform:translateY(-1px)}
+
+/* Custom zoom UI */
+.zoom-control{
+  position:fixed;
+  top:10px;
+  right:18px;
+  z-index:100;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 10px;
+  background:#fff;
+  border-radius:14px;
+  box-shadow:0 5px 16px rgba(0,0,0,.12);
+}
+.zoom-control button{
+  border:0;background:transparent;cursor:pointer;
+  width:32px;height:32px;border-radius:8px;font-size:22px;color:#333;
+}
+.zoom-control button:hover{background:#f1eef3}
+#zoomLevel{min-width:45px;text-align:center;font-size:14px;color:#333}
+.zoom-reset{
+  padding:7px 10px!important;width:auto!important;
+  border:1px solid #eee!important;
+  font-size:12px!important;
+}
+
+/* Responsive: tidak lagi kaku */
+@media (max-width:1100px){
+  .sidebar{width:140px;min-width:140px}
+  .stats{grid-template-columns:repeat(2,minmax(140px,1fr))}
+  .stat-card.revenue{grid-column:span 2}
+  .chart-grid,.lower-grid{grid-template-columns:1fr}
+}
+@media (max-width:760px){
+  .dashboard-admin{display:block}
+  .sidebar{
+    position:relative;
+    width:100%;
+    min-width:0;
+    min-height:auto;
+    padding:16px 14px;
+  }
+  .brand{width:auto}
+  .admin-profile{margin:14px 0}
+  .menu{display:grid;grid-template-columns:repeat(2,1fr);max-width:560px}
+  .main-content{padding:20px 14px 28px}
+  .header{margin-top:0px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat-card.revenue{grid-column:auto}
+  .guide{align-items:flex-start;flex-direction:column}
+  .zoom-control{top:auto;bottom:12px;right:12px}
+}
+@media (max-width:430px){
+  .menu{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr}
+  .stat-card.revenue{grid-column:auto}
+  .welcome h1{font-size:16px}
+  .welcome p{font-size:10px}
+}
+
+
+/* ==========================================================
+   NOUVA ADMIN — SIDEBAR RESPONSIVE MENGIKUTI PATOKAN PELANGGAN
+   Desktop/laptop: sidebar vertikal tetap di kiri.
+   HP (<=760px): bottom navigation horizontal dengan logo Dashboard
+   menonjol di tengah, mengikuti urutan pada desain admin.
+   ========================================================== */
+.mobile-dashboard-logo { display: none; }
+
+@media screen and (max-width: 760px) {
+  .dashboard-admin {
+    display: block !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    padding-bottom: 76px !important;
+  }
+
+  .sidebar {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 66px !important;
+    min-height: 66px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    z-index: 9999 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    background: #3e1e4b !important;
+    overflow: visible !important;
+  }
+
+  .sidebar .brand,
+  .sidebar .admin-profile {
+    display: none !important;
+  }
+
+  .sidebar .menu {
+    width: 100% !important;
+    max-width: none !important;
+    height: 66px !important;
+    margin: 0 !important;
+    padding: 0 2px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    justify-content: space-around !important;
+    gap: 0 !important;
+  }
+
+  .sidebar .menu-link {
+    position: relative !important;
+    flex: 1 1 0 !important;
+    width: 14.2857% !important;
+    min-width: 0 !important;
+    height: 66px !important;
+    min-height: 66px !important;
+    margin: 0 !important;
+    padding: 8px 1px 5px !important;
+    border-radius: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 4px !important;
+    text-align: center !important;
+    background: transparent !important;
+    overflow: visible !important;
+  }
+
+  /* Urutan navigasi HP: Pesanan, Produksi, Produk, Dashboard,
+     Pemasaran, Pembukuan, Pengaturan. Desktop tidak berubah. */
+  .sidebar .menu-link[href="pesanan.html"] { order: 1 !important; }
+  .sidebar .menu-link[href="produksi.html"] { order: 2 !important; }
+  .sidebar .menu-link[href="produk.html"] { order: 3 !important; }
+  .sidebar .menu-link.dashboard-menu-link { order: 4 !important; }
+  .sidebar .menu-link[href="pemasaran.html"] { order: 5 !important; }
+  .sidebar .menu-link[href="pembukuan.html"] { order: 6 !important; }
+  .sidebar .menu-link[href="pengaturan.html"] { order: 7 !important; }
+
+  .sidebar .menu-link img {
+    display: block !important;
+    width: 23px !important;
+    height: 23px !important;
+    max-width: 100% !important;
+    object-fit: contain !important;
+    flex: 0 0 auto !important;
+  }
+
+  .sidebar .menu-link span {
+    display: block !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    color: #fff !important;
+    font-size: 6.8px !important;
+    line-height: 1.15 !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .sidebar .menu-link:hover,
+  .sidebar .menu-link.active {
+    background: rgba(255,255,255,.10) !important;
+  }
+
+  .sidebar .menu-link.dashboard-menu-link {
+    justify-content: flex-end !important;
+    padding-bottom: 7px !important;
+  }
+
+  .sidebar .menu-link.dashboard-menu-link .desktop-dashboard-icon {
+    display: none !important;
+  }
+
+  .sidebar .menu-link.dashboard-menu-link .mobile-dashboard-logo {
+    display: block !important;
+    position: absolute !important;
+    left: 50% !important;
+    top: -39px !important;
+    bottom: auto !important;
+    transform: translateX(-50%) !important;
+    width: 72px !important;
+    height: 72px !important;
+    padding: 5px !important;
+    object-fit: contain !important;
+    background: #fff !important;
+    border: 3px solid #3e1e4b !important;
+    outline: 2px solid #fff !important;
+    border-radius: 23px !important;
+    box-shadow: 0 1px 0 2px #3e1e4b !important;
+    z-index: 10001 !important;
+  }
+
+  .sidebar .menu-link.dashboard-menu-link span {
+    position: relative !important;
+    z-index: 1 !important;
+    font-size: 7px !important;
+    padding-bottom: 8px !important;
+  }
+
+  .main-content {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 20px 14px 108px !important;
+  }
+
+  /* Dashboard cards and charts stay readable on phones. */
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .stat-card.revenue { grid-column: 1 / -1 !important; }
+
+  .chart-grid,
+  .lower-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .chart-panel { min-height: 190px !important; }
+  .status-panel { min-height: 190px !important; }
+
+  .table-scroll { overflow-x: auto !important; }
+  table { min-width: 300px; }
+
+  .guide {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+    padding: 16px !important;
+  }
+
+  .zoom-control {
+    top: auto !important;
+    bottom: 78px !important;
+    right: 10px !important;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .sidebar,
+  .sidebar .menu,
+  .sidebar .menu-link {
+    height: 62px !important;
+    min-height: 62px !important;
+  }
+
+  .sidebar .menu-link img {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .sidebar .menu-link span { font-size: 6px !important; }
+
+  .sidebar .menu-link.dashboard-menu-link .mobile-dashboard-logo {
+    width: 66px !important;
+    height: 66px !important;
+    top: -35px !important;
+    border-radius: 20px !important;
+  }
+
+  .main-content { padding-left: 10px !important; padding-right: 10px !important; }
+  .stats { gap: 7px !important; }
+  .stat-card { padding: 8px 5px !important; }
+  .stat-title { font-size: 9px !important; }
+  .stat-value { font-size: 22px !important; }
+  .stat-card.revenue .stat-value { font-size: 16px !important; }
+}
+
+@media screen and (max-width: 350px) {
+  .sidebar .menu-link span { font-size: 5.5px !important; }
+  .sidebar .menu-link img { width: 18px !important; height: 18px !important; }
+}
+
+
+/* MOBILE FIX: 3 statistik utama sejajar dalam satu baris */
+@media screen and (max-width: 520px) {
+  .stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+    align-items: stretch !important;
+  }
+  .stats .stat-card:not(.revenue) {
+    min-width: 0 !important;
+    min-height: 126px !important;
+    padding: 8px 3px !important;
+    border-radius: 12px !important;
+  }
+  .stats .stat-card:not(.revenue) .stat-icon {
+    width: 34px !important;
+    height: 34px !important;
+    margin-bottom: 6px !important;
+    flex: 0 0 auto !important;
+  }
+  .stats .stat-card:not(.revenue) .stat-icon img {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  .stats .stat-card:not(.revenue) .stat-title {
+    font-size: clamp(7px, 2.1vw, 10px) !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+    overflow-wrap: anywhere !important;
+  }
+  .stats .stat-card:not(.revenue) .stat-value {
+    margin-top: 4px !important;
+    font-size: clamp(20px, 6vw, 28px) !important;
+    line-height: 1.05 !important;
+  }
+  .stats .stat-card.revenue {
+    grid-column: 1 / -1 !important;
+  }
+}
+
+
+/* FIX HP 3: tombol Buka Panduan sejajar dengan teks panduan */
+@media screen and (max-width: 760px) {
+  .guide {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+    padding: 15px 14px !important;
+  }
+  .guide-copy {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+  .guide-copy h2 {
+    font-size: 12px !important;
+    line-height: 1.25 !important;
+  }
+  .guide-copy p {
+    max-width: 210px !important;
+    margin-top: 3px !important;
+    font-size: 10px !important;
+    line-height: 1.35 !important;
+  }
+  .guide-btn {
+    flex: 0 0 auto !important;
+    min-width: 82px !important;
+    min-height: 32px !important;
+    height: auto !important;
+    padding: 0 9px !important;
+    white-space: nowrap !important;
+    font-size: 9px !important;
+  }
+}
+@media screen and (max-width: 360px) {
+  .guide { gap: 7px !important; padding: 13px 10px !important; }
+  .guide-copy p { max-width: 165px !important; font-size: 9px !important; }
+  .guide-btn { min-width: 76px !important; padding: 0 6px !important; font-size: 8px !important; }
+}

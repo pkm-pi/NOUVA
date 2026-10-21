@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="id"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daftar Akun Pelanggan — NOUVA</title><link rel="stylesheet" href="../css/daftar_akun.css">
+</head>
+<body><main class="login-page"><section class="login-container">
+<img class="logo" src="https://c.animaapp.com/eMauf843/img/logo-nouva-fiks-2@2x.png" alt="Logo Nouva">
+<h1>Buat Akun Nouva</h1><p class="desc">Daftar sebagai pelanggan untuk memesan produk dan melihat pesananmu</p>
+<form class="login-card" id="registerForm">
+<label for="fullName">Nama Lengkap</label><input id="fullName" type="text" autocomplete="name" required>
+<label for="identifier">Email atau Nomor Telepon</label><input id="identifier" type="text" placeholder="Email atau 08xxxxxxxxxx" autocomplete="username" required>
+<label for="password">Kata Sandi</label><input id="password" type="password" minlength="8" autocomplete="new-password" required><small>Gunakan minimal 8 karakter.</small>
+<label for="confirmPassword">Konfirmasi Kata Sandi</label><input id="confirmPassword" type="password" minlength="8" autocomplete="new-password" required>
+<button class="btn" id="submitButton" type="submit">Daftar</button><p class="message" id="message" role="alert" aria-live="polite"></p>
+</form><a class="switch" href="./login_pelanggan.html">Sudah punya akun? Masuk</a>
+<a class="back-home" href="../index.html">← Kembali ke Beranda</a>
+</section></main>
+
+<script>
+/* DEMO LOKAL: pendaftaran hanya simulasi dan tidak menyimpan data. */
+const form=document.getElementById("registerForm"), msg=document.getElementById("message"), btn=document.getElementById("submitButton");
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  msg.textContent=""; msg.className="message";
+  const name=document.getElementById("fullName").value.trim();
+  const id=document.getElementById("identifier").value.trim();
+  const password=document.getElementById("password").value;
+  const confirmation=document.getElementById("confirmPassword").value;
+  if(!name || !id){msg.textContent="Lengkapi semua kolom terlebih dahulu.";msg.classList.add("error");return;}
+  if(password.length<8){msg.textContent="Kata sandi minimal 8 karakter.";msg.classList.add("error");return;}
+  if(password!==confirmation){msg.textContent="Konfirmasi kata sandi tidak sama.";msg.classList.add("error");return;}
+  msg.textContent="Simulasi pendaftaran berhasil. Data belum disimpan dan belum menjadi akun sungguhan.";
+  msg.classList.add("success");
+});
+</script></body></html>

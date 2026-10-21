@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <title>Detail Pesanan - NOUVA</title>
+  <link href="../css/detail_pesanan.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <img alt="Logo Nouva" class="logo-nouva-FIKS" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/logo-nouva-fiks-2.png"/>
+      <div class="brand-name">NOUVA</div>
+      <div class="brand-tagline">NOU Menuju Inovasi</div>
+    </div>
+    <div class="admin-profile">
+      <img alt="Admin" class="profile" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/profile.png"/>
+      <div class="admin-name">Admin</div>
+    </div>
+    <nav aria-label="Menu aplikasi" class="menu">
+      <a class="menu-link dashboard-menu-link" href="dashboard_admin.html">
+          <img class="desktop-dashboard-icon" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--3--1.png" alt="">
+          <img class="mobile-dashboard-logo" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/logo-nouva-fiks-2.png" alt="">
+          <span>Dashboard</span>
+        </a>
+      <a class="menu-link active" href="pesanan.html"><img alt="" src="https://c.animaapp.com/P7Ah09FQ/img/image-removebg-preview--12--3@2x.png"/><span>Pesanan</span></a>
+      <a class="menu-link" href="produksi.html"><img alt="" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--13--1.png"/><span>Produksi Jahit</span></a>
+      <a class="menu-link" href="produk.html"><img alt="" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--14--1.png"/><span>Produk</span></a>
+      <a class="menu-link" href="pemasaran.html"><img alt="" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--17--1.png"/><span>Pemasaran</span></a>
+      <a class="menu-link" href="pembukuan.html"><img alt="" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--18--1.png"/><span>Pembukuan</span></a>
+      <a class="menu-link" href="pengaturan.html"><img alt="" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--15--1.png"/><span>Pengaturan</span></a>
+    </nav>
+  </aside>
+
+  <main>
+    <header class="page-header">
+      <div class="page-title-group">
+        <a class="back-icon-btn back-title-button" href="pesanan.html" aria-label="Kembali ke daftar pesanan" title="Kembali ke daftar pesanan"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H5M12 19l-7-7 7-7" /></svg></a>
+        <div class="page-title-copy">
+          <h1>Detail Pesanan</h1>
+          <p>Lihat informasi lengkap pesanan</p>
+        </div>
+      </div>
+      <a class="edit-order-btn" id="editOrderBtn" href="edit_pes.html">
+        <img src="https://c.animaapp.com/ZEhLyd1X/img/edit-1.svg" alt=""/>
+        Edit Pesanan
+      </a>
+    </header>
+
+    <section class="info">
+      <div class="circle" id="customerAvatar"></div>
+      <div class="customer">
+        <b id="customerName">Nama Pemesan</b>
+        <small>
+          <img src="https://c.animaapp.com/ZEhLyd1X/img/phone-call-1.svg" alt=""/>
+          <span id="customerPhone">-</span>
+        </small>
+        <small class="customer-type-line" id="customerType">Individu</small>
+      </div>
+      <div class="col"><strong>No.Referensi</strong><span id="invoiceNo">CUS-000-000</span></div>
+      <div class="col"><strong>Tanggal Pesan</strong><span id="orderDate">-</span></div>
+      <div class="col"><strong>Deadline</strong><span class="deadline-value" id="deadline">-</span></div>
+    </section>
+
+    <div class="grid">
+      <div class="main-column">
+
+        <section class="card customer-detail-card">
+          <div class="section-heading">
+            <h2>Data Pemesan</h2>
+          </div>
+          <div class="customer-detail-grid">
+            <div class="detail-field">
+              <span>Nama Pemesan</span>
+              <strong id="detailCustomerName">-</strong>
+            </div>
+            <div class="detail-field">
+              <span>Jenis Pemesan</span>
+              <strong id="detailCustomerType">-</strong>
+            </div>
+            <div class="detail-field">
+              <span>Nama Instansi</span>
+              <strong id="detailInstitution">-</strong>
+            </div>
+            <div class="detail-field">
+              <span>Nomor HP</span>
+              <strong id="detailPhone">-</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="section-heading">
+            <div>
+              <h2>Rincian Pesanan</h2>
+              <p class="section-subtitle">Detail setiap produk yang dipesan</p>
+            </div>
+          </div>
+          <div id="orderItems" class="order-items"></div>
+        </section>
+
+        <section class="card note">
+          <div class="section-heading">
+            <div>
+              <h2>Catatan Pesanan</h2>
+              <p class="section-subtitle">Catatan yang diberikan saat pemesanan</p>
+            </div>
+          </div>
+          <div class="note-box">
+            <span id="orderNote">Belum ada catatan.</span>
+            <img src="https://c.animaapp.com/ZEhLyd1X/img/star.svg" alt="Catatan penting"/>
+          </div>
+        </section>
+      </div>
+
+      <div class="side-column">
+        <section class="card pay">
+          <h2>Informasi Pembayaran</h2>
+          <div class="payment-row">
+            <strong>Total Harga</strong>
+            <b class="total-amount" id="totalPayment">Rp 0</b>
+          </div>
+          <hr/>
+          <div class="payment-row">
+            <strong>Nominal DP</strong>
+            <div class="payment-value">
+              <span id="dpPayment">Rp 0</span>
+              <em class="paid" id="dpStatus">Belum Lunas</em>
+            </div>
+          </div>
+          <hr/>
+          <div class="payment-row">
+            <strong>Sisa Pembayaran</strong>
+            <div class="payment-value">
+              <span class="remaining" id="remainingPayment">Rp 0</span>
+              <em class="unpaid" id="remainingStatus">Belum Lunas</em>
+            </div>
+          </div>
+          <hr/>
+        </section>
+
+        <section class="card progress">
+          <h2>Progres Pesanan</h2>
+          <ol id="progressList"></ol>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+const orders = {
+  1: {
+    customer: "SDN 27", type: "Instansi", institution: "SDN 27", phone: "0812-3456-7890",
+    invoice: "CUS-000-001", orderDate: "25 September 2026", deadline: "12 Oktober 2026",
+    status: "Sedang Dijahit", note: "Ukuran dan motif mengikuti kesepakatan.",
+    payment: {total:12500000, dp:7500000, dpStatus:"Lunas", remaining:5000000, remainingStatus:"Belum Lunas", proof:""},
+    progressStage: "Proses",
+    progress: [
+      ["done","Pesanan Diterima","25 September 2026"],
+      ["done","Pembayaran DP","25 September 2026"],
+      ["now","Proses","26 September 2026"],
+      ["","Siap Diambil","12 Oktober 2026"],
+      ["","Selesai",""]
+    ],
+    items: [
+      {
+        name:"Seragam Karawo", category:"Seragam", qty:20, price:625000,
+        description:"Seragam karawo untuk kebutuhan sekolah.",
+        sizeSummary:"S 2 pcs • M 3 pcs • L 2 pcs • XL 1 pcs",
+        fabric:"Katun", fabricCustom:"", color:"Putih", colorImage:"",
+        modelImage:"https://c.animaapp.com/XYqZOEOx/img/jumper-2@2x.png",
+        customModel:"", motif:"Motif Bunga", motifImage:"../img/motif_karawo_bunga.svg",
+        customMotif:"", customMotifImage:"",
+        colors:[["Putih",2,3,2,1],["Cream",1,3,2,1],["Maroon",1,2,1,1]]
+      },
+      {
+        name:"Seragam Karawo", category:"Seragam", qty:15, price:625000,
+        description:"Seragam karawo dengan motif daun.", sizeSummary:"S 1 pcs • M 2 pcs • L 2 pcs • XL 1 pcs",
+        fabric:"Katun", fabricCustom:"", color:"Navy", colorImage:"",
+        modelImage:"https://c.animaapp.com/XYqZOEOx/img/jumper-2@2x.png",
+        customModel:"", motif:"Motif Daun", motifImage:"../img/motif_karawo_daun.svg",
+        customMotif:"", customMotifImage:"",
+        colors:[["Navy",1,2,2,1],["Putih",1,1,2,1],["Hitam",1,1,1,1]]
+      },
+      {
+        name:"Seragam Karawo", category:"Seragam", qty:15, price:625000,
+        description:"Seragam karawo dengan motif geometris.", sizeSummary:"S 2 pcs • M 3 pcs • L 2 pcs • XL 1 pcs",
+        fabric:"Katun", fabricCustom:"", color:"Maroon", colorImage:"",
+        modelImage:"https://c.animaapp.com/XYqZOEOx/img/jumper-2@2x.png",
+        customModel:"", motif:"Motif Geometris", motifImage:"../img/motif_karawo_geometris.svg",
+        customMotif:"", customMotifImage:"",
+        colors:[["Maroon",2,2,2,1],["Hitam",2,3,2,1]]
+      }
+    ]
+  },
+  2: {
+    customer:"Ayu", type:"Individu", institution:"", phone:"0813-2222-7788",
+    invoice:"CUS-000-002", orderDate:"20 September 2026", deadline:"10 November 2026",
+    status:"Sedang Dijahit", note:"Ukuran mengikuti hasil pengukuran pelanggan.",
+    payment:{total:650000,dp:350000,dpStatus:"Lunas",remaining:300000,remainingStatus:"Belum Lunas",proof:""},
+    progressStage:"Proses",
+    progress:[
+      ["done","Pesanan Diterima","20 September 2026"],["done","Pembayaran DP","20 September 2026"],
+      ["now","Proses","21 September 2026"],["","Siap Diambil","10 November 2026"],["","Selesai",""]
+    ],
+    items:[{name:"Kemeja Karawo",category:"Kemeja",qty:2,price:325000,description:"Kemeja karawo pesanan individu.",sizeSummary:"M 1 pcs • L 1 pcs",fabric:"Katun",fabricCustom:"",color:"Hitam",colorImage:"",modelImage:"https://c.animaapp.com/XYqZOEOx/img/jumper-2@2x.png",customModel:"",motif:"Motif Bunga",motifImage:"../img/motif_karawo_bunga.svg",customMotif:"",customMotifImage:"",colors:[["Hitam",0,1,0,0],["Putih",0,0,1,0]]}]
+  }
+};
+
+function money(value) {
+  return "Rp " + Number(value || 0).toLocaleString("id-ID");
+}
+function rowTotal(row) {
+  return row.slice(1).reduce((a,b)=>a+Number(b || 0),0);
+}
+function safeImage(src, fallback) {
+  return src || fallback;
+}
+function statusLabel(status) {
+  return ["Sedang Disulam","Sedang Dijahit"].includes(status) ? "✂ " + status : status;
+}
+
+function renderItems(items) {
+  const wrap = document.getElementById("orderItems");
+  wrap.innerHTML = items.map((item,index) => {
+    const subtotal = Number(item.qty || 0) * Number(item.price || 0);
+    const customModel = item.customModel
+      ? `<div class="media-box"><span>Model custom pelanggan</span><img src="${item.customModel}" alt="Model custom pelanggan"/></div>`
+      : `<div class="media-box empty-media"><span>Model custom pelanggan</span><div>Opsional • belum ada</div></div>`;
+    const customMotif = item.customMotifImage || item.customMotif
+      ? `<div class="media-box"><span>Motif custom pelanggan</span>${item.customMotifImage ? `<img src="${item.customMotifImage}" alt="${item.customMotif || 'Motif custom'}"/>` : `<div class="text-media">${item.customMotif || 'Nama motif custom'}</div>`}</div>`
+      : `<div class="media-box empty-media"><span>Motif custom pelanggan</span><div>Opsional • belum ada</div></div>`;
+
+    return `
+      <div class="order-detail-wrap">
+        <button class="order-item ${index===0?'open':''}" type="button" aria-expanded="${index===0}">
+          <span class="item-number">${index+1}</span>
+          <span class="item-icon"><img src="${safeImage(item.modelImage,'https://c.animaapp.com/XYqZOEOx/img/jumper-2@2x.png')}" alt=""/></span>
+          <span class="item-name">${item.name}<small>${item.category} • ${item.qty} pcs</small></span>
+          <span class="item-price">${money(subtotal)}</span>
+          <span class="item-arrow">${index===0?'⌃':'⌄'}</span>
+        </button>
+        <div class="item-detail ${index===0?'show':''}">
+          <div class="product-overview">
+            <div class="model-preview">
+              <span>Model pakaian dari toko</span>
+              <img src="${safeImage(item.modelImage,'https://c.animaapp.com/XYqZOEOx/img/jumper-2@2x.png')}" alt="${item.name}"/>
+            </div>
+            <div class="product-summary">
+              <div><small>Nama Produk</small><strong>${item.name}</strong></div>
+              <div><small>Kategori</small><strong>${item.category || "Belum diisi"}</strong></div>
+              <div><small>Jumlah</small><strong>${item.qty} pcs</strong></div>
+              <div><small>Jenis Kain</small><strong>${item.fabric || "Belum diisi"}</strong></div>
+              <div><small>Harga Produk</small><strong>${money(item.price)}</strong></div>
+              <div><small>Subtotal</small><strong class="accent">${money(subtotal)}</strong></div>
+            </div>
+          </div>
+          <div class="media-grid">
+            ${customModel}
+            <div class="media-box motif-store">
+              <span>Motif sulaman dari toko</span>
+              <img src="${safeImage(item.motifImage,'')}" alt="${item.motif || ''}"/>
+              <strong>${item.motif || "Belum diisi"}</strong>
+            </div>
+            ${customMotif}
+          </div>
+          <div class="spec-grid">
+            <div class="spec-box full"><span>Deskripsi Motif / Model / Pakaian</span><strong>${item.description || "Belum ada deskripsi."}</strong></div>
+          </div>
+          <div class="size-table-wrap">
+            <table class="size-table">
+              <thead><tr><th>Warna</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>Total</th></tr></thead>
+              <tbody>
+                ${item.colors.map(c=>`<tr>
+                  <td><span class="color-chip"><i></i>${c[0]}</span></td>
+                  <td>${c[1]||0}</td><td>${c[2]||0}</td><td>${c[3]||0}</td><td>${c[4]||0}</td><td><b>${rowTotal(c)}</b></td>
+                </tr>`).join("")}
+              </tbody>
+              <tfoot><tr><th>Total</th>
+                ${[1,2,3,4].map(i=>`<th>${item.colors.reduce((s,c)=>s+Number(c[i]||0),0)}</th>`).join("")}
+                <th>${item.colors.reduce((s,c)=>s+rowTotal(c),0)}</th>
+              </tr></tfoot>
+            </table>
+          </div>
+        </div>
+      </div>`;
+  }).join("");
+
+  wrap.querySelectorAll(".order-item").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const detail = btn.nextElementSibling;
+      const open = detail.classList.toggle("show");
+      btn.classList.toggle("open", open);
+      btn.setAttribute("aria-expanded", open);
+      btn.querySelector(".item-arrow").textContent = open ? "⌃" : "⌄";
+    });
+  });
+}
+
+function renderProgress(status, baseData) {
+  const stages = [
+    { label: "Pesanan diterima", description: "Pesanan berhasil diterima", date: baseData.orderDate || "" },
+    { label: "Sedang Disulam", description: "Proses pengerjaan sulaman", date: "" },
+    { label: "Sedang Dijahit", description: "Menunggu proses penjahitan", date: "" },
+    { label: "Siap diambil", description: "Pesanan siap diambil pelanggan", date: baseData.deadline || "" },
+    { label: "Selesai", description: "Pesanan telah diterima pelanggan", date: "" }
+  ];
+  const normalizedStatus = String(status || "").toLowerCase();
+  let current = 0;
+  if (normalizedStatus.includes("disulam")) current = 1;
+  else if (normalizedStatus.includes("dijahit") || normalizedStatus === "proses") current = 2;
+  else if (normalizedStatus.includes("siap diambil")) current = 3;
+  else if (normalizedStatus.includes("selesai")) current = 4;
+  else if (normalizedStatus.includes("dibatalkan")) current = -1;
+
+  document.getElementById("progressList").innerHTML = stages.map((stage, i) => {
+    const state = current < 0 ? "" : (i < current ? "done" : (i === current ? "now" : ""));
+    const detail = stage.date ? stage.date : stage.description;
+    return `<li class="${state}"><span>${stage.label}</span><small>${detail}</small></li>`;
+  }).join("");
+}
+
+const id = new URLSearchParams(location.search).get("id") || "1";
+const baseData = orders[id] || orders[1];
+
+let saved = null;
+try {
+  const raw = localStorage.getItem(`nouva_edit_order_${id}`);
+  saved = raw ? JSON.parse(raw) : null;
+} catch(e) {
+  saved = null;
+}
+
+const data = {
+  ...baseData,
+  ...(saved || {}),
+  payment: {
+    ...baseData.payment,
+    total: saved?.total ?? baseData.payment.total,
+    dp: saved?.dp ?? baseData.payment.dp,
+    dpStatus: saved?.dpStatus ?? baseData.payment.dpStatus,
+    remaining: Math.max(0, (saved?.total ?? baseData.payment.total) - (saved?.dp ?? baseData.payment.dp)),
+    remainingStatus: saved?.remainingStatus ?? baseData.payment.remainingStatus
+  },
+  items: saved?.items?.length
+    ? saved.items.map((item,i)=>({...baseData.items[i],...item}))
+    : baseData.items
+};
+
+if(!data.progressStage){
+  data.progressStage = ["Sedang Disulam","Sedang Dijahit"].includes(data.status) ? "Proses"
+    : data.status === "Siap Diambil" ? "Siap Diambil"
+    : data.status === "Selesai" ? "Selesai"
+    : "Pesanan Diterima";
+}
+
+document.getElementById("customerName").textContent = data.customer;
+document.getElementById("customerPhone").textContent = data.phone;
+document.getElementById("customerType").textContent = data.type;
+document.getElementById("invoiceNo").textContent = data.invoice;
+document.getElementById("orderDate").textContent = data.orderDate;
+document.getElementById("deadline").textContent = data.deadline;
+document.getElementById("detailCustomerName").textContent = data.customer;
+document.getElementById("detailCustomerType").textContent = data.type;
+document.getElementById("detailInstitution").textContent = data.institution || "Tidak ada";
+document.getElementById("detailPhone").textContent = data.phone;
+document.getElementById("orderNote").textContent = data.note || "Belum ada catatan.";
+document.getElementById("editOrderBtn").href = `edit_pes.html?id=${id}`;
+
+document.getElementById("totalPayment").textContent = money(data.payment.total);
+document.getElementById("dpPayment").textContent = money(data.payment.dp);
+document.getElementById("remainingPayment").textContent = money(data.payment.remaining);
+document.getElementById("dpStatus").textContent = data.payment.dpStatus;
+document.getElementById("remainingStatus").textContent = data.payment.remainingStatus;
+
+if (data.payment.dpStatus === "Belum Lunas") {
+  document.getElementById("dpStatus").classList.remove("paid");
+  document.getElementById("dpStatus").classList.add("unpaid");
+}
+if (data.payment.remainingStatus === "Lunas") {
+  document.getElementById("remainingStatus").classList.remove("unpaid");
+  document.getElementById("remainingStatus").classList.add("paid");
+}
+
+if (data.payment.proof) {
+  document.getElementById("proofPayment").textContent = data.payment.proof;
+  document.getElementById("proofBtn").hidden = false;
+}
+
+renderItems(data.items);
+renderProgress(data.status || data.progressStage, baseData);
+</script>
+</body>
+</html>

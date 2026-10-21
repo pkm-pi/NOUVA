@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pengaturan Admin - NOUVA</title>
+
+  <link rel="stylesheet" href="../globals.css">
+  <link rel="stylesheet" href="../css/peng_pel.css">
+</head>
+
+<body>
+  <div class="dashboard-admin">
+
+    <aside class="sidebar">
+      <div class="brand">
+        <img
+          class="logo-nouva"
+          src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/logo-nouva-fiks-2.png"
+          alt="Logo Nouva"
+        >
+        <div class="brand-name">NOUVA</div>
+        <div class="brand-tagline">NOU MENUJU INOVASI</div>
+      </div>
+
+      <nav class="menu" aria-label="Menu pelanggan">
+        <a class="menu-link dashboard-menu-link" href="dashboard_pelanggan.html">
+          <img class="desktop-dashboard-icon" src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--3--1.png" alt="">
+          <img class="mobile-dashboard-logo" src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/logo-nouva-fiks-2.png" alt="">
+          <span>Dashboard</span>
+        </a>
+
+        <a class="menu-link" href="katalog.html">
+          <img
+            src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--4--1.png"
+            alt=""
+          >
+          <span>Katalog Produk</span>
+        </a>
+
+        <a class="menu-link" href="pesanan_saya.html">
+          <img
+            src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--6--1.png"
+            alt=""
+          >
+          <span>Pesanan Saya</span>
+        </a>
+
+        <a class="menu-link" href="pes_cus.html">
+          <img
+            src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--5--1.png"
+            alt=""
+          >
+          <span>Pesan Custom</span>
+        </a>
+
+        <a class="menu-link active" href="peng_pel.html" aria-current="page">
+          <img
+            src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--9--1.png"
+            alt=""
+          >
+          <span>Pengaturan</span>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="main-content pengaturan-content">
+      <header class="header pengaturan-header">
+        <div class="welcome">
+          <div class="pengaturan-title">
+            <div>
+              <h1>Pengaturan</h1>
+              <p>Atur akun kamu dengan mudah.</p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="settings-list" aria-label="Pengaturan akun">
+
+        <article class="setting-card">
+          <div class="setting-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z"/>
+            </svg>
+          </div>
+
+          <div class="setting-content">
+            <label for="namaKamu">Nama Kamu</label>
+            <div class="setting-row">
+              <input id="namaKamu" type="text" placeholder="Nama Lengkap Kamu">
+              <button class="setting-btn" type="button" data-target="namaKamu">Ubah</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="setting-card">
+          <div class="setting-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm0 3v14h10V5H7Zm5 13a1.25 1.25 0 1 0 0 2.5A1.25 1.25 0 0 0 12 18Z"/>
+            </svg>
+          </div>
+
+          <div class="setting-content">
+            <label for="nomorHp">Nomor HP</label>
+            <div class="setting-row">
+              <input id="nomorHp" type="tel" placeholder="08xxxxxxxxxx">
+              <button class="setting-btn" type="button" data-target="nomorHp">Ubah</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="setting-card">
+          <div class="setting-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M17 8h-1V6a4 4 0 1 0-8 0v2H7a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2Zm-7-2a2 2 0 1 1 4 0v2h-4V6Zm7 13H7v-9h10v9Zm-5-2a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"/>
+            </svg>
+          </div>
+
+          <div class="setting-content">
+            <label for="kataSandi">Kata Sandi</label>
+            <div class="setting-row">
+              <input id="kataSandi" type="password" value="********" readonly>
+              <button class="setting-btn password-btn" type="button" id="passwordButton">
+                Ganti Kata Sandi
+              </button>
+            </div>
+          </div>
+        </article>
+
+      </section>
+
+      <div class="settings-actions">
+        <button class="logout-btn" type="button" id="logoutButton">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M10 17v2H5V5h5v2H7v10h3Zm8-5-4-4v3H10v2h4v3l4-4Z"/>
+          </svg>
+          <span>Keluar</span>
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.querySelectorAll(".setting-btn[data-target]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const input = document.getElementById(button.dataset.target);
+        input.focus();
+        input.select();
+      });
+    });
+
+    document.getElementById("passwordButton").addEventListener("click", () => {
+      const input = document.getElementById("kataSandi");
+      input.type = input.type === "password" ? "text" : "password";
+    });
+
+    document.getElementById("logoutButton").addEventListener("click", () => {
+      window.location.href = "../index.html";
+    });
+  </script>
+</body>
+</html>

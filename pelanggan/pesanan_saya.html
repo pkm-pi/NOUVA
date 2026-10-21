@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pesanan Saya - NOUVA</title>
+  <link rel="stylesheet" href="../css/pesanan_saya.css">
+</head>
+<body>
+  <div class="orders-page">    
+    <aside class="sidebar">
+      <div class="brand">
+        <img class="logo-nouva" src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/logo-nouva-fiks-2.png" alt="Logo Nouva">
+        <div class="brand-name">NOUVA</div>
+        <div class="brand-tagline">NOU MENUJU INOVASI</div>
+      </div>
+
+      <nav class="menu" aria-label="Menu pelanggan">
+        <a class="menu-link dashboard-menu-link" href="dashboard_pelanggan.html">
+          <img class="desktop-dashboard-icon" src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--3--1.png" alt="">
+          <img class="mobile-dashboard-logo" src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/logo-nouva-fiks-2.png" alt="">
+          <span>Dashboard</span>
+        </a>
+        <a class="menu-link" href="katalog.html">
+          <img src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--4--1.png" alt="">
+          <span>Katalog Produk</span>
+        </a>
+        <a class="menu-link active" href="pesanan_saya.html">
+          <img src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--6--1.png" alt="">
+          <span>Pesanan Saya</span>
+        </a>
+        <a class="menu-link" href="pes_cus.html">
+          <img src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--5--1.png" alt="">
+          <span>Pesan Custom</span>
+        </a>
+        <a class="menu-link" href="peng_pel.html">
+          <img src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--9--1.png" alt="">
+          <span>Pengaturan</span>
+        </a>
+      </nav>
+    </aside>
+<main class="main-content">
+<section class="page-title"><div><h2>Pesanan Saya</h2><p>Lihat dan pantau semua pesanan kamu di sini.</p></div></section>
+<nav class="tabs" aria-label="Filter status">
+<button class="tab active" data-status="Semua">Semua <b>5</b></button>
+<button class="tab" data-status="Sedang Disulam">Sedang Disulam <b>1</b></button>
+<button class="tab" data-status="Sedang Dijahit">Sedang Dijahit <b>1</b></button>
+<button class="tab" data-status="Siap Diambil">Siap Diambil <b>1</b></button>
+<button class="tab" data-status="Selesai">Selesai <b>1</b></button>
+<button class="tab" data-status="Dibatalkan">Dibatalkan <b>1</b></button>
+</nav>
+<section class="orders-table"><div class="table-head"><span>No. Referensi</span><span>Produk</span><span>Total</span><span>Status</span><span>Detail</span></div><div id="orderRows">
+<article class="order-row" data-status="Sedang Disulam" data-date="2026-07" data-search="CUS-482-731 Baju Karawo Custom Sedang Disulam">
+<div class="order-number"><strong>CUS-482-731</strong></div>
+<div class="order-product"><div class="product-thumb thumb-one">Karawo</div><div><strong>Baju Karawo Custom</strong><small>1 produk</small></div></div>
+<div class="order-total">Rp 250.000</div><div><span class="status embroider"><i></i>Sedang Disulam</span></div>
+<div><a class="detail-button" href="lihat_detail_cus.html">Lihat <span>›</span></a></div></article><article class="order-row" data-status="Sedang Dijahit" data-date="2026-06" data-search="DIS-615-204 Setelan Karawo Display Sedang Dijahit">
+<div class="order-number"><strong>DIS-615-204</strong></div>
+<div class="order-product"><div class="product-thumb thumb-two">Karawo</div><div><strong>Setelan Karawo Display</strong><small>1 produk</small></div></div>
+<div class="order-total">Rp 225.000</div><div><span class="status sewing"><i></i>Sedang Dijahit</span></div>
+<div><a class="detail-button" href="lihat_detail_dis.html">LIhat <span>›</span></a></div></article><article class="order-row" data-status="Siap Diambil" data-date="2026-06" data-search="DIS-327-859 Kemeja Karawo Display Siap Diambil">
+<div class="order-number"><strong>DIS-327-859</strong></div>
+<div class="order-product"><div class="product-thumb thumb-three">Karawo</div><div><strong>Kemeja Karawo Display</strong><small>2 produk</small></div></div>
+<div class="order-total">Rp 375.000</div><div><span class="status ready"><i></i>Siap Diambil</span></div>
+<div><a class="detail-button" href="lihat_detail_dis.html">LIhat <span>›</span></a></div></article><article class="order-row" data-status="Selesai" data-date="2026-05" data-search="CUS-794-126 Outer Karawo Custom Selesai">
+<div class="order-number"><strong>CUS-794-126</strong></div>
+<div class="order-product"><div class="product-thumb thumb-four">Karawo</div><div><strong>Outer Karawo Custom</strong><small>1 produk</small></div></div>
+<div class="order-total">Rp 180.000</div><div><span class="status completed"><i></i>Selesai</span></div>
+<div><a class="detail-button" href="lihat_detail_cus.html">LIhat <span>›</span></a></div></article><article class="order-row" data-status="Dibatalkan" data-date="2026-04" data-search="DIS-258-643 Baju Karawo Classic Dibatalkan">
+<div class="order-number"><strong>DIS-258-643</strong></div>
+<div class="order-product"><div class="product-thumb thumb-one">Karawo</div><div><strong>Baju Karawo Classic</strong><small>1 produk</small></div></div>
+<div class="order-total">Rp 265.000</div><div><span class="status cancelled"><i></i>Dibatalkan</span></div>
+<div><a class="detail-button" href="lihat_detail_dis.html">LIhat <span>›</span></a></div></article></div><p id="emptyState" class="empty-state" hidden>Tidak ada pesanan yang sesuai.</p></section></main></div>
+<script>
+const tabs = [...document.querySelectorAll(".tab")];
+const rows = [...document.querySelectorAll(".order-row")];
+const search = document.getElementById("searchOrders");
+const emptyState = document.getElementById("emptyState");
+let activeStatus = "Semua";
+function filterOrders() {
+  const term = search.value.trim().toLowerCase();
+  let visible = 0;
+  rows.forEach(row => {
+    const statusMatch = activeStatus === "Semua" || row.dataset.status === activeStatus;
+    const searchMatch = row.dataset.search.toLowerCase().includes(term);
+    const show = statusMatch && searchMatch;
+    row.hidden = !show;
+    if (show) visible++;
+  });
+  emptyState.hidden = visible > 0;
+}
+tabs.forEach(tab => tab.addEventListener("click", () => {
+  activeStatus = tab.dataset.status;
+  tabs.forEach(item => item.classList.toggle("active", item === tab));
+  filterOrders();
+}));
+search.addEventListener("input", filterOrders);
+</script></body></html>

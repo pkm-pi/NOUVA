@@ -1,0 +1,1428 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800|Cinzel:400,700|Inter:400,600,700");
+
+/* =========================================================
+   NOUVA LANDING PAGE — RESPONSIVE VERSION
+   Dibuat mengikuti prinsip layout dashboard:
+   flex/grid, width relatif, min-width:0, dan clamp().
+   ========================================================= */
+
+:root{
+  --purple:#391e46;
+  --purple-dark:#2f183a;
+  --purple-soft:#be88d8;
+  --cream:#f6f7f2;
+  --white:#fff;
+}
+
+*{
+  box-sizing:border-box;
+  -webkit-font-smoothing:antialiased;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  font-family:"Poppins",sans-serif;
+  background:#fff;
+}
+
+body{
+  overflow-x:hidden;
+}
+
+a{
+  text-decoration:none;
+}
+
+/* =========================
+   PAGE / HERO
+   ========================= */
+
+.landing-page{
+  width:100%;
+  min-width:0;
+  min-height:100vh;
+  position:relative;
+  overflow:hidden;
+  background:#fff;
+  color:var(--purple);
+}
+
+.BAJU-PKM-INI{
+  position:absolute;
+  z-index:0;
+  inset:0 0 auto 0;
+  width:100%;
+  height:clamp(430px,43.5vw,626px);
+  object-fit:cover;
+  object-position:center center;
+}
+
+.rectangle{
+  position:absolute;
+  z-index:1;
+  top:0;
+  left:0;
+  width:100%;
+  height:clamp(430px,43.5vw,626px);
+  border-radius:0;
+  background:
+    radial-gradient(
+      70% 90% at 38% 45%,
+      rgba(49,27,53,.88) 0%,
+      rgba(57,26,63,.80) 48%,
+      rgba(65,25,72,.60) 100%
+    );
+}
+
+header{
+  position:relative;
+  z-index:3;
+  width:100%;
+  height:clamp(430px,43.5vw,626px);
+  padding:clamp(22px,2.1vw,30px) clamp(24px,2.3vw,34px) 0;
+}
+
+/* =========================
+   TOP NAV
+   ========================= */
+
+.logo-nouva-FIKS{
+  position:absolute;
+  top:clamp(22px,2.1vw,30px);
+  left:clamp(22px,2.3vw,32px);
+  width:clamp(58px,5.2vw,94px);
+  height:clamp(58px,5.2vw,94px);
+  aspect-ratio:1;
+  object-fit:cover;
+  border-radius:clamp(12px,1vw,16px);
+}
+
+nav{
+  position:absolute;
+  top:clamp(30px,3.5vw,50px);
+  right:clamp(30px,4vw,70px);
+  left:auto;
+  transform:none;
+  width:min(589px,42vw);
+  min-width:300px;
+  height:46px;
+  padding:0 10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:clamp(6px,1.3vw,18px);
+  background:#391e46;
+  border-radius:100px;
+}
+
+nav a{
+  color:#fff;
+  font-family:"Poppins",sans-serif;
+  font-size:clamp(13px,1.8vw,26px);
+  line-height:1;
+  white-space:nowrap;
+  padding:7px 10px;
+  border-radius:999px;
+  transition:background .18s ease,opacity .18s ease;
+}
+
+nav a:hover{
+  background:rgba(255,255,255,.10);
+}
+
+nav a[aria-current="page"]{
+  font-family:"Inter",sans-serif;
+  font-weight:700;
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+
+/* Remove the old absolute positioning classes from Anima */
+.text-wrapper-4,
+.text-wrapper-5,
+.text-wrapper-10{
+  position:static;
+  width:auto;
+}
+
+/* =========================
+   HERO TITLE
+   ========================= */
+
+header h1{
+  position:absolute;
+  left:50%;
+  top:clamp(118px,11.6vw,167px);
+  transform:translateX(-50%);
+  width:min(463px,38vw);
+  margin:0;
+}
+
+.union{
+  display:block;
+  width:100%;
+  height:auto;
+}
+
+.jembatan-antara{
+  position:absolute;
+  top:clamp(280px,21.5vw,309px);
+  left:50%;
+  transform:translateX(-50%);
+  width:min(1002px,70vw);
+  margin:0;
+  color:#fff;
+  font-family:"Cinzel",serif;
+  font-weight:400;
+  font-size:clamp(11px,1.4vw,20px);
+  text-align:center;
+  letter-spacing:clamp(.7px,.15vw,2.2px);
+  line-height:1.45;
+}
+
+.span{
+  letter-spacing:inherit;
+}
+
+.text-wrapper-3{
+  font-weight:700;
+  letter-spacing:inherit;
+}
+
+/* =========================
+   CONTENT BACKGROUND
+   ========================= */
+
+main{
+  position:relative;
+  z-index:4;
+  margin-top:clamp(-155px,-10.8vw,-120px);
+  padding:clamp(115px,12vw,173px) clamp(24px,7.2vw,104px) 42px;
+  min-height:650px;
+}
+
+.div{
+  position:absolute;
+  z-index:-1;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  min-height:650px;
+  background:var(--cream);
+  border-radius:clamp(55px,7.4vw,107px) clamp(55px,7.4vw,107px) 0 0;
+}
+
+/* =========================
+   FEATURE ITEMS
+   ========================= */
+
+section[aria-labelledby="welcome-heading"]{
+  width:100%;
+  max-width:1232px;
+  margin:0 auto;
+}
+
+section ul{
+  width:100%;
+  margin:0;
+  padding:0;
+  list-style:none;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:clamp(12px,3vw,55px);
+  align-items:start;
+}
+
+section ul li{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  text-align:center;
+}
+
+section ul li img{
+  position:static;
+  display:block;
+  width:clamp(58px,6.7vw,96px);
+  height:clamp(58px,8vw,115px);
+  object-fit:contain;
+  margin:0 auto 7px;
+}
+
+section ul li:nth-child(2) img{
+  width:clamp(58px,6.7vw,96px);
+  height:clamp(58px,6.7vw,96px);
+  margin-top:5px;
+  margin-bottom:14px;
+}
+
+section ul li:nth-child(3) img{
+  width:clamp(75px,9vw,130px);
+  height:clamp(58px,6.7vw,96px);
+  margin-top:10px;
+  margin-bottom:9px;
+}
+
+section ul li:nth-child(4) img{
+  width:clamp(70px,7.9vw,114px);
+  height:clamp(58px,7.1vw,102px);
+}
+
+section ul h2{
+  position:static;
+  width:auto;
+  margin:0;
+  color:var(--purple);
+  font-family:"Poppins",sans-serif;
+  font-size:clamp(13px,1.8vw,26px);
+  font-weight:400;
+  line-height:1.05;
+  text-align:center;
+}
+
+.text-wrapper-6,
+.text-wrapper-8,
+.text-wrapper-9,
+.transparan-akurat{
+  position:static;
+  width:auto;
+}
+
+/* =========================
+   WELCOME + LOGIN CARDS
+   ========================= */
+
+.text-wrapper-7{
+  position:static;
+  width:auto;
+  margin:clamp(30px,3.7vw,53px) 0 clamp(22px,2.8vw,40px);
+  color:var(--purple);
+  font-size:clamp(16px,1.8vw,26px);
+  font-weight:600;
+  line-height:1.2;
+  text-align:center;
+}
+
+.frame,
+.rectangle-3{
+  position:relative;
+  top:auto;
+  left:auto;
+  width:100%;
+  height:clamp(210px,21vw,302px);
+  min-width:0;
+  border:0;
+  border-radius:clamp(34px,4.8vw,69px);
+  overflow:hidden;
+  display:block;
+  cursor:pointer;
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+
+.frame{
+  background:var(--purple);
+  color:#fff;
+}
+
+.rectangle-3{
+  background:var(--purple-soft);
+  color:var(--purple);
+}
+
+.frame:hover,
+.rectangle-3:hover{
+  transform:translateY(-3px);
+  box-shadow:0 12px 30px rgba(57,30,70,.14);
+}
+
+section[aria-labelledby="welcome-heading"]{
+  display:block;
+}
+
+/* Make the two login cards a responsive row */
+.frame,
+.rectangle-3{
+  width:calc(50% - clamp(6px,1.1vw,16px));
+  display:inline-block;
+  vertical-align:top;
+}
+
+.frame{
+  margin-right:clamp(6px,1.1vw,16px);
+}
+
+.rectangle-3{
+  margin-left:clamp(6px,1.1vw,16px);
+}
+
+/* Login card internals */
+.image-removebg{
+  position:absolute;
+  top:50%;
+  left:clamp(28px,4.4vw,63px);
+  transform:translateY(-50%);
+  width:clamp(105px,13vw,187px);
+  height:auto;
+  max-height:78%;
+  object-fit:contain;
+}
+
+.image-removebg-2{
+  position:absolute;
+  top:50%;
+  left:clamp(28px,4.6vw,66px);
+  transform:translateY(-50%);
+  width:clamp(82px,9.5vw,136px);
+  height:auto;
+  max-height:65%;
+  object-fit:contain;
+}
+
+.text-wrapper-11,
+.text-wrapper,
+.text-wrapper-13,
+.text-wrapper-2,
+.text-wrapper-12,
+.p,
+.line,
+.line-2{
+  position:absolute;
+}
+
+.text-wrapper-11{
+  top:23%;
+  left:32%;
+  color:#fefefe;
+  font-size:clamp(11px,1.4vw,20px);
+  line-height:1.2;
+  white-space:nowrap;
+}
+
+.text-wrapper-13{
+  top:35%;
+  left:32%;
+  color:#fefefe;
+  font-size:clamp(18px,2.45vw,35px);
+  font-weight:700;
+  line-height:1;
+  white-space:nowrap;
+}
+
+.line-2{
+  top:49%;
+  left:32%;
+  width:47%;
+  height:2px;
+}
+
+.text-wrapper-12{
+  top:55%;
+  left:32%;
+  width:48%;
+  margin:0;
+  color:#fefefe;
+  font-size:clamp(11px,1.4vw,20px);
+  line-height:1.25;
+}
+
+.rectangle-3 .text-wrapper{
+  top:23%;
+  left:42%;
+  width:auto;
+  color:var(--purple);
+  font-size:clamp(11px,1.4vw,20px);
+  line-height:1.2;
+  white-space:nowrap;
+}
+
+.rectangle-3 .text-wrapper-2{
+  top:35%;
+  left:42%;
+  width:auto;
+  color:var(--purple);
+  font-size:clamp(18px,2.45vw,35px);
+  font-weight:700;
+  line-height:1;
+  white-space:nowrap;
+}
+
+.rectangle-3 .line{
+  top:49%;
+  left:42%;
+  width:47%;
+  height:2px;
+}
+
+.rectangle-3 .p{
+  top:55%;
+  left:42%;
+  width:47%;
+  margin:0;
+  color:var(--purple);
+  font-size:clamp(11px,1.4vw,20px);
+  line-height:1.25;
+}
+
+/* =========================
+   CLEANUP OLD OFF-CANVAS ANIMA ELEMENTS
+   ========================= */
+
+.rectangle-4,
+.component{
+  display:none !important;
+}
+
+/* =========================
+   TABLET
+   ========================= */
+
+@media (max-width:900px){
+  nav{
+    width:min(500px,55vw);
+    min-width:280px;
+  }
+
+  .jembatan-antara{
+    width:82vw;
+  }
+
+  main{
+    padding-left:clamp(18px,4vw,45px);
+    padding-right:clamp(18px,4vw,45px);
+  }
+
+  section ul{
+    gap:10px;
+  }
+
+  .frame,
+  .rectangle-3{
+    height:230px;
+  }
+
+  .image-removebg{
+    width:105px;
+  }
+
+  .image-removebg-2{
+    width:82px;
+  }
+}
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width:700px){
+  header{
+    height:390px;
+  }
+
+  .BAJU-PKM-INI,
+  .rectangle{
+    height:390px;
+  }
+
+  .logo-nouva-FIKS{
+    width:58px;
+    height:58px;
+    top:18px;
+    left:18px;
+  }
+
+  nav{
+    top:20px;
+    left:auto;
+    right:14px;
+    transform:none;
+    width:auto;
+    min-width:0;
+    height:38px;
+    gap:2px;
+    padding:0 5px;
+  }
+
+  nav a{
+    font-size:11px;
+    padding:7px 7px;
+  }
+
+  header h1{
+    top:115px;
+    width:min(330px,68vw);
+  }
+
+  .jembatan-antara{
+    top:215px;
+    width:88vw;
+    font-size:10px;
+    letter-spacing:.7px;
+    line-height:1.5;
+  }
+
+  main{
+    margin-top:-75px;
+    padding:100px 18px 32px;
+  }
+
+  .div{
+    min-height:700px;
+    border-radius:42px 42px 0 0;
+  }
+
+  section ul{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    row-gap:24px;
+    column-gap:8px;
+  }
+
+  section ul li img,
+  section ul li:nth-child(2) img,
+  section ul li:nth-child(3) img,
+  section ul li:nth-child(4) img{
+    width:62px;
+    height:62px;
+    margin:0 auto 8px;
+  }
+
+  section ul h2{
+    font-size:14px;
+    line-height:1.15;
+  }
+
+  .text-wrapper-7{
+    margin:35px 0 22px;
+    font-size:18px;
+  }
+
+  .frame,
+  .rectangle-3{
+    width:100%;
+    margin:0 0 14px;
+    height:205px;
+    border-radius:34px;
+    display:block;
+  }
+
+  .image-removebg{
+    left:24px;
+    width:90px;
+  }
+
+  .image-removebg-2{
+    left:28px;
+    width:68px;
+  }
+
+  .text-wrapper-11{
+    left:31%;
+    top:23%;
+    font-size:11px;
+  }
+
+  .text-wrapper-13{
+    left:31%;
+    top:35%;
+    font-size:20px;
+  }
+
+  .line-2{
+    left:31%;
+    width:58%;
+    top:50%;
+  }
+
+  .text-wrapper-12{
+    left:31%;
+    width:60%;
+    top:56%;
+    font-size:11px;
+  }
+
+  .rectangle-3 .text-wrapper{
+    left:34%;
+    top:23%;
+    font-size:11px;
+  }
+
+  .rectangle-3 .text-wrapper-2{
+    left:34%;
+    top:35%;
+    font-size:20px;
+  }
+
+  .rectangle-3 .line{
+    left:34%;
+    width:58%;
+    top:50%;
+  }
+
+  .rectangle-3 .p{
+    left:34%;
+    width:60%;
+    top:56%;
+    font-size:11px;
+  }
+}
+
+/* =========================
+   VERY SMALL SCREEN
+   ========================= */
+
+@media (max-width:430px){
+  nav{
+    right:10px;
+  }
+
+  nav a{
+    font-size:9px;
+    padding:6px 5px;
+  }
+
+  .logo-nouva-FIKS{
+    width:52px;
+    height:52px;
+  }
+
+  header h1{
+    top:108px;
+  }
+
+  .jembatan-antara{
+    top:205px;
+    width:91vw;
+    font-size:9px;
+  }
+
+  .frame,
+  .rectangle-3{
+    height:185px;
+  }
+
+  .image-removebg{
+    left:18px;
+    width:76px;
+  }
+
+  .image-removebg-2{
+    left:21px;
+    width:58px;
+  }
+
+  .text-wrapper-13,
+  .rectangle-3 .text-wrapper-2{
+    font-size:17px;
+  }
+
+  .text-wrapper-12,
+  .rectangle-3 .p{
+    font-size:10px;
+  }
+}
+
+/* Accessibility */
+.frame:focus-visible,
+.rectangle-3:focus-visible,
+nav a:focus-visible{
+  outline:3px solid #fff;
+  outline-offset:3px;
+}
+
+.rectangle-3:focus-visible{
+  outline-color:var(--purple);
+}
+
+
+/* =========================================================
+   NOUVA — FINAL LAYOUT FIX
+   ========================================================= */
+
+/* ---------- AREA UTAMA ---------- */
+
+.landing-page{
+    width:100%;
+    min-width:0;
+    min-height:100vh;
+    overflow:hidden;
+}
+
+main{
+    position:relative;
+    z-index:4;
+
+    /* NAIKKAN ISI KONTEN */
+    margin-top:clamp(-155px,-10.8vw,-120px);
+
+    /* sebelumnya terlalu besar */
+    padding:clamp(35px,3.2vw,48px)
+            clamp(24px,7.2vw,104px)
+            45px;
+
+    min-height:650px;
+}
+
+.div{
+    position:absolute;
+    z-index:-1;
+    top:0;
+    left:0;
+
+    width:100%;
+    height:100%;
+    min-height:650px;
+
+    background:#f6f7f2;
+
+    border-radius:
+        clamp(55px,7.4vw,107px)
+        clamp(55px,7.4vw,107px)
+        0 0;
+}
+
+
+/* =========================================================
+   4 ICON — TETAP 1 BARIS
+   ========================================================= */
+
+section[aria-labelledby="welcome-heading"]{
+    width:100%;
+    max-width:1232px;
+    margin:0 auto;
+
+    /* INI PENTING */
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,minmax(0,1fr));
+
+    column-gap:clamp(15px,3.5vw,55px);
+}
+
+
+/* UL ICON */
+
+section ul{
+    grid-column:1 / -1;
+
+    width:100%;
+    margin:0;
+    padding:0;
+
+    list-style:none;
+
+    display:grid;
+    grid-template-columns:
+        repeat(4,minmax(0,1fr));
+
+    gap:clamp(10px,3vw,40px);
+
+    align-items:start;
+}
+
+
+/* masing-masing icon */
+
+section ul li{
+    min-width:0;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+
+    text-align:center;
+}
+
+
+/* gambar icon */
+
+section ul li img,
+section ul li .logo-landing-page,
+section ul li .img,
+section ul li .logo-landing-page-2,
+section ul li .logo-landing-page-3{
+
+    position:static !important;
+
+    display:block;
+
+    object-fit:contain;
+
+    margin-left:auto;
+    margin-right:auto;
+}
+
+
+/* icon 1 */
+
+section ul li:nth-child(1) img{
+    width:clamp(60px,6.7vw,96px);
+    height:clamp(70px,8vw,115px);
+
+    margin-bottom:5px;
+}
+
+
+/* icon 2 */
+
+section ul li:nth-child(2) img{
+    width:clamp(60px,6.7vw,96px);
+    height:clamp(65px,6.7vw,96px);
+
+    margin-top:5px;
+    margin-bottom:12px;
+}
+
+
+/* icon 3 */
+
+section ul li:nth-child(3) img{
+    width:clamp(75px,9vw,130px);
+    height:clamp(65px,6.7vw,96px);
+
+    margin-top:10px;
+    margin-bottom:7px;
+}
+
+
+/* icon 4 */
+
+section ul li:nth-child(4) img{
+    width:clamp(70px,7.9vw,114px);
+    height:clamp(65px,7.1vw,102px);
+
+    margin-bottom:5px;
+}
+
+
+/* tulisan icon */
+
+section ul li h2{
+    position:static !important;
+
+    width:auto !important;
+
+    margin:0;
+
+    color:#391e46;
+
+    font-family:"Poppins",sans-serif;
+
+    font-size:clamp(13px,1.7vw,26px);
+
+    font-weight:400;
+
+    line-height:1.05;
+
+    text-align:center;
+}
+
+
+/* =========================================================
+   SELAMAT DATANG
+   ========================================================= */
+
+.text-wrapper-7{
+
+    grid-column:1 / -1;
+
+    position:static !important;
+
+    width:auto !important;
+
+    margin:
+        clamp(28px,3vw,42px)
+        0
+        clamp(22px,2.6vw,38px);
+
+    color:#391e46;
+
+    font-family:"Poppins",sans-serif;
+
+    font-size:clamp(16px,1.8vw,26px);
+
+    font-weight:600;
+
+    line-height:1.2;
+
+    text-align:center;
+}
+
+
+/* =========================================================
+   KARTU LOGIN
+   ADMIN + PELANGGAN
+   ========================================================= */
+
+
+/*
+   INI YANG MEMBUAT KEDUANYA BERDERET
+   bukan atas-bawah.
+*/
+
+.frame,
+.rectangle-3 {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: clamp(155px, 20.8vw, 302px);
+    margin: 0 !important;
+    border: 0;
+    border-radius: clamp(34px, 4.8vw, 69px);
+    overflow: hidden;
+    display: block !important;
+    vertical-align: top;
+    cursor: pointer;
+}
+
+
+/* ADMIN */
+
+.frame{
+
+    grid-column:1 / 3;
+
+    background:#391e46;
+
+    color:#fff;
+}
+
+
+/* PELANGGAN */
+
+.rectangle-3{
+
+    grid-column:3 / 5;
+
+    background:#be88d8;
+
+    color:#391e46;
+}
+
+
+/* hover */
+
+.frame:hover,
+.rectangle-3:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+        0 12px 30px
+        rgba(57,30,70,.14);
+}
+
+
+/* =========================================================
+   ISI KARTU ADMIN
+   ========================================================= */
+
+.frame .image-removebg{
+
+    position:absolute !important;
+
+    top:50% !important;
+    left:8% !important;
+
+    transform:translateY(-50%);
+
+    width:clamp(90px,13vw,187px);
+
+    height:auto;
+
+    max-height:75%;
+
+    object-fit:contain;
+}
+
+
+.frame .text-wrapper-11{
+
+    position:absolute !important;
+
+    top:25% !important;
+    left:42% !important;
+
+    width:auto !important;
+
+    color:#fff;
+
+    font-size:clamp(10px,1.25vw,20px);
+
+    line-height:1.2;
+
+    white-space:nowrap;
+}
+
+
+.frame .text-wrapper-13{
+
+    position:absolute !important;
+
+    top:37% !important;
+    left:42% !important;
+
+    width:auto !important;
+
+    color:#fff;
+
+    font-size:clamp(17px,2.45vw,35px);
+
+    font-weight:700;
+
+    line-height:1;
+
+    white-space:nowrap;
+}
+
+
+.frame .line-2{
+    position:absolute !important;
+    top:51% !important;
+    left:42% !important;
+    width:48%;
+    height:4px;
+    object-fit:fill;
+}
+
+
+.frame .text-wrapper-12{
+
+    position:absolute !important;
+
+    top:56% !important;
+    left:42% !important;
+
+    width:48% !important;
+
+    margin:0;
+
+    color:#fff;
+
+    font-size:clamp(9px,1.2vw,18px);
+
+    line-height:1.25;
+}
+
+
+/* =========================================================
+   ISI KARTU PELANGGAN
+   ========================================================= */
+
+.rectangle-3 .image-removebg-2{
+
+    position:absolute !important;
+
+    top:50% !important;
+    left:8% !important;
+
+    transform:translateY(-50%);
+
+    width:clamp(70px,9.5vw,136px);
+
+    height:auto;
+
+    max-height:65%;
+
+    object-fit:contain;
+}
+
+
+.rectangle-3 .text-wrapper{
+
+    position:absolute !important;
+
+    top:25% !important;
+    left:42% !important;
+
+    width:auto !important;
+
+    color:#391e46;
+
+    font-size:clamp(10px,1.25vw,20px);
+
+    line-height:1.2;
+
+    white-space:nowrap;
+}
+
+
+.rectangle-3 .text-wrapper-2{
+
+    position:absolute !important;
+
+    top:37% !important;
+    left:42% !important;
+
+    width:auto !important;
+
+    color:#391e46;
+
+    font-size:clamp(17px,2.45vw,35px);
+
+    font-weight:700;
+
+    line-height:1;
+
+    white-space:nowrap;
+}
+
+
+.rectangle-3 .line{
+    position:absolute !important;
+
+    top:51% !important;
+    left:42% !important;
+
+    width:48%;
+
+    height:4px;
+
+    object-fit:fill;
+}
+
+
+.rectangle-3 .p{
+
+    position:absolute !important;
+
+    top:56% !important;
+    left:42% !important;
+
+    width:48% !important;
+
+    margin:0;
+
+    color:#391e46;
+
+    font-size:clamp(9px,1.2vw,18px);
+
+    line-height:1.25;
+}
+
+
+/* =========================================================
+   HILANGKAN ELEMEN ANIMA YANG TIDAK DIPAKAI
+   ========================================================= */
+
+.rectangle-4,
+.component{
+
+    display:none !important;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media(max-width:900px){
+
+    main{
+        padding-left:24px;
+        padding-right:24px;
+    }
+
+    section ul{
+        gap:8px;
+    }
+
+    .frame,
+    .rectangle-3{
+        height:180px;
+    }
+
+    .frame .image-removebg{
+        width:90px;
+    }
+
+    .rectangle-3 .image-removebg-2{
+        width:70px;
+    }
+}
+
+
+/* =========================================================
+   HP
+   ========================================================= */
+
+@media(max-width:600px){
+
+    section[aria-labelledby="welcome-heading"]{
+        display:grid;
+
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+    }
+
+    section ul{
+        grid-column:1 / -1;
+
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+    }
+
+    .frame{
+        grid-column:1 / -1;
+    }
+
+    .rectangle-3{
+        grid-column:1 / -1;
+    }
+
+    .frame,
+    .rectangle-3{
+        height:180px;
+    }
+}
+
+/* =========================================================
+   NOUVA — FINAL MOBILE POLISH
+   4 fitur tetap sejajar, kartu login lebih ringkas,
+   ikon kartu proporsional, dan jarak antar-kartu lebih lega.
+   ========================================================= */
+
+@media (max-width: 800px) {
+  /* Empat fitur tetap dalam satu baris pada layar HP */
+  section[aria-labelledby="welcome-heading"] ul {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    column-gap: 6px !important;
+    row-gap: 0 !important;
+    align-items: start;
+  }
+
+  section[aria-labelledby="welcome-heading"] ul li {
+    min-width: 0;
+    width: 100%;
+  }
+
+  section[aria-labelledby="welcome-heading"] ul li img,
+  section[aria-labelledby="welcome-heading"] ul li:nth-child(1) img,
+  section[aria-labelledby="welcome-heading"] ul li:nth-child(2) img,
+  section[aria-labelledby="welcome-heading"] ul li:nth-child(3) img,
+  section[aria-labelledby="welcome-heading"] ul li:nth-child(4) img {
+    width: clamp(34px, 10vw, 58px) !important;
+    height: clamp(38px, 11vw, 62px) !important;
+    max-width: 100%;
+    object-fit: contain;
+    margin: 0 auto 7px !important;
+  }
+
+  section[aria-labelledby="welcome-heading"] ul li h2 {
+    font-size: clamp(9px, 2.8vw, 13px) !important;
+    line-height: 1.12 !important;
+    overflow-wrap: anywhere;
+  }
+
+  /* Ruang setelah judul sambutan sebelum kartu login */
+  .text-wrapper-7 {
+    margin: 28px 0 28px !important;
+    font-size: clamp(16px, 4.4vw, 19px) !important;
+  }
+
+  /* Kartu tetap bertumpuk di HP, tetapi lebih pendek dan tidak terlalu besar */
+  .frame,
+  .rectangle-3 {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    height: clamp(142px, 39vw, 165px) !important;
+    min-height: 0 !important;
+    margin: 0 0 14px !important;
+    border-radius: clamp(26px, 7vw, 36px) !important;
+  }
+
+  /* Ikon di dalam kartu menyesuaikan ukuran kartu */
+  .frame .image-removebg {
+    left: 7% !important;
+    width: clamp(52px, 16vw, 72px) !important;
+    max-height: 66% !important;
+  }
+
+  .rectangle-3 .image-removebg-2 {
+    left: 8% !important;
+    width: clamp(42px, 13vw, 60px) !important;
+    max-height: 60% !important;
+  }
+
+  /* Teks dibuat lebih ringkas agar proporsional dengan kartu */
+  .frame .text-wrapper-11,
+  .rectangle-3 .text-wrapper {
+    top: 22% !important;
+    left: 31% !important;
+    font-size: clamp(10px, 2.8vw, 12px) !important;
+  }
+
+  .frame .text-wrapper-13,
+  .rectangle-3 .text-wrapper-2 {
+    top: 36% !important;
+    left: 31% !important;
+    font-size: clamp(16px, 4.6vw, 20px) !important;
+  }
+
+  /* Garis dibuat menggunakan CSS, bukan gambar SVG yang punya ruang kosong
+     di dalam file sehingga garis terlihat bergeser dari teks. */
+  .frame .line-2,
+  .rectangle-3 .line {
+    display: none !important;
+  }
+
+  .frame::after,
+  .rectangle-3::after {
+    content: "";
+    position: absolute;
+    top: 52% !important;
+    left: 31% !important;
+    width: 59% !important;
+    height: 2px;
+    background: currentColor;
+    pointer-events: none;
+  }
+
+  .frame::after {
+    background: #be88d8;
+  }
+
+  .rectangle-3::after {
+    background: #391e46;
+  }
+
+  .frame .text-wrapper-12,
+  .rectangle-3 .p {
+    top: 59% !important;
+    left: 31% !important;
+    width: 60% !important;
+    font-size: clamp(9px, 2.7vw, 11px) !important;
+    line-height: 1.25 !important;
+  }
+}
+
+@media (max-width: 380px) {
+  section[aria-labelledby="welcome-heading"] ul {
+    column-gap: 3px !important;
+  }
+
+  section[aria-labelledby="welcome-heading"] ul li h2 {
+    font-size: 9px !important;
+  }
+
+  .frame,
+  .rectangle-3 {
+    height: 142px !important;
+  }
+
+  .frame .text-wrapper-13,
+  .rectangle-3 .text-wrapper-2 {
+    font-size: 15px !important;
+  }
+}

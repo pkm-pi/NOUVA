@@ -1,0 +1,436 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap");
+
+:root {
+  --purple: #391e46;
+  --purple-dark: #341f50;
+  --purple-text: #3e244b;
+  --cream: #f6f7f2;
+  --lavender: #f1dff5;
+  --icon-purple: #7442a0;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+html, body {
+  margin: 0;
+  width: 100%;
+  min-height: 100%;
+  font-family: "Poppins", sans-serif;
+  color: var(--purple-text);
+}
+body { overflow-x: hidden; }
+a { text-decoration: none; }
+
+.hubungi-kami {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  background: #fff;
+}
+
+/* Header mengikuti sistem responsif halaman Tentang Kami */
+.hero {
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  height: clamp(390px, 43.5vw, 626px);
+  isolation: isolate;
+}
+
+.BAJU-PKM-INI,
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.BAJU-PKM-INI {
+  z-index: -2;
+  object-fit: cover;
+  object-position: center 43%;
+}
+
+.hero-overlay {
+  z-index: -1;
+  background: radial-gradient(75% 100% at 48% 45%, rgba(49,27,53,.83), rgba(57,26,63,.76) 65%, rgba(65,25,72,.62));
+}
+
+.brand {
+  position:absolute;
+  top:clamp(22px,2.1vw,30px);
+  left:clamp(22px,2.3vw,32px);
+  width:clamp(58px,5.2vw,94px);
+  height:clamp(58px,5.2vw,94px);
+  aspect-ratio:1;
+  object-fit:cover;
+  border-radius:clamp(12px,1vw,16px);
+}
+
+.logo-nouva-FIKS { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+.site-nav {
+  position: absolute;
+  top: clamp(30px, 3.5vw, 50px);
+  right: clamp(30px, 4vw, 70px);
+  z-index: 3;
+  width: min(589px, 42vw);
+  min-width: 300px;
+  min-height: 46px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(6px, 1.3vw, 18px);
+  border-radius: 999px;
+  background: var(--purple);
+}
+.site-nav a {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 7px 10px;
+  border-radius: 999px;
+  color: #fff;
+  font-size: clamp(13px, 1.8vw, 26px);
+  font-weight: 500;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+}
+.site-nav a.active,
+.site-nav a:hover {
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.site-nav a:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* Konten kontak */
+.content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1440px;
+  margin: -380px auto 0;
+  padding: clamp(35px, 3.2vw, 48px)
+           clamp(24px, 5vw, 72px) 55px;
+  min-height: 600px;
+  background: var(--cream);
+  border-radius: clamp(55px, 7.4vw, 107px)
+                 clamp(55px, 7.4vw, 107px) 0 0;
+}
+
+.intro {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.intro h1 {
+  margin: 0 0 8px;
+  color: var(--purple-dark);
+  font-size: clamp(34px, 5.2vw, 76px);
+  line-height: 1.12;
+  font-weight: 700;
+}
+.intro p {
+  max-width: 950px;
+  margin: 0;
+  font-size: clamp(14px, 1.5vw, 21px);
+  line-height: 1.65;
+}
+
+.contact-grid {
+  width: 100%;
+  max-width: 1100px;
+  margin: clamp(30px, 3vw, 45px) auto 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.contact-card {
+  min-width: 0;
+  min-height: clamp(180px, 18vw, 260px);
+  padding: clamp(18px, 2.2vw, 32px);
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2.2vw, 32px);
+  border-radius: clamp(18px, 2vw, 28px);
+  background: var(--lavender);
+}
+.contact-icon {
+  width: clamp(64px, 7.9vw, 114px);
+  height: clamp(64px, 7.9vw, 114px);
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--icon-purple);
+}
+.contact-icon svg {
+  width: 48%;
+  height: 48%;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.contact-copy { min-width: 0; }
+.contact-copy h2 {
+  margin: 0 0 5px;
+  color: var(--purple-dark);
+  font-size: clamp(20px, 2.2vw, 32px);
+  line-height: 1.2;
+  font-weight: 600;
+}
+.contact-copy p {
+  margin: 0 0 10px;
+  color: var(--purple-dark);
+  font-size: clamp(15px, 1.8vw, 26px);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.contact-copy span {
+  display: block;
+  color: var(--purple-text);
+  font-size: clamp(12px, 1.25vw, 18px);
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .site-nav {
+    width: min(500px, 55vw);
+    min-width: 280px;
+  }
+  .content {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+  .contact-card { min-height: 175px; }
+}
+
+@media (max-width: 700px) {
+  .hero { height: 390px; }
+  .brand {
+    width: 58px;
+    top: 18px;
+    left: 18px;
+  }
+  .site-nav {
+    top: 20px;
+    right: 14px;
+    left: auto;
+    width: auto;
+    min-width: 0;
+    min-height: 38px;
+    padding: 0 5px;
+    gap: 2px;
+  }
+  .site-nav a {
+    flex: 0 1 auto;
+    font-size: 11px;
+    padding: 7px 7px;
+  }
+  .content {
+    margin-top: -75px;
+    padding: 28px 18px 32px;
+    border-radius: 42px 42px 0 0;
+    min-height: 0;
+  }
+  .intro h1 { font-size: clamp(32px, 8vw, 42px); }
+  .intro p { font-size: 14px; line-height: 1.6; }
+  .contact-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    margin-top: 28px;
+  }
+  .contact-card {
+    min-height: 145px;
+    padding: 18px;
+    gap: 18px;
+    border-radius: 24px;
+  }
+  .contact-icon {
+    width: 62px;
+    height: 62px;
+  }
+  .contact-copy h2 { font-size: 20px; }
+  .contact-copy p { font-size: 15px; }
+  .contact-copy span { font-size: 12px; }
+}
+
+@media (max-width: 430px) {
+  .site-nav { right: 10px; }
+  .site-nav a { font-size: 9px; padding: 6px 5px; }
+  .brand { width: 52px; }
+  .content { padding-left: 14px; padding-right: 14px; }
+  .contact-card { padding: 15px; gap: 14px; }
+  .contact-icon { width: 54px; height: 54px; }
+}
+
+/* =========================================================
+   FIX FINAL: PANEL KREM NAIK DRASTIS
+   Override terakhir agar tidak kalah oleh aturan .content lama.
+   ========================================================= */
+@media (min-width: 701px) {
+  .content {
+    margin-top: -380px !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .content {
+    margin-top: -270px !important;
+  }
+}
+
+.contact-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  color: #fff;
+}
+
+.contact-icon svg {
+  width: 28px;
+  height: 28px;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ALAMAT: PANJANG MEMENUHI DUA KOLOM */
+.contact-card.address-card {
+  grid-column: 1 / -1;
+  width: 100%;
+  min-height: 110px;
+  padding: 20px 28px;
+  gap: 22px;
+  border-radius: 24px;
+}
+
+.contact-card.address-card .contact-icon {
+  width: 62px;
+  height: 62px;
+  flex: 0 0 62px;
+}
+
+.contact-card.address-card .contact-copy p {
+  margin-bottom: 5px;
+  font-size: clamp(13px, 1.4vw, 18px);
+  line-height: 1.5;
+}
+
+/* MEDIA SOSIAL: TETAP BERBENTUK KOTAK */
+.contact-grid > .contact-card:not(.address-card) {
+  grid-column: auto;
+  width: 100%;
+  min-height: 170px;
+  padding: 24px;
+}
+
+/* RESPONSIF HP */
+@media (max-width: 700px) {
+  .contact-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 22px;
+  }
+
+  /* Kotak alamat tetap memenuhi lebar */
+  .contact-card.address-card {
+    grid-column: 1 / -1;
+    min-height: 110px;
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .contact-card.address-card .contact-icon {
+    width: 44px;
+    height: 44px;
+    flex-basis: 44px;
+  }
+
+  .contact-card.address-card .contact-copy p {
+    font-size: 12px;
+  }
+
+  /* 4 KOTAK MEDIA SOSIAL DI HP */
+  .contact-grid > .contact-card:not(.address-card) {
+    grid-column: auto;
+    min-width: 0;
+    min-height: 105px;
+    padding: 12px;
+    gap: 10px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+
+    border-radius: 18px;
+  }
+
+  /* IKON */
+  .contact-grid > .contact-card:not(.address-card) .contact-icon {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+  }
+
+  /* TULISAN DI SAMPING IKON */
+  .contact-grid > .contact-card:not(.address-card) .contact-copy {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .contact-grid > .contact-card:not(.address-card) .contact-copy h2 {
+    margin: 0 0 4px;
+    font-size: 13px;
+    line-height: 1.3;
+  }
+
+  .contact-grid > .contact-card:not(.address-card) .contact-copy p {
+    margin: 0;
+    font-size: 11px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (min-width: 701px) {
+  .content {
+    margin-top: -380px !important;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* FIX HP 1: warna krem menyambung sampai bawah halaman Hubungi Kami */
+html,
+body,
+.hubungi-kami {
+  background: var(--cream) !important;
+}
+.hubungi-kami {
+  min-height: 100vh;
+}
+.hubungi-kami .content {
+  min-height: max(600px, calc(100vh - 100px));
+  background: var(--cream) !important;
+}
+@media (max-width: 700px) {
+  .hubungi-kami .content {
+    min-height: calc(100vh - 30px);
+    padding-bottom: 42px !important;
+    border-radius: 42px 42px 0 0;
+  }
+}

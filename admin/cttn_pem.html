@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pemasukan | NOUVA</title>
+  <link rel="stylesheet" href="../globals.css">
+  <link rel="stylesheet" href="../css/cttn_pem.css">
+</head>
+<body>
+<main class="pemasukan-page">
+
+  <!-- SIDEBAR SAMA DENGAN HALAMAN PEMBUKUAN -->
+  <aside class="sidebar">
+    <div class="brand">
+      <img class="logo-nouva-FIKS" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/logo-nouva-fiks-2.png" alt="Logo Nouva">
+      <div class="brand-name">NOUVA</div>
+      <div class="brand-tagline">NOU Menuju Inovasi</div>
+    </div>
+
+    <div class="admin-profile">
+      <img class="profile" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/profile.png" alt="Admin">
+      <div class="admin-name">Admin</div>
+    </div>
+
+    <nav class="menu" aria-label="Menu aplikasi">
+      <a class="menu-link dashboard-menu-link" href="dashboard_admin.html">
+          <img class="desktop-dashboard-icon" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--3--1.png" alt="">
+          <img class="mobile-dashboard-logo" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/logo-nouva-fiks-2.png" alt="">
+          <span>Dashboard</span>
+        </a>
+      <a class="menu-link" href="pesanan.html">
+        <img src="https://c.animaapp.com/P7Ah09FQ/img/image-removebg-preview--12--3@2x.png" alt="">
+        <span>Pesanan</span>
+      </a>
+      <a class="menu-link" href="produksi.html">
+        <img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--13--1.png" alt="">
+        <span>Produksi Jahit</span>
+      </a>
+      <a class="menu-link" href="produk.html">
+        <img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--14--1.png" alt="">
+        <span>Produk</span>
+      </a>
+      <a class="menu-link" href="pemasaran.html">
+        <img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--17--1.png" alt="">
+        <span>Pemasaran</span>
+      </a>
+      <a class="menu-link active" href="pembukuan.html" aria-current="page">
+        <img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--18--1.png" alt="">
+        <span>Pembukuan</span>
+      </a>
+      <a class="menu-link" href="pengaturan.html">
+        <img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--15--1.png" alt="">
+        <span>Pengaturan</span>
+      </a>
+    </nav>
+  </aside>
+
+  <section class="main-content">
+
+    <header class="page-header">
+      <div class="breadcrumb">
+        <a href="pembukuan.html">Pembukuan</a>
+        <span>›</span>
+        <strong>Pemasukan</strong>
+      </div>
+    </header>
+
+    <section class="filter-row">
+      <div class="date-range-box">
+        <div class="date-control">
+          <button class="calendar-button" type="button" data-picker="dateStart" aria-label="Pilih tanggal mulai">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3.5" y="5.5" width="17" height="15" rx="2"></rect>
+              <path d="M7 3.5v4M17 3.5v4M3.5 9.5h17"></path>
+            </svg>
+          </button>
+          <input id="dateStartDisplay" class="date-display" type="text" value="28/08/2026" readonly aria-label="Tanggal mulai">
+          <input id="dateStart" class="date-picker-hidden" type="date" value="2026-08-28" aria-label="Tanggal mulai">
+        </div>
+        <span class="range-dash">–</span>
+        <div class="date-control">
+          <button class="calendar-button" type="button" data-picker="dateEnd" aria-label="Pilih tanggal akhir">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3.5" y="5.5" width="17" height="15" rx="2"></rect>
+              <path d="M7 3.5v4M17 3.5v4M3.5 9.5h17"></path>
+            </svg>
+          </button>
+          <input id="dateEndDisplay" class="date-display" type="text" value="30/08/2026" readonly aria-label="Tanggal akhir">
+          <input id="dateEnd" class="date-picker-hidden" type="date" value="2026-08-30" aria-label="Tanggal akhir">
+        </div>
+      </div>
+
+      <button class="add-income-btn" id="openIncomeModal" type="button">
+        <span>＋</span> Catat Pemasukan
+      </button>
+    </section>
+
+    <section class="income-panel">
+      <div class="table-wrap">
+        <table class="income-table">
+          <thead>
+            <tr>
+              <th>Tanggal</th>
+              <th>Transaksi</th>
+              <th>Keterangan</th>
+              <th>No.<br>Referensi</th>
+              <th>Nominal</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="incomeBody"></tbody>
+        </table>
+
+      </div>
+
+      <div class="table-footer">
+        <strong>Total Pemasukan</strong>
+        <strong id="totalIncomePage">Rp 0</strong>
+      </div>
+    </section>
+
+    <div class="back-below-table">
+      <a class="back-income-btn" href="pembukuan.html">← Kembali</a>
+    </div>
+
+  </section>
+</main>
+
+<!-- MODAL CATAT PEMASUKAN -->
+<div class="modal" id="incomeModal" aria-hidden="true">
+  <div class="modal-card">
+    <div class="modal-heading">
+      <div>
+        <h2>Catat Pemasukan</h2>
+        <p>Tambahkan transaksi pemasukan baru.</p>
+      </div>
+      <button class="close-btn" id="closeIncomeModal" type="button">×</button>
+    </div>
+
+    <form id="incomeForm">
+      <div class="form-grid">
+        <label>
+          Tanggal
+          <input id="incomeDate" type="date" required>
+        </label>
+
+        <label>
+          Keterangan
+          <select id="incomeCategory" required>
+            <option value="CUSTOM">CUSTOM</option>
+            <option value="DISPLAY">DISPLAY</option>
+          </select>
+        </label>
+
+        <label class="full">
+          Transaksi
+          <input id="incomeDescription" type="text" value="Penjualan" readonly>
+        </label>
+
+        <label class="full">
+          No. Referensi
+          <input id="incomeReference" type="text" placeholder="Contoh: 000-000">
+        </label>
+
+        <label class="full">
+          Nominal
+          <input id="incomeAmount" type="number" min="0" step="1000" placeholder="1250000" required>
+        </label>
+      </div>
+
+      <div class="modal-actions">
+        <button class="cancel-btn" id="cancelIncome" type="button">Batal</button>
+        <button class="save-btn" type="submit">Simpan Pemasukan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'nouvaTransactions';
+
+const incomeBody = document.getElementById('incomeBody');
+const totalIncomePage = document.getElementById('totalIncomePage');
+const dateStart = document.getElementById('dateStart');
+const dateEnd = document.getElementById('dateEnd');
+
+const modal = document.getElementById('incomeModal');
+const form = document.getElementById('incomeForm');
+
+function getTransactions() {
+  try {
+    const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    return Array.isArray(data) ? data : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+function saveTransactions(rows) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(rows));
+}
+
+// Format yang dipakai pada kolom Keterangan di halaman Pembukuan.
+function getAccountingLabel(transaction) {
+  const category = String(transaction.category || '').toUpperCase();
+  const prefix = category === 'DISPLAY' ? 'DIS' : 'CUS';
+  const reference = String(transaction.reference || '000-000').trim() || '000-000';
+  return `Penjualan - ${prefix}-${reference}`;
+}
+
+function rupiah(value) {
+  return 'Rp ' + Number(value || 0).toLocaleString('id-ID');
+}
+
+function formatDate(dateString) {
+  if (!dateString) return '-';
+  return new Date(dateString + 'T00:00:00').toLocaleDateString('id-ID', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric'
+  });
+}
+
+function formatDateInput(dateString) {
+  if (!dateString) return '';
+  const [year, month, day] = dateString.split('-');
+  return `${day}/${month}/${year}`;
+}
+
+function syncDateDisplays() {
+  document.getElementById('dateStartDisplay').value = formatDateInput(dateStart.value);
+  document.getElementById('dateEndDisplay').value = formatDateInput(dateEnd.value);
+}
+
+function keepDateRangeValid(changedInput) {
+  if (dateStart.value && dateEnd.value && dateEnd.value < dateStart.value) {
+    if (changedInput === dateStart) {
+      dateEnd.value = dateStart.value;
+    } else {
+      dateStart.value = dateEnd.value;
+    }
+  }
+  syncDateDisplays();
+}
+
+function renderIncomeTable() {
+  const start = dateStart.value;
+  const end = dateEnd.value;
+  let rows = getTransactions().filter(t => t.type === 'income');
+
+  if (start) rows = rows.filter(t => t.date >= start);
+  if (end) rows = rows.filter(t => t.date <= end);
+  rows.sort((a, b) => b.date.localeCompare(a.date));
+
+  if (rows.length === 0) {
+    incomeBody.innerHTML = `
+      <tr class="empty-row">
+        <td colspan="6">Belum ada data pemasukan pada periode yang dipilih.</td>
+      </tr>
+    `;
+  } else {
+    incomeBody.innerHTML = rows.map((t, index) => `
+      <tr>
+        <td>${formatDate(t.date)}</td>
+        <td class="transaction-name">${escapeHtml(t.description || '-')}</td>
+        <td>${escapeHtml(t.category || '-')}</td>
+        <td>${escapeHtml(t.reference || '-')}</td>
+        <td class="amount-cell">${rupiah(t.amount)}</td>
+        <td>
+          <button class="delete-row" type="button" data-index="${index}" title="Hapus">×</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+
+  const total = rows.reduce((sum, t) => sum + Number(t.amount || 0), 0);
+  totalIncomePage.textContent = rupiah(total);
+
+  incomeBody.querySelectorAll('.delete-row').forEach((button, index) => {
+    button.addEventListener('click', () => deleteIncome(rows[index]));
+  });
+}
+
+function deleteIncome(target) {
+  const all = getTransactions();
+  const index = all.findIndex(t =>
+    t === target ||
+    (t.date === target.date &&
+     t.description === target.description &&
+     t.type === target.type &&
+     Number(t.amount) === Number(target.amount) &&
+     (t.reference || '') === (target.reference || ''))
+  );
+
+  if (index === -1) return;
+
+  if (confirm('Hapus transaksi pemasukan ini?')) {
+    all.splice(index, 1);
+    saveTransactions(all);
+    renderIncomeTable();
+  }
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+function openModal() {
+  document.getElementById('incomeDate').value =
+    new Date().toISOString().slice(0, 10);
+  form.reset();
+  document.getElementById('incomeDate').value =
+    new Date().toISOString().slice(0, 10);
+  document.getElementById('incomeDescription').value = 'Penjualan';
+  document.getElementById('incomeReference').value = '000-000';
+  modal.classList.add('show');
+  modal.setAttribute('aria-hidden', 'false');
+}
+
+function closeModal() {
+  modal.classList.remove('show');
+  modal.setAttribute('aria-hidden', 'true');
+  form.reset();
+}
+
+document.getElementById('openIncomeModal').addEventListener('click', openModal);
+document.getElementById('closeIncomeModal').addEventListener('click', closeModal);
+document.getElementById('cancelIncome').addEventListener('click', closeModal);
+
+modal.addEventListener('click', event => {
+  if (event.target === modal) closeModal();
+});
+
+form.addEventListener('submit', event => {
+  event.preventDefault();
+
+  const transactions = getTransactions();
+
+  const category = document.getElementById('incomeCategory').value;
+  const reference = document.getElementById('incomeReference').value.trim() || '000-000';
+
+  const transaction = {
+    date: document.getElementById('incomeDate').value,
+    description: 'Penjualan',
+    type: 'income',
+    category,
+    reference,
+    amount: Number(document.getElementById('incomeAmount').value),
+    createdAt: Date.now()
+  };
+
+  transaction.accountingLabel = getAccountingLabel(transaction);
+  transactions.push(transaction);
+
+  saveTransactions(transactions);
+  closeModal();
+  renderIncomeTable();
+});
+
+dateStart.addEventListener('change', () => {
+  keepDateRangeValid(dateStart);
+  renderIncomeTable();
+});
+
+dateEnd.addEventListener('change', () => {
+  keepDateRangeValid(dateEnd);
+  renderIncomeTable();
+});
+
+document.querySelectorAll('.calendar-button').forEach(button => {
+  button.addEventListener('click', () => {
+    const picker = document.getElementById(button.dataset.picker);
+    if (picker && typeof picker.showPicker === 'function') {
+      picker.showPicker();
+    } else if (picker) {
+      picker.click();
+    }
+  });
+});
+
+syncDateDisplays();
+renderIncomeTable();
+</script>
+</body>
+</html>

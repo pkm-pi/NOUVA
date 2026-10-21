@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Katalog Produk - NOUVA</title>
+  <link rel="stylesheet" href="../globals.css">
+  <link rel="stylesheet" href="../css/katalog.css">
+</head>
+
+<body>
+  <div class="catalog-page">
+
+    <!-- SIDEBAR PELANGGAN
+         Struktur, ukuran, ikon, spacing, dan responsive dipertahankan
+         dari katalog pelanggan yang sudah ada. -->
+    <aside class="sidebar">
+      <div class="brand">
+        <img
+          class="logo-nouva"
+          src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/logo-nouva-fiks-2.png"
+          alt="Logo Nouva"
+        >
+        <div class="brand-name">NOUVA</div>
+        <div class="brand-tagline">NOU MENUJU INOVASI</div>
+      </div>
+
+      <nav class="menu" aria-label="Menu pelanggan">
+        <a class="menu-link dashboard-menu-link" href="dashboard_pelanggan.html">
+          <img class="desktop-dashboard-icon"
+            src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--3--1.png"
+            alt=""
+          >
+          <img class="mobile-dashboard-logo"
+            src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/logo-nouva-fiks-2.png"
+            alt=""
+          >
+          <span>Dashboard</span>
+        </a>
+
+        <a class="menu-link active" href="katalog.html" aria-current="page">
+          <img
+            src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--4--1.png"
+            alt=""
+          >
+          <span>Katalog Produk</span>
+        </a>
+
+        <a class="menu-link" href="pesanan_saya.html">
+          <img
+            src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--6--1.png"
+            alt=""
+          >
+          <span>Pesanan Saya</span>
+        </a>
+
+        <a class="menu-link" href="pes_cus.html">
+          <img
+            src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--5--1.png"
+            alt=""
+          >
+          <span>Pesan Custom</span>
+        </a>
+
+        <a class="menu-link" href="peng_pel.html">
+          <img
+            src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--9--1.png"
+            alt=""
+          >
+          <span>Pengaturan</span>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+
+      <!-- HEADER PELANGGAN -->
+      <header class="catalog-header">
+        <div class="welcome">
+          <h1>Katalog Produk</h1>
+          <p>Lihat semua produk Karawo yang tersedia di UtiKarawo.</p>
+        </div>
+      </header>
+
+      <!--
+        DAFTAR PRODUK PELANGGAN
+        Struktur visual mengambil pola produk.html:
+        gambar → nama → harga → ketersediaan → aksi pelanggan.
+        Fitur admin seperti Edit, Hapus, Tambah Produk, dan menu ⋮
+        tidak dibawa ke sisi pelanggan.
+      -->
+      <section class="products-panel" aria-label="Daftar produk Karawo">
+        <div class="catalog-toolbar">
+          <label class="header-search">
+            <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="m16.2 16.2 4.3 4.3"></path>
+            </svg>
+            <input
+              id="searchInput"
+              type="search"
+              placeholder="Cari nama produk, motif, atau warna..."
+              aria-label="Cari produk"
+            >
+          </label>
+        </div>
+        <div class="products-grid" id="productGrid">
+        <article class="product-card product-card-clickable" data-search="kemeja karawo navy">
+          <div class="product-image">
+            <img src="https://www.karyakreatifindonesia.co.id/download/cHJvZHVjdDpwcm9kdWN0cy9pbWFnZXMvNDEzN2VmNjMtNjI5Ni00YWNlLWI5NGUtNjE0NGZmLWNvbktWRnQtMjAyMjA1MjUuanBlZw%3D%3D" alt="Kemeja Karawo Navy" loading="lazy"
+                 onerror="this.closest('.product-image').classList.add('fallback'); this.remove();">
+          </div>
+          <div class="product-info">
+            <h2>Kemeja Karawo Navy</h2>
+            <div class="price">Rp 900.000</div>
+            <div class="availability"><span></span>Stok: 12 pcs</div>
+            <a class="buy-button" href="detail_produk.html" aria-label="Beli Kemeja Karawo Navy">
+              <span class="cart-icon">🛒</span>
+              <span>Beli</span>
+            </a>
+          </div>
+        </article>
+        <article class="product-card product-card-clickable" data-search="kemeja karawo olive">
+          <div class="product-image">
+            <img src="https://www.karyakreatifindonesia.co.id/download/cHJvZHVjdDpwcm9kdWN0cy9pbWFnZXMvYmI3NmM5NzMtZmE1NS00YTYzLTlhNTItNGNhNTBmLUlXb3lrUFYtMjAyMjA1MjUuanBlZw%3D%3D" alt="Kemeja Karawo Olive" loading="lazy"
+                 onerror="this.closest('.product-image').classList.add('fallback'); this.remove();">
+          </div>
+          <div class="product-info">
+            <h2>Kemeja Karawo Olive</h2>
+            <div class="price">Rp 750.000</div>
+            <div class="availability"><span></span>Stok: 18 pcs</div>
+            <a class="buy-button" href="detail_produk.html" aria-label="Beli Kemeja Karawo Olive">
+              <span class="cart-icon">🛒</span>
+              <span>Beli</span>
+            </a>
+          </div>
+        </article>
+        <article class="product-card product-card-clickable" data-search="baju karawo hijau">
+          <div class="product-image">
+            <img src="https://www.karyakreatifindonesia.co.id/en/download/cHJvZHVjdDpwcm9kdWN0cy9pbWFnZXMvd2hhdHNhcHAtaW1hZ2UtMjAyNS0wNy0xMS1hdC0xLXVOZ1BzMTUtMjAyNTA3MTEuanBlZw%3D%3D" alt="Baju Karawo Hijau" loading="lazy"
+                 onerror="this.closest('.product-image').classList.add('fallback'); this.remove();">
+          </div>
+          <div class="product-info">
+            <h2>Baju Karawo Hijau</h2>
+            <div class="price">Rp 850.000</div>
+            <div class="availability"><span></span>Stok: 25 pcs</div>
+            <a class="buy-button" href="detail_produk.html" aria-label="Beli Baju Karawo Hijau">
+              <span class="cart-icon">🛒</span>
+              <span>Beli</span>
+            </a>
+          </div>
+        </article>
+        <article class="product-card product-card-clickable" data-search="baju koko karawo">
+          <div class="product-image">
+            <img src="https://www.karyakreatifindonesia.co.id/en/download/cHJvZHVjdDpwcm9kdWN0cy9pbWFnZXMvd2hhdHNhcHAtaW1hZ2UtMjAyNS0wNy0xLUt1ak5FSlAtMjAyNTA3MTEuanBlZw%3D%3D" alt="Baju Koko Karawo" loading="lazy"
+                 onerror="this.closest('.product-image').classList.add('fallback'); this.remove();">
+          </div>
+          <div class="product-info">
+            <h2>Baju Koko Karawo</h2>
+            <div class="price">Rp 900.000</div>
+            <div class="availability"><span></span>Stok: 15 pcs</div>
+            <a class="buy-button" href="detail_produk.html" aria-label="Beli Baju Koko Karawo">
+              <span class="cart-icon">🛒</span>
+              <span>Beli</span>
+            </a>
+          </div>
+        </article>
+        <article class="product-card product-card-clickable" data-search="karawo motif origami">
+          <div class="product-image">
+            <img src="https://img.mbizmarket.co.id/products/thumbs/800x800/2026/02/23/3953b0e53bd41c55b84b08cda0d6f79c.jpg" alt="Karawo Motif Origami" loading="lazy"
+                 onerror="this.closest('.product-image').classList.add('fallback'); this.remove();">
+          </div>
+          <div class="product-info">
+            <h2>Karawo Motif Origami</h2>
+            <div class="price">Rp 900.000</div>
+            <div class="availability"><span></span>Stok: 10 pcs</div>
+            <a class="buy-button" href="detail_produk.html" aria-label="Beli Karawo Motif Origami">
+              <span class="cart-icon">🛒</span>
+              <span>Beli</span>
+            </a>
+          </div>
+        </article>
+        <article class="product-card product-card-clickable" data-search="seragam karawo">
+          <div class="product-image">
+            <img src="../img/kemeja.png" alt="Seragam Karawo" loading="lazy"
+                 onerror="this.closest('.product-image').classList.add('fallback'); this.remove();">
+          </div>
+          <div class="product-info">
+            <h2>Seragam Karawo</h2>
+            <div class="price">Rp 450.000</div>
+            <div class="availability"><span></span>Stok: 50 pcs</div>
+            <a class="buy-button" href="detail_produk.html" aria-label="Beli Seragam Karawo">
+              <span class="cart-icon">🛒</span>
+              <span>Beli</span>
+            </a>
+          </div>
+        </article>
+        <article class="product-card product-card-clickable" data-search="kemeja karawo">
+          <div class="product-image">
+            <img src="https://images.unsplash.com/photo-1603252110481-7ba873bf42ab?auto=format&fit=crop&w=800&q=85" alt="Kemeja Karawo" loading="lazy"
+                 onerror="this.closest('.product-image').classList.add('fallback'); this.remove();">
+          </div>
+          <div class="product-info">
+            <h2>Kemeja Karawo</h2>
+            <div class="price">Rp 400.000</div>
+            <div class="availability"><span></span>Stok: 40 pcs</div>
+            <a class="buy-button" href="detail_produk.html" aria-label="Beli Kemeja Karawo">
+              <span class="cart-icon">🛒</span>
+              <span>Beli</span>
+            </a>
+          </div>
+        </article>
+        <article class="product-card product-card-clickable" data-search="blus karawo">
+          <div class="product-image">
+            <img src="https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&w=800&q=85" alt="Blus Karawo" loading="lazy"
+                 onerror="this.closest('.product-image').classList.add('fallback'); this.remove();">
+          </div>
+          <div class="product-info">
+            <h2>Blus Karawo</h2>
+            <div class="price">Rp 380.000</div>
+            <div class="availability"><span></span>Stok: 30 pcs</div>
+            <a class="buy-button" href="detail_produk.html" aria-label="Beli Blus Karawo">
+              <span class="cart-icon">🛒</span>
+              <span>Beli</span>
+            </a>
+          </div>
+        </article>
+        <article class="product-card product-card-clickable" data-search="outer karawo">
+          <div class="product-image">
+            <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=800&q=85" alt="Outer Karawo" loading="lazy"
+                 onerror="this.closest('.product-image').classList.add('fallback'); this.remove();">
+          </div>
+          <div class="product-info">
+            <h2>Outer Karawo</h2>
+            <div class="price">Rp 500.000</div>
+            <div class="availability"><span></span>Stok: 25 pcs</div>
+            <a class="buy-button" href="detail_produk.html" aria-label="Beli Outer Karawo">
+              <span class="cart-icon">🛒</span>
+              <span>Beli</span>
+            </a>
+          </div>
+        </article>
+        <article class="product-card product-card-clickable" data-search="dress karawo">
+          <div class="product-image">
+            <img src="https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=800&q=85" alt="Dress Karawo" loading="lazy"
+                 onerror="this.closest('.product-image').classList.add('fallback'); this.remove();">
+          </div>
+          <div class="product-info">
+            <h2>Dress Karawo</h2>
+            <div class="price">Rp 600.000</div>
+            <div class="availability"><span></span>Stok: 20 pcs</div>
+            <a class="buy-button" href="detail_produk.html" aria-label="Beli Dress Karawo">
+              <span class="cart-icon">🛒</span>
+              <span>Beli</span>
+            </a>
+          </div>
+        </article>
+        <article class="product-card product-card-clickable" data-search="kebaya karawo">
+          <div class="product-image">
+            <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=800&q=85" alt="Kebaya Karawo" loading="lazy"
+                 onerror="this.closest('.product-image').classList.add('fallback'); this.remove();">
+          </div>
+          <div class="product-info">
+            <h2>Kebaya Karawo</h2>
+            <div class="price">Rp 650.000</div>
+            <div class="availability"><span></span>Stok: 15 pcs</div>
+            <a class="buy-button" href="detail_produk.html" aria-label="Beli Kebaya Karawo">
+              <span class="cart-icon">🛒</span>
+              <span>Beli</span>
+            </a>
+          </div>
+        </article>
+        <article class="product-card product-card-clickable" data-search="tunik karawo">
+          <div class="product-image">
+            <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=800&q=85" alt="Tunik Karawo" loading="lazy"
+                 onerror="this.closest('.product-image').classList.add('fallback'); this.remove();">
+          </div>
+          <div class="product-info">
+            <h2>Tunik Karawo</h2>
+            <div class="price">Rp 350.000</div>
+            <div class="availability"><span></span>Stok: 35 pcs</div>
+            <a class="buy-button" href="detail_produk.html" aria-label="Beli Tunik Karawo">
+              <span class="cart-icon">🛒</span>
+              <span>Beli</span>
+            </a>
+          </div>
+        </article>
+        <article class="product-card product-card-clickable" data-search="blazer karawo">
+          <div class="product-image">
+            <img src="https://images.unsplash.com/photo-1485968579580-b6d095142e6e?auto=format&fit=crop&w=800&q=85" alt="Blazer Karawo" loading="lazy"
+                 onerror="this.closest('.product-image').classList.add('fallback'); this.remove();">
+          </div>
+          <div class="product-info">
+            <h2>Blazer Karawo</h2>
+            <div class="price">Rp 550.000</div>
+            <div class="availability"><span></span>Stok: 18 pcs</div>
+            <a class="buy-button" href="detail_produk.html" aria-label="Beli Blazer Karawo">
+              <span class="cart-icon">🛒</span>
+              <span>Beli</span>
+            </a>
+          </div>
+        </article>
+        <article class="product-card product-card-clickable" data-search="dress motif karawo">
+          <div class="product-image">
+            <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=800&q=85" alt="Dress Motif Karawo" loading="lazy"
+                 onerror="this.closest('.product-image').classList.add('fallback'); this.remove();">
+          </div>
+          <div class="product-info">
+            <h2>Dress Motif Karawo</h2>
+            <div class="price">Rp 625.000</div>
+            <div class="availability"><span></span>Stok: 14 pcs</div>
+            <a class="buy-button" href="detail_produk.html" aria-label="Beli Dress Motif Karawo">
+              <span class="cart-icon">🛒</span>
+              <span>Beli</span>
+            </a>
+          </div>
+        </article>
+        <article class="product-card product-card-clickable" data-search="kemeja motif bunga">
+          <div class="product-image">
+            <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=800&q=85" alt="Kemeja Motif Bunga" loading="lazy"
+                 onerror="this.closest('.product-image').classList.add('fallback'); this.remove();">
+          </div>
+          <div class="product-info">
+            <h2>Kemeja Motif Bunga</h2>
+            <div class="price">Rp 425.000</div>
+            <div class="availability"><span></span>Stok: 22 pcs</div>
+            <a class="buy-button" href="detail_produk.html" aria-label="Beli Kemeja Motif Bunga">
+              <span class="cart-icon">🛒</span>
+              <span>Beli</span>
+            </a>
+          </div>
+        </article>
+        <article class="product-card product-card-clickable" data-search="atasan karawo">
+          <div class="product-image">
+            <img src="../img/bluss.png" alt="Atasan Karawo" loading="lazy"
+                 onerror="this.closest('.product-image').classList.add('fallback'); this.remove();">
+          </div>
+          <div class="product-info">
+            <h2>Atasan Karawo</h2>
+            <div class="price">Rp 475.000</div>
+            <div class="availability"><span></span>Stok: 28 pcs</div>
+            <a class="buy-button" href="detail_produk.html" aria-label="Beli Atasan Karawo">
+              <span class="cart-icon">🛒</span>
+              <span>Beli</span>
+            </a>
+          </div>
+        </article>
+        <article class="product-card product-card-clickable" data-search="tunik karawo ungu">
+          <div class="product-image">
+            <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=85" alt="Tunik Karawo Ungu" loading="lazy"
+                 onerror="this.closest('.product-image').classList.add('fallback'); this.remove();">
+          </div>
+          <div class="product-info">
+            <h2>Tunik Karawo Ungu</h2>
+            <div class="price">Rp 500.000</div>
+            <div class="availability"><span></span>Stok: 20 pcs</div>
+            <a class="buy-button" href="detail_produk.html" aria-label="Beli Tunik Karawo Ungu">
+              <span class="cart-icon">🛒</span>
+              <span>Beli</span>
+            </a>
+          </div>
+        </article>
+        <article class="product-card product-card-clickable" data-search="blus karawo modern">
+          <div class="product-image">
+            <img src="https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&w=800&q=85" alt="Blus Karawo Modern" loading="lazy"
+                 onerror="this.closest('.product-image').classList.add('fallback'); this.remove();">
+          </div>
+          <div class="product-info">
+            <h2>Blus Karawo Modern</h2>
+            <div class="price">Rp 420.000</div>
+            <div class="availability"><span></span>Stok: 26 pcs</div>
+            <a class="buy-button" href="detail_produk.html" aria-label="Beli Blus Karawo Modern">
+              <span class="cart-icon">🛒</span>
+              <span>Beli</span>
+            </a>
+          </div>
+        </article>
+        <article class="product-card product-card-clickable" data-search="kemeja karawo formal">
+          <div class="product-image">
+            <img src="https://images.unsplash.com/photo-1583743814966-8936f37f3841?auto=format&fit=crop&w=800&q=85" alt="Kemeja Karawo Formal" loading="lazy"
+                 onerror="this.closest('.product-image').classList.add('fallback'); this.remove();">
+          </div>
+          <div class="product-info">
+            <h2>Kemeja Karawo Formal</h2>
+            <div class="price">Rp 525.000</div>
+            <div class="availability"><span></span>Stok: 16 pcs</div>
+            <a class="buy-button" href="detail_produk.html" aria-label="Beli Kemeja Karawo Formal">
+              <span class="cart-icon">🛒</span>
+              <span>Beli</span>
+            </a>
+          </div>
+        </article>
+        <article class="product-card product-card-clickable" data-search="outer karawo premium">
+          <div class="product-image">
+            <img src="https://images.unsplash.com/photo-1598554747436-c9293d6a588f?auto=format&fit=crop&w=800&q=85" alt="Outer Karawo Premium" loading="lazy"
+                 onerror="this.closest('.product-image').classList.add('fallback'); this.remove();">
+          </div>
+          <div class="product-info">
+            <h2>Outer Karawo Premium</h2>
+            <div class="price">Rp 700.000</div>
+            <div class="availability"><span></span>Stok: 9 pcs</div>
+            <a class="buy-button" href="detail_produk.html" aria-label="Beli Outer Karawo Premium">
+              <span class="cart-icon">🛒</span>
+              <span>Beli</span>
+            </a>
+          </div>
+        </article>
+        </div>
+
+        <div class="empty-state" id="emptyState">
+          <strong>Produk tidak ditemukan</strong>
+          <span>Coba gunakan kata kunci produk yang lain.</span>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    const searchInput = document.getElementById("searchInput");
+    const cards = [...document.querySelectorAll(".product-card")];
+    const emptyState = document.getElementById("emptyState");
+
+    // Halaman detail pesanan pelanggan.
+    // Jika nama file detail kamu berbeda, cukup ubah bagian ini.
+    const DETAIL_PAGE = "detail_produk.html";
+
+    function filterProducts() {
+      const query = searchInput.value.trim().toLowerCase();
+      let visible = 0;
+
+      cards.forEach((card) => {
+        const matches = card.dataset.search.includes(query);
+        card.hidden = !matches;
+        if (matches) visible++;
+      });
+
+      emptyState.classList.toggle("show", visible === 0);
+    }
+
+    function openProductDetail(card) {
+      const name = card.querySelector(".product-info h2")?.textContent.trim() || "";
+      const price = card.querySelector(".price")?.textContent.trim() || "";
+      const stock = card.querySelector(".availability")?.textContent.trim() || "";
+      const image = card.querySelector(".product-image img")?.getAttribute("src") || "";
+
+      // Simpan produk yang dipilih agar halaman detail bisa mengambil datanya.
+      sessionStorage.setItem("selectedProduct", JSON.stringify({
+        name,
+        price,
+        stock,
+        image
+      }));
+
+      window.location.href = DETAIL_PAGE;
+    }
+
+    cards.forEach((card) => {
+      card.setAttribute("tabindex", "0");
+      card.setAttribute("role", "button");
+
+      card.addEventListener("click", (event) => {
+        // Tombol/link di dalam kartu tetap menjalankan fungsi masing-masing.
+        if (event.target.closest("a, button, input, select, textarea")) return;
+        openProductDetail(card);
+      });
+
+      card.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openProductDetail(card);
+        }
+      });
+    });
+
+    searchInput.addEventListener("input", filterProducts);
+  </script>
+</body>
+</html>

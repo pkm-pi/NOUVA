@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <title>Dashboard Admin - NOUVA</title>
+  <link rel="stylesheet" href="../globals.css">
+  <link rel="stylesheet" href="../css/dashboard_admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="dashboard-admin">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <img class="logo-nouva-FIKS" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/logo-nouva-fiks-2.png" alt="Logo Nouva">
+      <div class="brand-name">NOUVA</div>
+      <div class="brand-tagline">NOU Menuju Inovasi</div>
+    </div>
+
+    <div class="admin-profile">
+      <img class="profile" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/profile.png" alt="Admin">
+      <div class="admin-name">Admin</div>
+    </div>
+
+    <nav class="menu" aria-label="Menu aplikasi">
+      <a class="menu-link active dashboard-menu-link" href="dashboard_admin.html">
+        <img class="desktop-dashboard-icon" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--3--1.png" alt="">
+        <img class="mobile-dashboard-logo" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/logo-nouva-fiks-2.png" alt="">
+        <span>Dashboard</span>
+      </a>
+      <a class="menu-link" href="pesanan.html"><img src="https://c.animaapp.com/P7Ah09FQ/img/image-removebg-preview--12--3@2x.png" alt=""><span>Pesanan</span></a>
+      <a class="menu-link" href="produksi.html"><img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--13--1.png" alt=""><span>Produksi Jahit</span></a>
+      <a class="menu-link" href="produk.html"><img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--14--1.png" alt=""><span>Produk</span></a>
+      <a class="menu-link" href="pemasaran.html"><img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--17--1.png" alt=""><span>Pemasaran</span></a>
+      <a class="menu-link" href="pembukuan.html"><img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--18--1.png" alt=""><span>Pembukuan</span></a>
+      <a class="menu-link" href="pengaturan.html"><img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--15--1.png" alt=""><span>Pengaturan</span></a>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <header class="header">
+      <div class="welcome">
+        <h1>Selamat Datang!</h1>
+        <p>Kelola usaha Uti Karawo dengan lebih teratur</p>
+      </div>
+      <a class="notification-btn" href="notifikasi.html" aria-label="Buka notifikasi" title="Notifikasi">
+        <img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/icon-2.svg" alt="Notifikasi">
+      </a>
+    </header>
+
+    <section class="stats">
+      <div class="stat-card">
+        <div class="stat-icon"><img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/icon-1.svg" alt=""></div>
+        <div class="stat-title">Total Pesanan</div>
+        <div class="stat-value">18</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/icon.svg" alt=""></div>
+        <div class="stat-title">Sedang Dikerjakan</div>
+        <div class="stat-value">7</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/icon-3.svg" alt=""></div>
+        <div class="stat-title">Pesanan Selesai</div>
+        <div class="stat-value">9</div>
+      </div>
+      <div class="stat-card revenue">
+        <div class="stat-icon">
+          <svg class="revenue-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3.5 7.5h15A2.5 2.5 0 0 1 21 10v7.5a2.5 2.5 0 0 1-2.5 2.5h-15A2.5 2.5 0 0 1 1 17.5V7a2 2 0 0 1 2-2h13.5a2 2 0 0 1 2 2v1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M16 13.5h5v4h-5a2 2 0 1 1 0-4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <circle cx="16.5" cy="15.5" r=".7" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="stat-title">Pendapatan Bulan Ini</div>
+        <div class="stat-value">Rp 12.450.000</div>
+      </div>
+    </section>
+
+    <section class="chart-grid">
+      <div class="panel chart-panel">
+        <div class="panel-title-row">
+          <h2 class="panel-title">Ringkasan Penjualan</h2>
+          <div class="filter-hari">
+            <select id="filterHari" aria-label="Pilih periode">
+              <option value="10">10 hari</option>
+              <option value="15">15 hari</option>
+              <option value="30" selected>30 hari</option>
+              <option value="45">45 hari</option>
+            </select>
+          </div>
+        </div>
+        <div class="chart-wrap"><canvas id="salesChart"></canvas></div>
+      </div>
+
+      <div class="panel chart-panel status-panel">
+        <h2 class="panel-title">Status Produksi Pesanan</h2>
+        <div class="status-chart-wrap"><canvas id="statusChart"></canvas></div>
+      </div>
+    </section>
+
+    <section class="lower-grid">
+      <div class="panel table-panel">
+        <div class="table-heading">
+          <h2>Pesanan Terbaru</h2>
+          <a class="view-all" href="pesanan.html">Lihat Semua</a>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>
+               No. Referensi</th><th>Nama Pelanggan</th><th>Total</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+              <tr><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+              <tr><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+              <tr><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel table-panel">
+        <div class="table-heading">
+          <h2>Aktivitas Terbaru</h2>
+          <a class="view-all" href="notifikasi.html">Lihat Semua</a>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Aktivitas</th><th>Waktu</th></tr></thead>
+            <tbody>
+              <tr><td>-</td><td>-</td></tr>
+              <tr><td>-</td><td>-</td></tr>
+              <tr><td>-</td><td>-</td></tr>
+              <tr><td>-</td><td>-</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="guide">
+      <div class="guide-copy">
+        <h2>Panduan Penggunaan</h2>
+        <p>Pelajari cara menggunakan Uti Karawo dengan mudah!</p>
+      </div>
+      <!-- GANTI URL DI BAWAH DENGAN LINK GOOGLE DRIVE BUKU/PANDUAN KAMU -->
+      <a class="guide-btn" href="https://drive.google.com/file/d/1CZj-XEIAVxct-IGo-EC4FD5BHS7Guq-I/view?usp=drive_link" target="_blank" rel="noopener noreferrer">Buka Panduan</a>
+    </section>
+  </main>
+</div>
+
+
+<script>
+const filter = document.getElementById("filterHari");
+const ctx = document.getElementById("salesChart");
+
+const salesChart = new Chart(ctx, {
+  type:"line",
+  data:{
+    labels:["01","07","14","21","30"],
+    datasets:[{
+      label:"Penjualan",
+      data:[50,20,90,70,90],
+      borderColor:"#7b61ff",
+      backgroundColor:"transparent",
+      tension:.4,
+      pointRadius:2.5,
+      borderWidth:1.5
+    }]
+  },
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      y:{beginAtZero:true,max:100,ticks:{font:{size:7}}},
+      x:{ticks:{font:{size:7}}}
+    }
+  }
+});
+
+filter.addEventListener("change",()=>{
+  const data = {
+    10:{labels:["Hari 1","Hari 2","Hari 3","Hari 4","Hari 5"], values:[20,40,30,70,50]},
+    15:{labels:["Hari 1","Hari 3","Hari 6","Hari 9","Hari 15"], values:[30,60,45,80,70]},
+    30:{labels:["01","07","14","21","30"], values:[50,20,90,70,90]},
+    45:{labels:["1","10","20","30","45"], values:[20,80,40,90,60]}
+  }[filter.value];
+  salesChart.data.labels=data.labels;
+  salesChart.data.datasets[0].data=data.values;
+  salesChart.update();
+});
+
+new Chart(document.getElementById("statusChart"),{
+  type:"doughnut",
+  data:{
+    labels:["Sedang Disulam","Sedang Dijahit","Siap Diambil","Selesai"],
+    datasets:[{
+      data:[32,18,33,17],
+      backgroundColor:["#8b6cff","#35c4dd","#ff8f8f","#ffb347"],
+      borderWidth:0
+    }]
+  },
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    cutout:"45%",
+    plugins:{
+      legend:{
+        display:true,
+        position:"bottom",
+        labels:{boxWidth:7,padding:5,font:{size:7}}
+      }
+    }
+  }
+});
+
+</script>
+
+</body>
+</html>
