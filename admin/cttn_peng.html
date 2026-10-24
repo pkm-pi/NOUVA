@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pengeluaran | NOUVA</title>
   <link rel="stylesheet" href="../globals.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/nouva-config.js"></script>
+  <script src="../js/nouva-finance.js"></script>
   <link rel="stylesheet" href="../css/cttn_peng.css">
 </head>
 <body>
@@ -169,213 +172,18 @@
 </div>
 
 <script>
-const STORAGE_KEY = 'nouvaTransactions';
-
-const expenseBody = document.getElementById('expenseBody');
-const totalExpensePage = document.getElementById('totalExpensePage');
-const dateStart = document.getElementById('dateStart');
-const dateEnd = document.getElementById('dateEnd');
-
-const modal = document.getElementById('expenseModal');
-const form = document.getElementById('expenseForm');
-
-function getTransactions() {
-  try {
-    const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    return Array.isArray(data) ? data : [];
-  } catch (error) {
-    return [];
-  }
-}
-
-function saveTransactions(rows) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(rows));
-}
-
-// Format yang dipakai pada kolom Keterangan di halaman Pembukuan.
-function getExpenseLabel(transaction) {
-  const category = String(transaction.category || '').toUpperCase();
-  const prefix = category === 'DISPLAY' ? 'DIS' : 'CUS';
-  const reference = String(transaction.reference || '000-000').trim() || '000-000';
-  return `Pembelian - ${transaction.category || '-'}`;
-}
-
-function rupiah(value) {
-  return 'Rp ' + Number(value || 0).toLocaleString('id-ID');
-}
-
-function formatDate(dateString) {
-  if (!dateString) return '-';
-  return new Date(dateString + 'T00:00:00').toLocaleDateString('id-ID', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric'
-  });
-}
-
-function formatDateInput(dateString) {
-  if (!dateString) return '';
-  const [year, month, day] = dateString.split('-');
-  return `${day}/${month}/${year}`;
-}
-
-function syncDateDisplays() {
-  document.getElementById('dateStartDisplay').value = formatDateInput(dateStart.value);
-  document.getElementById('dateEndDisplay').value = formatDateInput(dateEnd.value);
-}
-
-function keepDateRangeValid(changedInput) {
-  if (dateStart.value && dateEnd.value && dateEnd.value < dateStart.value) {
-    if (changedInput === dateStart) {
-      dateEnd.value = dateStart.value;
-    } else {
-      dateStart.value = dateEnd.value;
-    }
-  }
-  syncDateDisplays();
-}
-
-function renderExpenseTable() {
-  const start = dateStart.value;
-  const end = dateEnd.value;
-  let rows = getTransactions().filter(t => t.type === 'expense');
-
-  if (start) rows = rows.filter(t => t.date >= start);
-  if (end) rows = rows.filter(t => t.date <= end);
-  rows.sort((a, b) => b.date.localeCompare(a.date));
-
-  if (rows.length === 0) {
-    expenseBody.innerHTML = `
-      <tr class="empty-row">
-        <td colspan="5">Belum ada data pengeluaran pada periode yang dipilih.</td>
-      </tr>
-    `;
-  } else {
-    expenseBody.innerHTML = rows.map((t, index) => `
-      <tr>
-        <td>${formatDate(t.date)}</td>
-        <td class="transaction-name">${escapeHtml(t.description || '-')}</td>
-        <td>${escapeHtml(t.category || '-')}</td>
-        <td class="amount-cell">${rupiah(t.amount)}</td>
-        <td>
-          <button class="delete-row" type="button" data-index="${index}" title="Hapus">×</button>
-        </td>
-      </tr>
-    `).join('');
-  }
-
-
-  const total = rows.reduce((sum, t) => sum + Number(t.amount || 0), 0);
-  totalExpensePage.textContent = rupiah(total);
-
-  expenseBody.querySelectorAll('.delete-row').forEach((button, index) => {
-    button.addEventListener('click', () => deleteExpense(rows[index]));
-  });
-}
-
-function deleteExpense(target) {
-  const all = getTransactions();
-  const index = all.findIndex(t =>
-    t === target ||
-    (t.date === target.date &&
-     t.description === target.description &&
-     t.type === target.type &&
-     Number(t.amount) === Number(target.amount) &&
-     (t.reference || '') === (target.reference || ''))
-  );
-
-  if (index === -1) return;
-
-  if (confirm('Hapus transaksi pengeluaran ini?')) {
-    all.splice(index, 1);
-    saveTransactions(all);
-    renderExpenseTable();
-  }
-}
-
-function escapeHtml(value) {
-  return String(value)
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#039;');
-}
-
-function openModal() {
-  document.getElementById('expenseDate').value =
-    new Date().toISOString().slice(0, 10);
-  form.reset();
-  document.getElementById('expenseDate').value =
-    new Date().toISOString().slice(0, 10);
-  document.getElementById('expenseDescription').value = 'Pembelian';
-  modal.classList.add('show');
-  modal.setAttribute('aria-hidden', 'false');
-}
-
-function closeModal() {
-  modal.classList.remove('show');
-  modal.setAttribute('aria-hidden', 'true');
-  form.reset();
-}
-
-document.getElementById('openExpenseModal').addEventListener('click', openModal);
-document.getElementById('closeExpenseModal').addEventListener('click', closeModal);
-document.getElementById('cancelExpense').addEventListener('click', closeModal);
-
-modal.addEventListener('click', event => {
-  if (event.target === modal) closeModal();
-});
-
-form.addEventListener('submit', event => {
-  event.preventDefault();
-
-  const transactions = getTransactions();
-
-  const category = document.getElementById('expenseCategory').value;
-
-  const transaction = {
-    date: document.getElementById('expenseDate').value,
-    // Kolom Keterangan di Pembukuan otomatis menjadi:
-    // Pembelian - (isi keterangan dari form)
-    description: `Pembelian - ${category}`,
-    type: 'expense',
-    category,
-    amount: Number(document.getElementById('expenseAmount').value),
-    createdAt: Date.now()
-  };
-
-  transaction.accountingLabel = getExpenseLabel(transaction);
-  transactions.push(transaction);
-
-  saveTransactions(transactions);
-  closeModal();
-  renderExpenseTable();
-});
-
-dateStart.addEventListener('change', () => {
-  keepDateRangeValid(dateStart);
-  renderExpenseTable();
-});
-
-dateEnd.addEventListener('change', () => {
-  keepDateRangeValid(dateEnd);
-  renderExpenseTable();
-});
-
-document.querySelectorAll('.calendar-button').forEach(button => {
-  button.addEventListener('click', () => {
-    const picker = document.getElementById(button.dataset.picker);
-    if (picker && typeof picker.showPicker === 'function') {
-      picker.showPicker();
-    } else if (picker) {
-      picker.click();
-    }
-  });
-});
-
-syncDateDisplays();
-renderExpenseTable();
+const db=window.nouvaFinanceClient, expenseBody=document.getElementById('expenseBody'),totalExpensePage=document.getElementById('totalExpensePage');
+const dateStart=document.getElementById('dateStart'),dateEnd=document.getElementById('dateEnd'),modal=document.getElementById('expenseModal'),form=document.getElementById('expenseForm');let expenseRows=[];
+const rupiah=v=>'Rp '+Number(v||0).toLocaleString('id-ID');const esc=v=>String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
+function fmt(d){return d?new Date(d+'T00:00:00').toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'}):'-';}function fmtInput(d){if(!d)return '';const [y,m,day]=d.split('-');return `${day}/${m}/${y}`;}
+function syncDates(){document.getElementById('dateStartDisplay').value=fmtInput(dateStart.value);document.getElementById('dateEndDisplay').value=fmtInput(dateEnd.value);}function keepRange(changed){if(dateStart.value&&dateEnd.value&&dateEnd.value<dateStart.value){if(changed===dateStart)dateEnd.value=dateStart.value;else dateStart.value=dateEnd.value;}syncDates();}
+async function loadExpenses(){if(!db){alert('Supabase belum terhubung. Periksa konfigurasi.');return;}const {data,error}=await db.from('expense_records').select('id,transaction_date,category,description,reference_no,amount,created_at').order('transaction_date',{ascending:false});if(error){alert('Gagal memuat pengeluaran: '+window.nouvaFinanceError(error));return;}expenseRows=(data||[]).map(r=>({id:r.id,date:r.transaction_date,category:r.category,description:r.description,reference:r.reference_no,amount:Number(r.amount||0)}));renderExpenses();}
+function renderExpenses(){let rows=expenseRows.filter(r=>(!dateStart.value||r.date>=dateStart.value)&&(!dateEnd.value||r.date<=dateEnd.value));rows.sort((a,b)=>b.date.localeCompare(a.date));expenseBody.innerHTML=rows.length?rows.map(r=>`<tr><td>${fmt(r.date)}</td><td class="transaction-name">${esc(r.description||'-')}</td><td>${esc(r.category||'-')}</td><td class="amount-cell">${rupiah(r.amount)}</td><td>${r.orderId?'<span title="Pemasukan otomatis dari pesanan">—</span>':`<button class="delete-row" type="button" data-id="${r.id}" title="Hapus">×</button>`}</td></tr>`).join(''):`<tr class="empty-row"><td colspan="5">Belum ada data pengeluaran pada periode yang dipilih.</td></tr>`;totalExpensePage.textContent=rupiah(rows.reduce((a,r)=>a+r.amount,0));expenseBody.querySelectorAll('.delete-row').forEach(b=>b.addEventListener('click',()=>deleteExpense(b.dataset.id)));}
+async function deleteExpense(id){if(!confirm('Hapus transaksi pengeluaran ini?'))return;const {error}=await db.from('expense_records').delete().eq('id',id);if(error){alert('Gagal menghapus: '+window.nouvaFinanceError(error));return;}await loadExpenses();}
+function openModal(){form.reset();document.getElementById('expenseDate').value=new Date().toISOString().slice(0,10);document.getElementById('expenseDescription').value='Pembelian';modal.classList.add('show');modal.setAttribute('aria-hidden','false');}function closeModal(){modal.classList.remove('show');modal.setAttribute('aria-hidden','true');form.reset();}
+document.getElementById('openExpenseModal').addEventListener('click',openModal);document.getElementById('closeExpenseModal').addEventListener('click',closeModal);document.getElementById('cancelExpense').addEventListener('click',closeModal);modal.addEventListener('click',e=>{if(e.target===modal)closeModal();});
+form.addEventListener('submit',async e=>{e.preventDefault();if(!db){alert('Supabase belum terhubung.');return;}const category=document.getElementById('expenseCategory').value.trim();const payload={transaction_date:document.getElementById('expenseDate').value,category,description:'Pembelian - '+category,amount:Number(document.getElementById('expenseAmount').value)};const {error}=await db.from('expense_records').insert(payload);if(error){alert('Gagal menyimpan pengeluaran: '+window.nouvaFinanceError(error));return;}closeModal();await loadExpenses();});
+dateStart.addEventListener('change',()=>{keepRange(dateStart);renderExpenses();});dateEnd.addEventListener('change',()=>{keepRange(dateEnd);renderExpenses();});document.querySelectorAll('.calendar-button').forEach(b=>b.addEventListener('click',()=>{const p=document.getElementById(b.dataset.picker);if(p?.showPicker)p.showPicker();else p?.click();}));const today=new Date(),todayKey=today.toISOString().slice(0,10),monthStart=todayKey.slice(0,8)+'01';dateStart.value=monthStart;dateEnd.value=todayKey;syncDates();loadExpenses();
 </script>
 </body>
 </html>

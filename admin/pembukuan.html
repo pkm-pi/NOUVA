@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pembukuan | NOUVA</title>
   <link rel="stylesheet" href="../globals.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/nouva-config.js"></script>
+  <script src="../js/nouva-finance.js"></script>
   <link rel="stylesheet" href="../css/pembukuan.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -207,241 +210,28 @@
 </div>
 
 <script>
-const STORAGE_KEY = 'nouvaTransactions';
-
-const seedTransactions = [
-  {date:'2026-07-21', description:'Penjualan - CUS-001-001', type:'income', category:'Penjualan', amount:1250000},
-  {date:'2026-07-20', description:'Pembelian - Kain Katun', type:'expense', category:'Kain', amount:350000},
-  {date:'2026-07-18', description:'Penjualan - DIS-001-001', type:'income', category:'Penjualan', amount:1500000},
-  {date:'2026-07-16', description:'Pembelian - Jasa Penjahit', type:'expense', category:'Jasa Penjahit', amount:200000},
-  {date:'2026-07-15', description:'Pembelian - Jasa Penyulam', type:'expense', category:'Jasa Penyulam', amount:500000},
-  {date:'2026-07-14', description:'Penjualan - CUS-002-001', type:'income', category:'Penjualan', amount:900000},
-  {date:'2026-07-12', description:'Pembelian - Kain Katun', type:'expense', category:'Kain', amount:425000},
-  {date:'2026-07-10', description:'Penjualan - CUS-003-001', type:'income', category:'Penjualan', amount:850000},
-  {date:'2026-07-09', description:'Pembelian - Jasa Penjahit', type:'expense', category:'Jasa Penjahit', amount:250000},
-  {date:'2026-07-07', description:'Penjualan - Display-001', type:'income', category:'Display', amount:650000},
-  {date:'2026-07-05', description:'Pembelian - Jasa Penyulam', type:'expense', category:'Jasa Penyulam', amount:450000},
-  {date:'2026-07-03', description:'Penjualan - CUS-004-001', type:'income', category:'Penjualan', amount:1100000},
-  {date:'2026-07-01', description:'Pembelian - Kain Katun', type:'expense', category:'Kain', amount:300000},
-  {date:'2026-06-28', description:'Penjualan - CUS-005-001', type:'income', category:'Penjualan', amount:750000},
-  {date:'2026-06-25', description:'Pembelian - Jasa Penjahit', type:'expense', category:'Jasa Penjahit', amount:180000}
-];
-
-function loadTransactions() {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      if (Array.isArray(parsed)) return parsed;
-    }
-  } catch (e) {}
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(seedTransactions));
-  return [...seedTransactions];
+const db=window.nouvaFinanceClient;let transactions=[];const reportDate=document.getElementById('reportDate'),linePeriod=document.getElementById('linePeriod'),rangeStart=document.getElementById('rangeStart'),rangeEnd=document.getElementById('rangeEnd'),transactionBody=document.getElementById('transactionBody');let financeChart,profitChart;
+const rupiah=v=>'Rp '+Number(v||0).toLocaleString('id-ID');function formatDate(d){if(!d)return '-';const [y,m,day]=d.split('-');return `${day}/${m}/${y}`;}function sum(rows,type){return rows.filter(t=>t.type===type).reduce((a,t)=>a+Number(t.amount||0),0);}function escapeHtml(v){return String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');}
+async function loadTransactions(){if(!db){transactionBody.innerHTML='<tr><td colspan="4">Supabase belum terhubung. Periksa konfigurasi.</td></tr>';return;}const [inc,exp]=await Promise.all([db.from('income_records').select('id,transaction_date,description,transaction_type,reference_no,amount,created_at'),db.from('expense_records').select('id,transaction_date,category,description,amount,created_at')]);if(inc.error||exp.error){const err=inc.error||exp.error;console.error(err);transactionBody.innerHTML=`<tr><td colspan="4">Gagal memuat data: ${escapeHtml(err.message)}</td></tr>`;return;}transactions=[...(inc.data||[]).map(r=>({id:r.id,date:r.transaction_date,description:r.description==='Penjualan'?`Penjualan - ${r.reference_no}`:r.description,type:'income',category:r.transaction_type,amount:Number(r.amount||0),createdAt:new Date(r.created_at).getTime()})),...(exp.data||[]).map(r=>({id:r.id,date:r.transaction_date,description:r.description,type:'expense',category:r.category,amount:Number(r.amount||0),createdAt:new Date(r.created_at).getTime()}))];refreshAll();}
+function updateSummary(){const rows=transactions.filter(t=>t.date<=reportDate.value),income=sum(rows,'income'),expense=sum(rows,'expense'),balance=income-expense;document.getElementById('totalIncome').textContent=rupiah(income);document.getElementById('totalExpense').textContent=rupiah(expense);document.getElementById('netProfit').textContent=rupiah(balance);document.getElementById('currentBalance').textContent=rupiah(balance);}
+function updateFinanceChart(){
+ const end=new Date(reportDate.value+'T00:00:00'),days=Number(linePeriod.value),labels=[],incomeValues=[],expenseValues=[];
+ for(let i=days-1;i>=0;i--){const d=new Date(end);d.setDate(end.getDate()-i);const key=[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');const daily=transactions.filter(t=>t.date===key);labels.push(d.toLocaleDateString('id-ID',{day:'2-digit',month:'short'}));incomeValues.push(sum(daily,'income'));expenseValues.push(sum(daily,'expense'));}
+ const ctx=document.getElementById('financeChart').getContext('2d');if(financeChart)financeChart.destroy();
+ financeChart=new Chart(ctx,{type:'line',data:{labels,datasets:[
+ {label:'Pemasukan',data:incomeValues,borderColor:'#4d7ff0',backgroundColor:'rgba(77,127,240,.10)',tension:.35,fill:false,pointRadius:3,borderWidth:2},
+ {label:'Pengeluaran',data:expenseValues,borderColor:'#f06b72',backgroundColor:'rgba(240,107,114,.08)',tension:.35,fill:false,pointRadius:3,borderWidth:2}]},
+ options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+ plugins:{legend:{position:'top',align:'start',labels:{usePointStyle:true,boxWidth:8,padding:10,font:{size:11,weight:'600'}}},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${rupiah(c.raw)}`}}},
+ scales:{x:{grid:{display:false},ticks:{maxTicksLimit:8,font:{size:9}}},y:{beginAtZero:true,ticks:{font:{size:9},callback:v=>v>=1000000?'Rp '+(v/1000000).toFixed(1)+' jt':'Rp '+(v/1000).toFixed(0)+' rb'},grid:{color:'#e1e1da'}}}}});
 }
-
-const transactions = loadTransactions();
-const reportDate = document.getElementById('reportDate');
-const linePeriod = document.getElementById('linePeriod');
-const rangeStart = document.getElementById('rangeStart');
-const rangeEnd = document.getElementById('rangeEnd');
-const transactionBody = document.getElementById('transactionBody');
-
-let financeChart, profitChart;
-
-const rupiah = value => 'Rp ' + Number(value || 0).toLocaleString('id-ID');
-
-function formatDate(dateString) {
-  if (!dateString) return '-';
-  const [year, month, day] = dateString.split('-');
-  return `${day}/${month}/${year}`;
-}
-
-function getTransactionsUntil(date) {
-  return transactions.filter(t => t.date <= date);
-}
-
-function sum(rows, type) {
-  return rows.filter(t => t.type === type)
-    .reduce((total, t) => total + Number(t.amount || 0), 0);
-}
-
-function updateSummary() {
-  const rows = getTransactionsUntil(reportDate.value);
-  const income = sum(rows, 'income');
-  const expense = sum(rows, 'expense');
-  const balance = income - expense;
-
-  document.getElementById('totalIncome').textContent = rupiah(income);
-  document.getElementById('totalExpense').textContent = rupiah(expense);
-  document.getElementById('netProfit').textContent = rupiah(balance);
-  document.getElementById('currentBalance').textContent = rupiah(balance);
-}
-
-function updateFinanceChart() {
-  const end = new Date(reportDate.value + 'T00:00:00');
-  const days = Number(linePeriod.value);
-  const labels = [], incomeValues = [], expenseValues = [];
-
-  for (let i = days - 1; i >= 0; i--) {
-    const d = new Date(end);
-    d.setDate(end.getDate() - i);
-    const key = d.toISOString().slice(0,10);
-    const daily = transactions.filter(t => t.date === key);
-    labels.push(d.toLocaleDateString('id-ID', {day:'2-digit', month:'short'}));
-    incomeValues.push(sum(daily, 'income'));
-    expenseValues.push(sum(daily, 'expense'));
-  }
-
-  const ctx = document.getElementById('financeChart').getContext('2d');
-  if (financeChart) financeChart.destroy();
-
-  financeChart = new Chart(ctx, {
-    type:'line',
-    data:{labels, datasets:[
-      {label:'Pemasukan',data:incomeValues,borderColor:'#4d7ff0',backgroundColor:'rgba(77,127,240,.10)',tension:.35,fill:false,pointRadius:3,pointHoverRadius:5,borderWidth:2},
-      {label:'Pengeluaran',data:expenseValues,borderColor:'#f06b72',backgroundColor:'rgba(240,107,114,.08)',tension:.35,fill:false,pointRadius:3,pointHoverRadius:5,borderWidth:2}
-    ]},
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      interaction:{mode:'index',intersect:false},
-      plugins:{
-        legend:{position:'top',align:'start',labels:{usePointStyle:true,boxWidth:8,padding:10,font:{size:11,weight:'600'}}},
-        tooltip:{callbacks:{label: c => `${c.dataset.label}: ${rupiah(c.raw)}`}}
-      },
-      layout:{padding:{left:8,right:8,top:0,bottom:0}},
-      scales:{
-        x:{grid:{display:false},ticks:{maxTicksLimit:8,font:{size:9}}},
-        y:{beginAtZero:true,ticks:{font:{size:9},callback:v => v >= 1000000 ? 'Rp ' + (v/1000000).toFixed(1) + ' jt' : 'Rp ' + (v/1000).toFixed(0) + ' rb'},grid:{color:'#e1e1da'}}
-      }
-    }
-  });
-}
-
-function syncRangeLimits() {
-  // Rentang selalu valid: tanggal mulai tidak boleh melewati tanggal akhir.
-  rangeStart.max = rangeEnd.value;
-  rangeEnd.min = rangeStart.value;
-}
-
-function updateProfitChart() {
-  const start = rangeStart.value;
-  const end = rangeEnd.value;
-
-  // Jangan pernah membalik rentang otomatis. Jika user memilih tanggal yang
-  // berlawanan, kembalikan tanggal yang baru dipilih ke batas yang valid.
-  if (start > end) {
-    rangeStart.value = end;
-  }
-
-  const validStart = rangeStart.value;
-  const validEnd = rangeEnd.value;
-  syncRangeLimits();
-
-  const rows = transactions.filter(t => t.date >= validStart && t.date <= validEnd);
-  const income = sum(rows,'income'), expense = sum(rows,'expense'), total = income-expense;
-
-  document.getElementById('rangeIncome').textContent = rupiah(income);
-  document.getElementById('rangeExpense').textContent = rupiah(expense);
-  document.getElementById('rangeTotal').textContent = rupiah(total);
-
-  const ctx = document.getElementById('profitChart').getContext('2d');
-  if (profitChart) profitChart.destroy();
-
-  profitChart = new Chart(ctx, {
-    type:'doughnut',
-    data:{labels:['Pemasukan','Pengeluaran'],datasets:[{data:[income,expense],backgroundColor:['#4d7ff0','#f06b72'],borderWidth:0,hoverOffset:5}]},
-    options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c => `${c.label}: ${rupiah(c.raw)}`}}}}
-  });
-}
-
-function getAccountingDescription(t) {
-
-  // Kalau pemasukan sudah punya format dari halaman catat pemasukan,
-  // langsung tampilkan tanpa ditambah kode lagi.
-  if (t.type === 'income') {
-    if (t.accountingLabel) {
-      return t.accountingLabel;
-    }
-
-    if (t.description && t.description.includes('-')) {
-      return t.description;
-    }
-
-    return t.description || 'Penjualan';
-  }
-
-  return t.description || '-';
-}
-
-function escapeHtml(value) {
-  return String(value)
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#039;');
-}
-
-function updateTransactions() {
-  // Semua transaksi ditampilkan dan diurutkan dari tanggal terbaru.
-  const sorted = [...transactions].sort((a,b) => {
-    return (b.createdAt || 0) - (a.createdAt || 0);
-  });
-
-  transactionBody.innerHTML = sorted.map(t => `
-    <tr>
-      <td><span class="date-badge">${formatDate(t.date)}</span></td>
-      <td><span class="type-badge ${t.type}">${t.type === 'income' ? 'Pemasukan' : 'Pengeluaran'}</span></td>
-      <td class="description-cell">${escapeHtml(getAccountingDescription(t))}</td>
-      <td class="amount ${t.type}">${t.type === 'income' ? '+ ' : '- '}${rupiah(t.amount)}</td>
-    </tr>
-  `).join('');
-}
-
-function refreshAll() {
-  updateSummary();
-  updateFinanceChart();
-  updateProfitChart();
-  updateTransactions();
-}
-
-reportDate.addEventListener('change', () => {
-  rangeEnd.value = reportDate.value;
-  if (rangeStart.value > rangeEnd.value) {
-    rangeStart.value = rangeEnd.value;
-  }
-  syncRangeLimits();
-  refreshAll();
-});
-linePeriod.addEventListener('change', updateFinanceChart);
-rangeStart.addEventListener('change', () => {
-  if (rangeStart.value > rangeEnd.value) rangeStart.value = rangeEnd.value;
-  syncRangeLimits();
-  updateProfitChart();
-});
-rangeEnd.addEventListener('change', () => {
-  if (rangeEnd.value < rangeStart.value) rangeEnd.value = rangeStart.value;
-  syncRangeLimits();
-  updateProfitChart();
-});
-
-document.getElementById('downloadBtn').addEventListener('click', () => {
-  const rows = [...transactions].sort((a,b) => b.date.localeCompare(a.date));
-  const csv = [
-    ['Tanggal','Jenis','Keterangan','Nominal'],
-    ...rows.map(t => [formatDate(t.date),t.type === 'income' ? 'Pemasukan' : 'Pengeluaran',t.description,t.amount])
-  ].map(row => row.map(v => `"${String(v).replaceAll('"','""')}"`).join(',')).join('\n');
-
-  const blob = new Blob(["\ufeff" + csv], {type:'text/csv;charset=utf-8;'});
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = `laporan-pembukuan-${reportDate.value}.csv`;
-  link.click();
-  URL.revokeObjectURL(url);
-});
-
-refreshAll();
+function syncRangeLimits(){rangeStart.max=rangeEnd.value;rangeEnd.min=rangeStart.value;}
+function updateProfitChart(){if(rangeStart.value>rangeEnd.value)rangeStart.value=rangeEnd.value;syncRangeLimits();const rows=transactions.filter(t=>t.date>=rangeStart.value&&t.date<=rangeEnd.value),income=sum(rows,'income'),expense=sum(rows,'expense');document.getElementById('rangeIncome').textContent=rupiah(income);document.getElementById('rangeExpense').textContent=rupiah(expense);document.getElementById('rangeTotal').textContent=rupiah(income-expense);const ctx=document.getElementById('profitChart').getContext('2d');if(profitChart)profitChart.destroy();profitChart=new Chart(ctx,{type:'doughnut',data:{labels:['Pemasukan','Pengeluaran'],datasets:[{data:[income,expense],backgroundColor:['#4d7ff0','#f06b72'],borderWidth:0,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.label}: ${rupiah(c.raw)}`}}}}});}
+function updateTransactions(){const sorted=[...transactions].sort((a,b)=>b.createdAt-a.createdAt);transactionBody.innerHTML=sorted.length?sorted.map(t=>`<tr><td><span class="date-badge">${formatDate(t.date)}</span></td><td><span class="type-badge ${t.type}">${t.type==='income'?'Pemasukan':'Pengeluaran'}</span></td><td class="description-cell">${escapeHtml(t.description||'-')}</td><td class="amount ${t.type}">${t.type==='income'?'+ ':'- '}${rupiah(t.amount)}</td></tr>`).join(''):'<tr><td colspan="4">Belum ada transaksi tercatat.</td></tr>';}
+function refreshAll(){updateSummary();updateFinanceChart();updateProfitChart();updateTransactions();}
+reportDate.addEventListener('change',()=>{rangeEnd.value=reportDate.value;if(rangeStart.value>rangeEnd.value)rangeStart.value=rangeEnd.value;syncRangeLimits();refreshAll();});linePeriod.addEventListener('change',updateFinanceChart);rangeStart.addEventListener('change',()=>{if(rangeStart.value>rangeEnd.value)rangeStart.value=rangeEnd.value;syncRangeLimits();updateProfitChart();});rangeEnd.addEventListener('change',()=>{if(rangeEnd.value<rangeStart.value)rangeEnd.value=rangeStart.value;syncRangeLimits();updateProfitChart();});
+document.getElementById('downloadBtn').addEventListener('click',()=>{const rows=[...transactions].sort((a,b)=>b.date.localeCompare(a.date)),csv=[['Tanggal','Jenis','Keterangan','Nominal'],...rows.map(t=>[formatDate(t.date),t.type==='income'?'Pemasukan':'Pengeluaran',t.description,t.amount])].map(row=>row.map(v=>`"${String(v).replaceAll('"','""')}"`).join(',')).join('\n'),blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=`laporan-pembukuan-${reportDate.value}.csv`;link.click();URL.revokeObjectURL(url);});
+const today=new Date(),todayKey=today.toISOString().slice(0,10),monthAgo=new Date(today);monthAgo.setDate(today.getDate()-29);reportDate.value=todayKey;rangeEnd.value=todayKey;rangeStart.value=monthAgo.toISOString().slice(0,10);loadTransactions();
 </script>
 </body>
 </html>

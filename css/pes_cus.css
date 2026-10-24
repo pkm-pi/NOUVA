@@ -1168,3 +1168,212 @@ textarea::placeholder {
     font-size: 8px !important;
   }
 }
+
+
+/* Perbaikan form custom: field custom dan preview upload */
+.product-item .custom-category,
+.product-item .custom-size,
+.product-item .custom-fabric {
+  width: 100%;
+  min-width: 0;
+  height: 31px;
+  margin-top: 5px;
+  padding: 0 9px;
+  border: 1px solid #c9c9c9;
+  border-radius: 4px;
+  background: #fff;
+  color: var(--purple);
+  outline: 0;
+  font: inherit;
+  font-size: 9px;
+}
+.product-item .custom-category:focus,
+.product-item .custom-size:focus,
+.product-item .custom-fabric:focus {
+  border-color: var(--purple-2);
+}
+.product-item .preview-box:not(:empty) {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 5px 0;
+}
+.product-item .preview-box img {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+}
+.preview-filename {
+  min-width: 0;
+  color: var(--purple);
+  font-size: 8px;
+  overflow-wrap: anywhere;
+}
+.preview-error {
+  color: #b42318;
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   LAYOUT RAPI FORM PRODUK CUSTOM — 3 baris terstruktur
+   ========================================================= */
+.product-fields {
+  display: flex !important;
+  flex-direction: column;
+  gap: 14px !important;
+}
+.product-row {
+  display: grid;
+  align-items: start;
+  gap: 12px;
+  min-width: 0;
+}
+.product-row-one {
+  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+}
+.product-row-two {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) minmax(0, 1fr);
+}
+.product-row-three {
+  grid-template-columns: minmax(150px, .65fr) minmax(0, 2fr);
+}
+.product-row .field,
+.product-row .field-group { min-width: 0; }
+.product-row .product-name-field { grid-column: auto; }
+.product-row .model-image-field,
+.product-row .description-field { grid-column: auto; }
+.field-group { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.product-row .custom-category,
+.product-row .custom-size,
+.product-row .custom-fabric {
+  display: block;
+  width: 100%;
+  height: 31px;
+  margin-top: 5px;
+  padding: 0 9px;
+  border: 1px solid #c9c9c9;
+  border-radius: 4px;
+  background: #fff;
+  color: var(--purple);
+  outline: 0;
+  font: inherit;
+  font-size: 9px;
+}
+.product-row .custom-fabric-field .custom-fabric { margin-top: 0; }
+.product-row .custom-category.is-hidden,
+.product-row .custom-size.is-hidden,
+.product-row .custom-fabric-field.is-hidden,
+.product-row .custom-fabric.is-hidden { display: none !important; }
+.product-row .preview-box:not(:empty) {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 5px 0;
+}
+.product-row .preview-box img { width: 48px; height: 48px; flex: 0 0 48px; }
+.product-row .upload-box { min-height: 38px; }
+.product-row .product-description { min-height: 58px; width: 100%; }
+@media (max-width: 1100px) {
+  .product-row-one { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .product-row-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .product-row-two .model-image-field { grid-column: 1 / -1; }
+}
+@media (max-width: 760px) {
+  .product-row-one, .product-row-two, .product-row-three {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .product-row-two .model-image-field { grid-column: auto; }
+}
+
+
+/* Matriks ukuran per satu model pakaian */
+.size-matrix-field { grid-column: 1 / -1; min-width: 0; }
+.size-quantity-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; margin-top: 7px; }
+.size-quantity-grid label { display: flex; flex-direction: column; gap: 5px; color: var(--purple); font-size: 10px; font-weight: 600; }
+.size-quantity-grid input { width: 100%; min-width: 0; height: 34px; border: 1px solid #d0d2c8; border-radius: 6px; padding: 0 7px; color: var(--purple); background: #fff; font: inherit; font-size: 11px; }
+.size-quantity-grid input:focus { outline: 1px solid var(--purple-2); border-color: var(--purple-2); }
+.size-total { display: block; margin-top: 7px; color: #6c6470; font-size: 10px; }
+.size-total-large { min-height: 36px; display: flex; align-items: center; gap: 5px; padding: 0 10px; border: 1px solid #d0d2c8; border-radius: 6px; color: var(--purple); background: #fff; font-size: 12px; }
+@media (max-width: 760px) { .size-quantity-grid { grid-template-columns: repeat(4, minmax(0,1fr)); } }
+@media (max-width: 420px) { .size-quantity-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+
+
+/* Catatan tambahan sejajar dengan foto model pada baris kedua */
+@media (min-width: 1101px) {
+  .product-row-two {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) minmax(0, 1fr);
+  }
+  .product-row-two .description-field {
+    grid-column: auto;
+  }
+}
+@media (max-width: 1100px) and (min-width: 761px) {
+  .product-row-two {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .product-row-two .description-field {
+    grid-column: auto;
+  }
+}
+
+
+/* Katalog warna kain dan motif sulaman dari stok toko */
+.store-choice-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:10px;margin-top:8px}
+.store-choice{position:relative;display:flex;flex-direction:column;gap:7px;padding:8px;border:1px solid #e4d9e9;border-radius:11px;background:#fff;cursor:pointer;min-width:0;transition:.18s ease}
+.store-choice:has(input:checked){border:2px solid #6c3d79;background:#faf5fc;box-shadow:0 0 0 2px #6c3d7918}
+.store-choice input{position:absolute;top:10px;right:10px;accent-color:#542d60;width:17px;height:17px}
+.store-choice img{width:100%;height:94px;object-fit:cover;border-radius:7px;background:#f4f0f5}
+.store-choice span{display:flex;flex-direction:column;gap:3px;padding-right:4px;font-size:12px;color:#391e46}
+.store-choice small{font-size:10px;color:#766b79;line-height:1.35}
+.choice-note{display:block;margin-top:9px;padding:9px 11px;border-radius:8px;background:#f5eff7;color:#65566a;font-size:11px;line-height:1.55}
+.choice-empty,.choice-loading{grid-column:1/-1;margin:0;padding:12px;border:1px dashed #d9cadd;border-radius:8px;color:#766b79;font-size:12px}
+.custom-motif-upload{margin-top:12px;padding-top:10px;border-top:1px dashed #e3d8e7}
+.custom-motif-label{display:flex;flex-direction:column;gap:7px;font-size:12px;color:#391e46;font-weight:600}
+.custom-motif-label input{font-size:11px}
+@media(max-width:760px){.store-choice-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.store-choice img{height:105px}}
+
+
+/* =========================================================
+   FINAL POLISH — FORM PESAN CUSTOM
+   Susunan desktop: identitas produk → warna → ukuran
+   → motif, foto model, dan catatan dalam tiga kolom seimbang.
+   ========================================================= */
+@media (min-width: 1101px) {
+  .product-row-one {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, .9fr) minmax(0, .9fr) !important;
+    column-gap: 14px; row-gap: 14px;
+  }
+  .product-row-one .color-field,
+  .product-row-one .size-matrix-field { grid-column: 1 / -1 !important; }
+  .product-row-one .color-field .store-choice-grid { grid-template-columns: repeat(auto-fill, minmax(125px, 150px)); }
+  .product-row-two {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) minmax(0, 1fr) !important;
+    align-items: start; gap: 14px;
+  }
+  .product-row-two > .field { min-width: 0; }
+  .product-row-two .store-motif-options { grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); }
+  .product-row-two .description-field textarea { min-height: 112px; resize: vertical; }
+}
+@media (min-width: 761px) and (max-width: 1100px) {
+  .product-row-one { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px; }
+  .product-row-one .color-field,
+  .product-row-one .size-matrix-field { grid-column: 1 / -1 !important; }
+  .product-row-two { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px; }
+  .product-row-two .motif-field { grid-column: 1 / -1; }
+  .product-row-two .description-field textarea { min-height: 90px; }
+}
+@media (max-width: 760px) {
+  .product-row-one, .product-row-two {
+    display: grid !important; grid-template-columns: minmax(0, 1fr) !important; gap: 13px !important;
+  }
+  .product-row-one .color-field, .product-row-one .size-matrix-field,
+  .product-row-two .motif-field, .product-row-two .model-image-field,
+  .product-row-two .description-field { grid-column: 1 / -1 !important; }
+  .product-row-two .store-motif-options,
+  .product-row-one .fabric-color-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .product-row-two .description-field textarea { min-height: 90px; }
+  .custom-motif-upload { margin-top: 10px; }
+}

@@ -6,6 +6,10 @@
   <title>Detail Produk - NOUVA</title>
   <link rel="stylesheet" href="../globals.css">
   <link rel="stylesheet" href="../css/detail_produk.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/nouva-config.js"></script>
+  <script src="../js/nouva-supabase.js"></script>
+  <script src="../js/nouva-workflow.js"></script>
 </head>
 
 <body>
@@ -164,143 +168,88 @@
   </div>
 
   <script>
-    const stored = sessionStorage.getItem("selectedProduct");
-    const selected = stored ? JSON.parse(stored) : null;
-
-    const product = {
-      name: selected?.name || "Seragam Karawo",
-      price: Number(String(selected?.price || "450000").replace(/[^\d]/g, "")) || 450000,
-      stock: Number(String(selected?.stock || "50").replace(/[^\d]/g, "")) || 50,
-      image: selected?.image || "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?auto=format&fit=crop&w=900&q=85",
-      category: "Pakaian",
-      motif: selected?.motif || "Bunga Karawo",
-      fabric: selected?.fabric || selected?.jenisKain || "Katun Toyobo",
-      description: "Pakaian dengan motif khas Karawo yang elegan dan nyaman digunakan. Cocok untuk acara resmi maupun kegiatan kantor."
+  (async()=>{
+    const sb=window.nouvaSupabase, selected=JSON.parse(sessionStorage.getItem("selectedProduct")||"null");
+    const $=id=>document.getElementById(id), esc=NouvaWorkflow.escape, money=NouvaWorkflow.money;
+    const nameEl=$("productName"),descEl=$("productDescription"),priceEl=$("price"),stockEl=$("stock"),pill=$("stockPill"),main=$("mainImage"),gallery=$("galleryList"),thumbs=$("thumbs"),qtyEl=$("quantity");
+    let product=null, variants=[], availability={}, currentVariant=null;
+    function status(msg){let el=$("detailStatus");if(!el){el=document.createElement("p");el.id="detailStatus";el.className="detail-status";$("orderBtn").before(el)}el.textContent=msg}
+    function setVariant(){
+      const size=$("sizeOptions").querySelector(".selected")?.dataset.size;
+      const color=$("colorOptions").querySelector(".selected")?.dataset.color;
+      currentVariant=variants.find(v=>v.size===size&&v.color_name===color)||null;
+      const avail=currentVariant?Number(availability[currentVariant.id] ?? currentVariant.stock):0;
+      stockEl.textContent=`${avail} pcs`;
+      pill.textContent=avail>0?"Tersedia":"Stok Habis";pill.classList.toggle("sold-out",avail<=0);
+      if(Number(qtyEl.textContent)>avail)qtyEl.textContent=String(Math.max(1,avail));
+      $("plusBtn").disabled=avail<=0||Number(qtyEl.textContent)>=avail;
+      $("minusBtn").disabled=Number(qtyEl.textContent)<=1;
+      $("orderBtn").disabled=!currentVariant||avail<=0;
+      updateTotal();
+    }
+    function updateTotal(){ $("total").textContent=money((Number(product?.price)||0)*Number(qtyEl.textContent||1)); }
+    function buildGallery(urls){
+      const list=urls.length?urls:[product.motif_image_url||"../img/kemeja.png"];
+      main.src=list[0];gallery.innerHTML="";thumbs.innerHTML="";
+      list.forEach((url,i)=>{
+        const b=document.createElement("button");b.type="button";b.className="gallery-item"+(!i?" selected":"");b.innerHTML=`<img src="${esc(url)}" alt="Foto produk ${esc(product.name)} ${i+1}">`;b.onclick=()=>{main.src=url;gallery.querySelectorAll("button").forEach(x=>x.classList.toggle("selected",x===b));};gallery.appendChild(b);
+        const t=document.createElement("button");t.type="button";t.className="thumb"+(!i?" selected":"");t.innerHTML=`<img src="${esc(url)}" alt="Thumbnail ${i+1}">`;t.onclick=()=>{main.src=url;thumbs.querySelectorAll("button").forEach(x=>x.classList.toggle("selected",x===t));gallery.querySelectorAll("button").forEach((x,j)=>x.classList.toggle("selected",j===i));};thumbs.appendChild(t);
+      });
+    }
+    function renderOptions(){
+      const colors=[...new Set(variants.map(v=>v.color_name))], sizes=[...new Set(variants.map(v=>v.size))];
+      $("colorOptions").innerHTML=colors.map((c,i)=>`<button class="color-dot ${i===1?'color-two':i===2?'color-three':''} ${i===0?'selected':''}" type="button" data-color="${esc(c)}" aria-label="${esc(c)}" title="${esc(c)}"></button>`).join("");
+      $("sizeOptions").innerHTML=sizes.map((s,i)=>`<button class="size-btn ${i===0?'selected':''}" type="button" data-size="${esc(s)}">${esc(s)}</button>`).join("");
+      $("colorOptions").querySelectorAll("button").forEach(b=>b.onclick=()=>{if(b.disabled)return;$("colorOptions").querySelectorAll("button").forEach(x=>x.classList.toggle("selected",x===b));$("selectedColor").textContent=b.dataset.color;const possible=variants.filter(v=>v.color_name===b.dataset.color);if(!possible.some(v=>v.size===$("sizeOptions").querySelector(".selected")?.dataset.size)){const first=possible[0];$("sizeOptions").querySelectorAll("button").forEach(x=>x.classList.toggle("selected",x.dataset.size===first?.size));}setVariant();});
+      $("sizeOptions").querySelectorAll("button").forEach(b=>b.onclick=()=>{if(b.disabled)return;$("sizeOptions").querySelectorAll("button").forEach(x=>x.classList.toggle("selected",x===b));setVariant();});
+      setVariant();
+    }
+    if(!sb||!selected?.id){status("Produk tidak dipilih atau koneksi Supabase belum siap. Kembali ke katalog dan pilih produk aktif.");$("orderBtn").disabled=true;return}
+    const {data,error}=await sb.from("products").select("id,reference_no,name,category,description,fabric_type,motif_name,motif_description,motif_image_url,price,is_active,product_images(image_url,sort_order),product_variants(id,size,color_name,color_image_url,stock)").eq("id",selected.id).eq("is_active",true).maybeSingle();
+    if(error||!data){status("Produk tidak ditemukan atau sudah tidak aktif. Silakan kembali ke katalog.");$("orderBtn").disabled=true;return}
+    product=data;variants=data.product_variants||[];
+    if(!variants.length){status("Produk ini belum memiliki varian ukuran/warna sehingga belum bisa dipesan.");$("orderBtn").disabled=true;return}
+    const ids=variants.map(v=>v.id);
+    const {data:avData,error:avError}=await sb.from("product_variant_availability").select("product_variant_id,available_stock").in("product_variant_id",ids);
+    if(!avError)(avData||[]).forEach(v=>availability[v.product_variant_id]=Number(v.available_stock)||0);
+    nameEl.textContent=data.name;descEl.textContent=data.description||"Detail produk belum tersedia.";priceEl.textContent=money(data.price);
+    $("category").textContent=data.category||"—";$("motif").textContent=data.motif_name||"—";$("fabricType").textContent=data.fabric_type||"—";
+    const images=(data.product_images||[]).sort((a,b)=>(a.sort_order||1)-(b.sort_order||1)).map(x=>x.image_url).filter(Boolean);
+    buildGallery(images.length?images:[data.motif_image_url||selected.image].filter(Boolean));
+    renderOptions();
+    $("minusBtn").onclick=()=>{qtyEl.textContent=String(Math.max(1,Number(qtyEl.textContent)-1));setVariant()};
+    $("plusBtn").onclick=()=>{const max=Number(availability[currentVariant?.id]??currentVariant?.stock??0);if(Number(qtyEl.textContent)<max)qtyEl.textContent=String(Number(qtyEl.textContent)+1);setVariant()};
+    $("orderBtn").onclick=async()=>{
+      try{
+        const {session,profile}=await NouvaWorkflow.requireRole("customer","../auth/login_pelanggan.html");
+        setVariant();
+        if(!currentVariant)throw new Error("Pilih kombinasi ukuran dan warna yang tersedia.");
+        const qty=Number(qtyEl.textContent), available=Number(availability[currentVariant.id]??currentVariant.stock);
+        if(qty<1||qty>available)throw new Error("Stok tidak mencukupi. Muat ulang halaman dan pilih jumlah lain.");
+        let phone=profile.phone||session.user.phone||"";
+        if(!phone)phone=prompt("Masukkan nomor WhatsApp/telepon untuk pesanan:");
+        if(!phone||!phone.trim())throw new Error("Nomor telepon wajib diisi.");
+        $("orderBtn").disabled=true;status("Menyimpan pesanan ke Supabase...");
+        const total=Number(product.price)*qty;
+        const {data:order,error:orderError}=await sb.from("orders").insert({
+          customer_id:session.user.id,source:"website",order_type:"display",
+          customer_name:profile.full_name||session.user.user_metadata?.full_name||session.user.email||"Pelanggan",
+          customer_type:"individual",customer_phone:phone.trim(),total_amount:total,
+          notes:"Pesanan dibuat dari katalog pelanggan Nouva.",quote_status:"not_required"
+        }).select("id,reference_no").single();
+        if(orderError)throw orderError;
+        const {error:itemError}=await sb.from("order_items").insert({
+          order_id:order.id,product_variant_id:currentVariant.id,
+          product_name_snapshot:product.name,size_snapshot:currentVariant.size,color_snapshot:currentVariant.color_name,
+          quantity:qty,unit_price:Number(product.price)
+        });
+        if(itemError){status("Nomor pesanan dibuat, tetapi item gagal tersimpan: "+itemError.message);throw itemError}
+        sessionStorage.setItem("nouvaLastOrderRef",order.reference_no);
+        alert(`Pesanan berhasil dikirim! Nomor: ${order.reference_no}`);
+        location.href="pesanan_saya.html";
+      }catch(e){console.error(e);status("Pesanan belum berhasil: "+(e.message||e));$("orderBtn").disabled=false;}
     };
-
-    const productName = document.getElementById("productName");
-    const productDescription = document.getElementById("productDescription");
-    const price = document.getElementById("price");
-    const stock = document.getElementById("stock");
-    const stockPill = document.getElementById("stockPill");
-    const mainImage = document.getElementById("mainImage");
-    const galleryList = document.getElementById("galleryList");
-    const thumbs = document.getElementById("thumbs");
-    const quantityEl = document.getElementById("quantity");
-    const totalEl = document.getElementById("total");
-
-    productName.textContent = product.name;
-    productDescription.textContent = product.description;
-    document.getElementById("category").textContent = product.category;
-    document.getElementById("motif").textContent = product.motif;
-    document.getElementById("fabricType").textContent = product.fabric;
-    price.textContent = formatRupiah(product.price);
-    stock.textContent = `${product.stock} pcs`;
-    stockPill.textContent = product.stock > 0 ? "Tersedia" : "Stok Habis";
-    stockPill.classList.toggle("sold-out", product.stock <= 0);
-
-    const galleryImages = [
-      product.image,
-      "https://images.unsplash.com/photo-1603252110481-7ba873bf42ab?auto=format&fit=crop&w=700&q=85",
-      "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&w=700&q=85",
-      "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=700&q=85"
-    ];
-
-    function formatRupiah(value) {
-      return "Rp " + new Intl.NumberFormat("id-ID").format(value);
-    }
-
-    function setMainImage(src) {
-      mainImage.src = src;
-    }
-
-    function buildGallery() {
-      galleryList.innerHTML = "";
-      thumbs.innerHTML = "";
-
-      galleryImages.forEach((src, index) => {
-        const button = document.createElement("button");
-        button.className = "gallery-item" + (index === 0 ? " selected" : "");
-        button.type = "button";
-        button.innerHTML = `<img src="${src}" alt="Foto ${product.name} ${index + 1}">`;
-        button.addEventListener("click", () => {
-          document.querySelectorAll(".gallery-item").forEach(item => item.classList.remove("selected"));
-          button.classList.add("selected");
-          setMainImage(src);
-        });
-        galleryList.appendChild(button);
-
-        const thumb = document.createElement("button");
-        thumb.className = "thumb" + (index === 0 ? " selected" : "");
-        thumb.type = "button";
-        thumb.innerHTML = `<img src="${src}" alt="Thumbnail ${index + 1}">`;
-        thumb.addEventListener("click", () => {
-          document.querySelectorAll(".thumb").forEach(item => item.classList.remove("selected"));
-          thumb.classList.add("selected");
-          document.querySelectorAll(".gallery-item").forEach(item => item.classList.remove("selected"));
-          document.querySelectorAll(".gallery-item")[index]?.classList.add("selected");
-          setMainImage(src);
-        });
-        thumbs.appendChild(thumb);
-      });
-
-      setMainImage(galleryImages[0]);
-    }
-
-    function updateTotal() {
-      const quantity = Number(quantityEl.textContent);
-      totalEl.textContent = formatRupiah(product.price * quantity);
-    }
-
-    document.getElementById("minusBtn").addEventListener("click", () => {
-      const current = Number(quantityEl.textContent);
-      if (current > 1) {
-        quantityEl.textContent = current - 1;
-        updateTotal();
-      }
-    });
-
-    document.getElementById("plusBtn").addEventListener("click", () => {
-      const current = Number(quantityEl.textContent);
-      if (current < Math.max(product.stock, 1)) {
-        quantityEl.textContent = current + 1;
-        updateTotal();
-      }
-    });
-
-    document.querySelectorAll(".size-btn").forEach(button => {
-      button.addEventListener("click", () => {
-        document.querySelectorAll(".size-btn").forEach(item => item.classList.remove("selected"));
-        button.classList.add("selected");
-      });
-    });
-
-    document.querySelectorAll(".color-dot").forEach(button => {
-      button.addEventListener("click", () => {
-        document.querySelectorAll(".color-dot").forEach(item => item.classList.remove("selected"));
-        button.classList.add("selected");
-        document.getElementById("selectedColor").textContent = button.dataset.color;
-      });
-    });
-
-    document.getElementById("orderBtn").addEventListener("click", () => {
-      const size = document.querySelector(".size-btn.selected")?.dataset.size || "S";
-      const color = document.querySelector(".color-dot.selected")?.dataset.color || "Warna utama";
-      const quantity = Number(quantityEl.textContent);
-
-      sessionStorage.setItem("orderProduct", JSON.stringify({
-        ...product,
-        size,
-        color,
-        quantity,
-        total: product.price * quantity
-      }));
-
-      window.location.href = "pesanan_saya.html";
-    });
-
-    buildGallery();
-    updateTotal();
+  })();
   </script>
 </body>
 </html>

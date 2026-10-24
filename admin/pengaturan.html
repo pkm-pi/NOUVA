@@ -51,6 +51,8 @@
         </div>
       </header>
 
+      <p id="accountMessage" class="account-message" role="status" aria-live="polite"></p>
+
       <section class="settings-list" aria-label="Pengaturan akun">
 
         <article class="setting-card">
@@ -64,7 +66,7 @@
             <label for="namaKamu">Nama Kamu</label>
             <div class="setting-row">
               <input id="namaKamu" type="text" placeholder="Nama Lengkap Kamu">
-              <button class="setting-btn" type="button" data-target="namaKamu">Ubah</button>
+              <button class="setting-btn" type="button" data-target="namaKamu">Simpan</button>
             </div>
           </div>
         </article>
@@ -80,7 +82,7 @@
             <label for="nomorHp">Nomor HP</label>
             <div class="setting-row">
               <input id="nomorHp" type="tel" placeholder="08xxxxxxxxxx">
-              <button class="setting-btn" type="button" data-target="nomorHp">Ubah</button>
+              <button class="setting-btn" type="button" data-target="nomorHp">Simpan</button>
             </div>
           </div>
         </article>
@@ -116,22 +118,13 @@
     </main>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/nouva-config.js"></script>
+  <script src="../js/nouva-supabase.js"></script>
+  <script src="../js/pengaturan-akun.js"></script>
   <script>
-    document.querySelectorAll(".setting-btn[data-target]").forEach((button) => {
-      button.addEventListener("click", () => {
-        const input = document.getElementById(button.dataset.target);
-        input.focus();
-        input.select();
-      });
-    });
-
-    document.getElementById("passwordButton").addEventListener("click", () => {
-      const input = document.getElementById("kataSandi");
-      input.type = input.type === "password" ? "text" : "password";
-    });
-
-    document.getElementById("logoutButton").addEventListener("click", () => {
-      window.location.href = "../index.html";
+    document.addEventListener("DOMContentLoaded", () => {
+      window.initNouvaAccountSettings({ expectedRole: "admin", loginUrl: "../auth/login_admin.html" });
     });
   </script>
 </body>

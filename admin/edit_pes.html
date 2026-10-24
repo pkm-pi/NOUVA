@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Edit Pesanan - NOUVA</title>
   <link rel="stylesheet" href="../css/edit_pes.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/nouva-config.js"></script>
+  <script src="../js/nouva-supabase.js"></script>
+  <script src="../js/nouva-workflow.js"></script>
 </head>
 <body>
 <div class="app">
@@ -99,10 +103,11 @@
             <p>Nomor pesanan, tanggal, deadline, dan status proses</p>
           </div>
         </div>
+        <div id="typeNotice" class="type-notice">Jenis pesanan akan dimuat dari database.</div>
         <div class="form-grid four">
           <label class="field">
-            <span>No. Referensi</span>
-            <input id="invoice" type="text" value="CUS-000-001">
+            <span>No. Pesanan (otomatis, tidak dapat diubah)</span>
+            <input id="invoice" type="text" readonly>
           </label>
           <label class="field">
             <span>Tanggal Pesan</span>
@@ -115,10 +120,13 @@
           <label class="field">
             <span>Status Pesanan</span>
             <select id="status">
+              <option>Menunggu Konfirmasi</option>
+              <option>Menunggu Persetujuan Pelanggan</option>
               <option>Sedang Disulam</option>
               <option>Sedang Dijahit</option>
               <option>Siap Diambil</option>
               <option>Selesai</option>
+              <option>Dibatalkan</option>
             </select>
           </label>
         </div>
@@ -147,15 +155,15 @@
             <span>Total Harga</span>
             <input id="total" type="number" min="0" value="12500000">
           </label>
-          <label class="field">
-            <span>Nominal DP</span>
-            <input id="dp" type="number" min="0" value="7500000">
+          <label class="field" id="dpField">
+            <span>Nominal DP (khusus custom)</span>
+            <input id="dp" type="number" min="0" value="0">
           </label>
-          <label class="field">
-            <span>Status Pembayaran DP</span>
+          <label class="field" id="dpStatusField">
+            <span>Status Pembayaran</span>
             <select id="dpStatus">
-              <option>Lunas</option>
               <option>Belum Lunas</option>
+              <option>Lunas</option>
             </select>
           </label>
         </div>
@@ -313,248 +321,163 @@
 </template>
 
 <script>
-const initialItems = [
-  {
-    name:"Seragam Karawo", category:"Seragam", qty:20, price:625000,
-    description:"Seragam karawo untuk kebutuhan sekolah.",
-    fabric:"Katun", modelImage:"https://c.animaapp.com/XYqZOEOx/img/jumper-2@2x.png",
-    motif:"Motif Bunga", motifImage:"../img/motif_karawo_bunga.svg",
-    colors:[["Putih",2,3,2,1],["Cream",1,3,2,1],["Maroon",1,2,1,1]]
-  },
-  {
-    name:"Seragam Karawo", category:"Seragam", qty:15, price:625000,
-    description:"Seragam karawo dengan motif daun.",
-    fabric:"Katun", modelImage:"https://c.animaapp.com/XYqZOEOx/img/jumper-2@2x.png",
-    motif:"Motif Daun", motifImage:"../img/motif_karawo_daun.svg",
-    colors:[["Navy",1,2,2,1],["Putih",1,1,2,1],["Hitam",1,1,1,1]]
-  },
-  {
-    name:"Seragam Karawo", category:"Seragam", qty:15, price:625000,
-    description:"Seragam karawo dengan motif geometris.",
-    fabric:"Katun", modelImage:"https://c.animaapp.com/XYqZOEOx/img/jumper-2@2x.png",
-    motif:"Motif Geometris", motifImage:"../img/motif_karawo_geometris.svg",
-    colors:[["Maroon",2,2,2,1],["Hitam",2,3,2,1]]
-  }
-];
-
-const id = new URLSearchParams(location.search).get("id") || "1";
-document.getElementById("backBtn").href = `detail_pesanan.html?id=${id}`;
-document.getElementById("cancelBtn").href = `detail_pesanan.html?id=${id}`;
-
-function money(v){
-  return "Rp " + Number(v || 0).toLocaleString("id-ID");
+(async function(){
+const $=id=>document.getElementById(id), sb=window.nouvaSupabase;
+const id=new URLSearchParams(location.search).get("id");
+$("backBtn").href=`detail_pesanan.html?id=${encodeURIComponent(id||"")}`;
+$("cancelBtn").href=`detail_pesanan.html?id=${encodeURIComponent(id||"")}`;
+const money=v=>"Rp "+Number(v||0).toLocaleString("id-ID");
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let order=null, kind="custom", itemRows=[], customDetail=null, payment=null;
+function show(el,yes){if(el)el.style.display=yes?"":"none";}
+function setupKind(){
+ const display=kind==="display";
+ $("typeNotice").textContent=display
+  ?"PESANAN DISPLAY — produk sudah jadi. Tidak ada DP dan tidak ada tahap sulam/jahit. Status: menunggu pembayaran, siap diambil, selesai, atau dibatalkan."
+  :"PESANAN CUSTOM — admin menentukan harga terlebih dahulu. Setelah pelanggan menyetujui penawaran, pesanan masuk ke proses sulam dan jahit.";
+ $("typeNotice").className="type-notice "+kind;
+ show($("dpField"),!display); show($("dpStatusField"),true);
+ show($("progressStage").closest(".card"),!display);
+ show($("addItemBtn"),!display);
+ // Display product details are catalog-based; do not present custom garment uploads/size tables.
+ document.querySelectorAll("#items .edit-item").forEach(el=>{
+   show(el.querySelector(".media-edit-grid"),!display);
+   show(el.querySelector(".description-field"),!display);
+   show(el.querySelector(".size-section"),!display);
+   show(el.querySelector(".product-top"),display);
+   show(el.querySelector(".remove-item"),!display);
+ });
+ $("status").innerHTML=(display
+   ? ["Menunggu Konfirmasi","Siap Diambil","Selesai","Dibatalkan"]
+   : ["Menunggu Konfirmasi","Sedang Disulam","Sedang Dijahit","Siap Diambil","Selesai","Dibatalkan"])
+   .map(x=>`<option>${x}</option>`).join("");
 }
-
-function dateToISO(text){
-  const months = {Januari:0,Februari:1,Maret:2,April:3,Mei:4,Juni:5,Juli:6,Agustus:7,September:8,Oktober:9,November:10,Desember:11};
-  const p = String(text || "").split(" ");
-  if(p.length === 3 && months[p[1]] !== undefined){
-    const d = new Date(Number(p[2]), months[p[1]], Number(p[0]));
-    return d.toISOString().slice(0,10);
-  }
-  return text || "";
+function addColorRow(tbody,data=["Warna",0,0,0,0]){
+ const tr=document.createElement("tr");
+ tr.innerHTML=`<td><input class="color-name" value="${esc(data[0])}"></td>${["s","m","l","xl"].map((s,i)=>`<td><input class="size ${s}" type="number" min="0" value="${Number(data[i+1]||0)}"></td>`).join("")}<td class="row-total">0</td><td><button type="button" class="delete-row">×</button></td>`;
+ tbody.appendChild(tr);
+ tr.querySelectorAll("input").forEach(x=>x.addEventListener("input",updateTable));
+ tr.querySelector(".delete-row").addEventListener("click",()=>{tr.remove();updateTable()});
 }
-
-function isoToIndonesian(value){
-  if(!value) return "";
-  const [y,m,d] = value.split("-");
-  const months = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
-  return `${Number(d)} ${months[Number(m)-1]} ${y}`;
-}
-
-function addColorRow(tbody, data=["Putih",0,0,0,0]){
-  const tr = document.createElement("tr");
-  tr.innerHTML = `
-    <td><input class="color-name" type="text" value="${data[0] || ""}"></td>
-    <td><input class="size s" type="number" min="0" value="${data[1] || 0}"></td>
-    <td><input class="size m" type="number" min="0" value="${data[2] || 0}"></td>
-    <td><input class="size l" type="number" min="0" value="${data[3] || 0}"></td>
-    <td><input class="size xl" type="number" min="0" value="${data[4] || 0}"></td>
-    <td class="row-total">0</td>
-    <td><button type="button" class="delete-row">×</button></td>`;
-  tbody.appendChild(tr);
-  tr.querySelectorAll("input").forEach(i => i.addEventListener("input", updateTable));
-  tr.querySelector(".delete-row").addEventListener("click", () => { tr.remove(); updateTable(); });
-  updateTable();
-}
-
 function updateTable(){
-  document.querySelectorAll(".edit-item").forEach(item => {
-    let totals=[0,0,0,0,0];
-    item.querySelectorAll(".color-rows tr").forEach(tr => {
-      const vals=[1,2,3,4].map(i => Number(tr.querySelectorAll("input")[i]?.value || 0));
-      const total=vals.reduce((a,b)=>a+b,0);
-      tr.querySelector(".row-total").textContent=total;
-      vals.forEach((v,i)=>totals[i+1]+=v);
-      totals[0]+=total;
-    });
-    item.querySelector(".t-s").textContent=totals[1];
-    item.querySelector(".t-m").textContent=totals[2];
-    item.querySelector(".t-l").textContent=totals[3];
-    item.querySelector(".t-xl").textContent=totals[4];
-    item.querySelector(".t-all").textContent=totals[0];
-
-    const qty=Number(item.querySelector(".item-qty").value||0);
-    const price=Number(item.querySelector(".item-price-input").value||0);
-    item.querySelector(".item-subtotal").textContent=money(qty*price);
-  });
+ document.querySelectorAll(".edit-item").forEach(item=>{
+   const totals=[0,0,0,0,0];
+   item.querySelectorAll(".color-rows tr").forEach(tr=>{
+     const vals=["s","m","l","xl"].map(c=>Number(tr.querySelector("."+c)?.value||0));
+     const sum=vals.reduce((a,b)=>a+b,0);tr.querySelector(".row-total").textContent=sum;
+     vals.forEach((v,i)=>totals[i+1]+=v);totals[0]+=sum;
+   });
+   ["s","m","l","xl"].forEach((s,i)=>{const n=item.querySelector(".t-"+s);if(n)n.textContent=totals[i+1]});
+   const all=item.querySelector(".t-all");if(all)all.textContent=totals[0];
+   const qty=Number(item.querySelector(".item-qty")?.value||0),price=Number(item.querySelector(".item-price-input")?.value||0);
+   const sub=item.querySelector(".item-subtotal");if(sub)sub.textContent=money(qty*price);
+ });
+ updateRemaining();
 }
-
-function bindImage(input, target){
-  input.addEventListener("change", () => {
-    const file=input.files?.[0];
-    if(!file) return;
-    const url=URL.createObjectURL(file);
-    if(target.tagName==="IMG"){
-      target.src=url;
-    } else {
-      target.classList.remove("empty");
-      target.innerHTML=`<img src="${url}" alt="Gambar custom">`;
-    }
-  });
-}
-
-function addItem(data={}, index=0){
-  const node=document.getElementById("itemTemplate").content.cloneNode(true);
-  const item=node.querySelector(".edit-item");
-  item.dataset.index=index;
-  item.querySelector(".item-number").textContent=index+1;
-  item.querySelector(".item-name-input").value=data.name||"";
-  item.querySelector(".item-category").value=data.category||"";
-  item.querySelector(".item-qty").value=data.qty||1;
-  item.querySelector(".item-fabric").value=data.fabric||"";
-  item.querySelector(".item-price-input").value=data.price||0;
-  item.querySelector(".item-description").value=data.description||"";
-  item.querySelector(".motif-name").value=data.motif||"";
-
-  const model=item.querySelector(".model-image");
-  if(data.modelImage) model.src=data.modelImage;
-  const motif=item.querySelector(".motif-image");
-  if(data.motifImage) motif.src=data.motifImage;
-
-  const tbody=item.querySelector(".color-rows");
-  (data.colors?.length ? data.colors : [["Putih",0,0,0,0]]).forEach(c=>addColorRow(tbody,c));
-
-  item.querySelector(".add-color-btn").addEventListener("click",()=>addColorRow(tbody,["Warna baru",0,0,0,0]));
-  item.querySelector(".remove-item").addEventListener("click",()=>{
-    if(document.querySelectorAll(".edit-item").length===1){ alert("Minimal harus ada 1 produk."); return; }
-    item.remove(); renumberItems(); updateTable();
-  });
-
-  item.querySelectorAll(".item-qty,.item-price-input").forEach(x=>x.addEventListener("input",updateTable));
-  bindImage(item.querySelector(".model-upload"),model);
-  bindImage(item.querySelector(".motif-upload"),motif);
-  bindImage(item.querySelector(".custom-model-upload"),item.querySelectorAll(".custom-preview")[0]);
-  bindImage(item.querySelector(".custom-motif-upload"),item.querySelectorAll(".custom-preview")[1]);
-
-  document.getElementById("items").appendChild(item);
-  updateTable();
-}
-
-function renumberItems(){
-  document.querySelectorAll(".edit-item").forEach((el,i)=>{
-    el.dataset.index=i;
-    el.querySelector(".item-number").textContent=i+1;
-  });
-}
-
 function updateRemaining(){
-  const total=Number(document.getElementById("total").value||0);
-  const dp=Number(document.getElementById("dp").value||0);
-  document.getElementById("remainingPreview").textContent=money(Math.max(0,total-dp));
+ const total=Number($("total").value||0),dp=kind==="display"?0:Number($("dp").value||0);
+ $("remainingPreview").textContent=money(Math.max(0,total-dp));
 }
-
-["total","dp"].forEach(x=>document.getElementById(x).addEventListener("input",updateRemaining));
-
-/* Ambil data tersimpan dari detail pesanan jika sebelumnya sudah diedit. */
-const savedRaw = localStorage.getItem(`nouva_edit_order_${id}`);
-let saved = null;
-try { saved = savedRaw ? JSON.parse(savedRaw) : null; } catch(e) { saved = null; }
-
-const savedItems = saved?.items?.length
-  ? saved.items.map((item, i) => ({...initialItems[i], ...item}))
-  : initialItems;
-
-const customer = saved?.customer ?? "SDN 27";
-const type = saved?.type ?? "Instansi";
-const institution = saved?.institution ?? "SDN 27";
-const phone = saved?.phone ?? "0812-3456-7890";
-const invoice = saved?.invoice ?? "CUS-000-001";
-const orderDate = saved?.orderDate ?? "2026-09-25";
-const deadline = saved?.deadline ?? "2026-10-12";
-const status = saved?.status ?? "Sedang Dijahit";
-const progressStage = saved?.progressStage ?? (
-  ["Sedang Disulam","Sedang Dijahit"].includes(status) ? "Proses" :
-  status === "Siap Diambil" ? "Siap Diambil" :
-  status === "Selesai" ? "Selesai" : "Pesanan Diterima"
-);
-
-document.getElementById("customer").value=customer;
-document.getElementById("type").value=type;
-document.getElementById("institution").value=institution;
-document.getElementById("phone").value=phone;
-document.getElementById("invoice").value=invoice;
-document.getElementById("orderDate").value=dateToISO(orderDate) || orderDate;
-document.getElementById("deadline").value=dateToISO(deadline) || deadline;
-document.getElementById("status").value=status;
-document.getElementById("progressStage").value=progressStage;
-document.getElementById("total").value=saved?.total ?? 12500000;
-document.getElementById("dp").value=saved?.dp ?? 7500000;
-document.getElementById("dpStatus").value=saved?.dpStatus ?? "Lunas";
-document.getElementById("remainingStatus").value=saved?.remainingStatus ?? "Belum Lunas";
-document.getElementById("note").value=saved?.note ?? "Ukuran dan motif mengikuti kesepakatan.";
-
-savedItems.forEach((x,i)=>addItem(x,i));
-
-document.getElementById("addItemBtn").addEventListener("click",()=>addItem({
-  name:"",category:"",qty:1,price:0,description:"",fabric:"",motif:""
-},document.querySelectorAll(".edit-item").length));
-
-document.getElementById("editForm").addEventListener("submit", e=>{
-  e.preventDefault();
-
-  const payload={
-    id,
-    customer:document.getElementById("customer").value,
-    type:document.getElementById("type").value,
-    institution:document.getElementById("institution").value,
-    phone:document.getElementById("phone").value,
-    invoice:document.getElementById("invoice").value,
-    orderDate:document.getElementById("orderDate").value,
-    deadline:document.getElementById("deadline").value,
-    status:document.getElementById("status").value,
-    progressStage:document.getElementById("progressStage").value,
-    total:Number(document.getElementById("total").value||0),
-    dp:Number(document.getElementById("dp").value||0),
-    dpStatus:document.getElementById("dpStatus").value,
-    remainingStatus:document.getElementById("remainingStatus").value,
-    note:document.getElementById("note").value,
-    items:[...document.querySelectorAll(".edit-item")].map(item=>({
-      name:item.querySelector(".item-name-input").value,
-      category:item.querySelector(".item-category").value,
-      qty:Number(item.querySelector(".item-qty").value||0),
-      fabric:item.querySelector(".item-fabric").value,
-      price:Number(item.querySelector(".item-price-input").value||0),
-      description:item.querySelector(".item-description").value,
-      motif:item.querySelector(".motif-name").value,
-      modelImage:item.querySelector(".model-image").src,
-      motifImage:item.querySelector(".motif-image").src,
-      colors:[...item.querySelectorAll(".color-rows tr")].map(tr=>[
-        tr.querySelector(".color-name").value,
-        Number(tr.querySelector(".s").value||0),
-        Number(tr.querySelector(".m").value||0),
-        Number(tr.querySelector(".l").value||0),
-        Number(tr.querySelector(".xl").value||0)
-      ])
-    }))
+function addCustomItem(d){
+ const node=$("itemTemplate").content.cloneNode(true),el=node.querySelector(".edit-item");
+ el.querySelector(".item-name-input").value=d.name||"";
+ el.querySelector(".item-category").value=d.category||"";
+ el.querySelector(".item-qty").value=d.qty||1;
+ el.querySelector(".item-fabric").value=d.fabric||"";
+ el.querySelector(".item-price-input").value=d.price||0;
+ el.querySelector(".item-description").value=d.description||"";
+ el.querySelector(".motif-name").value=d.motif||"";
+ if(d.modelImage)el.querySelector(".model-image").src=d.modelImage;
+ if(d.motifImage)el.querySelector(".motif-image").src=d.motifImage;
+ const tbody=el.querySelector(".color-rows");
+ (d.colors?.length?d.colors:[[d.color||"Belum diisi",0,0,0,0]]).forEach(c=>addColorRow(tbody,c));
+ el.querySelector(".add-color-btn").addEventListener("click",()=>addColorRow(tbody,["Warna baru",0,0,0,0]));
+ el.querySelector(".remove-item").addEventListener("click",()=>{if(document.querySelectorAll(".edit-item").length<=1)return alert("Minimal harus ada satu rincian.");el.remove();updateTable()});
+ el.querySelectorAll(".item-qty,.item-price-input").forEach(x=>x.addEventListener("input",updateTable));
+ // Upload preview only; persistent URL upload is not faked.
+ for(const [sel,targetSel] of [[".model-upload",".model-image"],[".motif-upload",".motif-image"]]){
+  el.querySelector(sel).addEventListener("change",e=>{const f=e.target.files?.[0];if(f)el.querySelector(targetSel).src=URL.createObjectURL(f)});
+ }
+ for(const [sel,idx] of [[".custom-model-upload",0],[".custom-motif-upload",1]]){
+  el.querySelector(sel).addEventListener("change",e=>{const f=e.target.files?.[0];if(!f)return;const target=el.querySelectorAll(".custom-preview")[idx];target.classList.remove("empty");target.innerHTML=`<img alt="Pratinjau gambar" src="${URL.createObjectURL(f)}">`});
+ }
+ $("items").appendChild(el);setupKind();updateTable();
+}
+async function loadOrder(){
+ if(!sb||!window.nouvaSupabaseReady)throw new Error("Supabase belum siap. Periksa konfigurasi.");
+ await window.NouvaWorkflow.requireRole("admin","../auth/login_admin.html");
+ if(!id)throw new Error("ID pesanan tidak ditemukan pada URL.");
+ const {data:o,error}=await sb.from("orders").select("*,order_items(*,product_variants(size,color_name,products(reference_no,name,category,description,fabric_type,motif_name,motif_description,motif_image_url,product_images(image_url,sort_order)))),custom_order_details(*),payments(*)").eq("id",id).single();
+ if(error)throw error;order=o;kind=o.order_type;
+ customDetail=Array.isArray(o.custom_order_details)?o.custom_order_details[0]:o.custom_order_details;
+ payment=Array.isArray(o.payments)?o.payments[0]:o.payments;
+ $("customer").value=o.customer_name||"";$("type").value=o.customer_type==="institution"?"Instansi":"Individu";
+ $("institution").value=o.institution_name||"";$("phone").value=o.customer_phone||"";
+ $("invoice").value=o.reference_no||"";$("orderDate").value=String(o.ordered_at||"").slice(0,10);$("deadline").value=o.deadline||"";
+ $("note").value=o.notes||"";$("total").value=payment?.total_amount??o.quoted_price??o.total_amount??0;
+ $("dp").value=payment?.dp_amount||0;$("dpStatus").value=payment?.payment_status||"Belum Lunas";
+ $("status").value=o.process_status||"Menunggu Konfirmasi";
+ itemRows=o.order_items||[];
+ if(kind==="display"){
+  $("items").innerHTML="";
+  itemRows.forEach((it,i)=>{
+   const v=it.product_variants||{},p=v.products||{};
+   const d=document.createElement("div");d.className="edit-item display-item";
+   d.innerHTML=`<div class="item-head"><div class="item-title"><span class="item-number">${i+1}</span><div><strong>${esc(it.product_name_snapshot||p.name||"Produk")}</strong><small>${esc(p.reference_no||"—")} · ${esc(v.size||it.size_snapshot||"—")} · ${esc(v.color_name||it.color_snapshot||"—")}</small></div></div></div><div class="item-body"><div class="mini-fields"><label class="field"><span>Nama Produk</span><input readonly value="${esc(it.product_name_snapshot||p.name||"")}"></label><label class="field"><span>Ukuran</span><input readonly value="${esc(v.size||it.size_snapshot||"")}"></label><label class="field"><span>Warna</span><input readonly value="${esc(v.color_name||it.color_snapshot||"")}"></label><label class="field"><span>Jumlah</span><input readonly value="${Number(it.quantity||0)}"></label><label class="field"><span>Harga Satuan</span><input readonly value="${Number(it.unit_price||0)}"></label></div></div>`;
+   $("items").appendChild(d);
+  });
+ }else{
+  const d=customDetail||{};
+  addCustomItem({name:d.product_name,category:d.category,qty:d.quantity,price:Number(o.total_amount||0)/(Number(d.quantity)||1),description:d.design_description,fabric:d.custom_fabric_type||d.fabric_type,color:d.fabric_color,modelImage:d.model_image_url,motif:d.product_name,motifImage:d.store_motif_image_url,colors:[[d.fabric_color||"Belum diisi",0,0,0,0]]});
+ }
+ setupKind();updateTable();
+}
+$("total").addEventListener("input",updateRemaining);$("dp").addEventListener("input",updateRemaining);
+$("addItemBtn").addEventListener("click",()=>{if(kind==="custom")addCustomItem({qty:1})});
+$("editForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const save=$("editForm").querySelector(".save-btn");save.disabled=true;save.textContent="Menyimpan…";
+ try{
+  if(!order)throw new Error("Data pesanan belum termuat.");
+  const total=Number($("total").value||0),dp=kind==="display"?0:Number($("dp").value||0);
+  const status=$("status").value,deadline=$("deadline").value||null;
+  const orderUpdate={
+   customer_name:$("customer").value.trim(),customer_type:$("type").value==="Instansi"?"institution":"individual",
+   institution_name:$("type").value==="Instansi"?$("institution").value.trim():null,
+   customer_phone:$("phone").value.trim(),deadline,notes:$("note").value.trim()||null,
+   process_status:status,total_amount:total,updated_at:new Date().toISOString()
   };
-
-  localStorage.setItem(`nouva_edit_order_${id}`,JSON.stringify(payload));
+  if(kind==="custom"){
+   if(status==="Dibatalkan")orderUpdate.cancelled_at=new Date().toISOString();
+  }
+  const {error:oe}=await sb.from("orders").update(orderUpdate).eq("id",id);if(oe)throw oe;
+  if(kind==="custom"&&customDetail){
+   const el=document.querySelector(".edit-item");
+   const dUpdate={
+    product_name:el.querySelector(".item-name-input").value.trim()||customDetail.product_name,
+    category:el.querySelector(".item-category").value.trim()||customDetail.category,
+    quantity:Math.max(1,Number(el.querySelector(".item-qty").value||customDetail.quantity||1)),
+    design_description:el.querySelector(".item-description").value.trim()||null,
+    custom_fabric_type:el.querySelector(".item-fabric").value.trim()||null
+   };
+   const {error:de}=await sb.from("custom_order_details").update(dUpdate).eq("order_id",id);if(de)throw de;
+  }
+  if(payment){
+   const remain=Math.max(0,total-dp);
+   const payUpdate={total_amount:total,dp_amount:dp,remaining_amount:remain,payment_status:$("dpStatus").value,updated_at:new Date().toISOString()};
+   const {error:pe}=await sb.from("payments").update(payUpdate).eq("order_id",id);if(pe)throw pe;
+  }else if(kind==="custom"){
+   // Pembayaran dibuat admin hanya jika tabel belum memiliki baris; grant/RLS tetap harus mengizinkan.
+   const {error:pe}=await sb.from("payments").insert({order_id:id,total_amount:total,dp_amount:dp,remaining_amount:Math.max(0,total-dp),payment_status:$("dpStatus").value});
+   if(pe)console.warn("Baris pembayaran belum dibuat:",pe.message);
+  }
   alert("Perubahan pesanan berhasil disimpan.");
-  window.location.href=`detail_pesanan.html?id=${id}`;
+  location.href=`detail_pesanan.html?id=${encodeURIComponent(id)}`;
+ }catch(err){console.error(err);alert("Gagal menyimpan perubahan: "+(err.message||err))}
+ finally{save.disabled=false;save.textContent="✓ Simpan Perubahan"}
 });
-
-updateRemaining();
+try{await loadOrder()}catch(err){console.error(err);$("typeNotice").textContent="Gagal memuat pesanan: "+(err.message||err);alert("Gagal memuat pesanan: "+(err.message||err))}
+})();
 </script>
 </body>
 </html>

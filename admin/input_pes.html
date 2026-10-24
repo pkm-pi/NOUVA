@@ -253,148 +253,101 @@
       </div>
 
       <div class="product-fields">
-        <label class="field product-name-field">
-          <span>Nama Produk</span>
-          <div class="input-shell">
-            <input class="product-name" type="text" placeholder="Contoh: Kemeja Karawo"/>
-          </div>
-        </label>
-
-        <label class="field">
-          <span>Kategori Produk</span>
-          <div class="input-shell select-shell">
-            <select class="product-category">
-              <option value="">Pilih kategori</option>
-              <option>Kemeja</option>
-              <option>Blouse</option>
-              <option>Jas</option>
-              <option>Seragam</option>
-              <option>Outer</option>
-              <option>Dress</option>
-              <option>Rompi</option>
-              <option>Celana</option>
-              <option>Rok</option>
-              <option>Lainnya</option>
-            </select>
-          </div>
-        </label>
-
-        <label class="field">
-          <span>Ukuran Produk</span>
-          <div class="input-shell select-shell">
-            <select class="product-size">
-              <option value="">Pilih ukuran</option>
-              <option>XS</option><option>S</option><option>M</option>
-              <option>L</option><option>XL</option><option>XXL</option>
-              <option>XXXL</option><option>Custom</option>
-            </select>
-          </div>
-        </label>
-
-        <label class="field">
-          <span>Jumlah Pesanan (pcs)</span>
-          <div class="input-shell">
-            <input class="product-qty" type="number" min="1" value="" placeholder="Jumlah pcs"/>
-          </div>
-        </label>
-
-        <label class="field">
-          <span>Harga Produk</span>
-          <div class="input-shell currency-shell">
-            <span>Rp</span>
-            <input class="product-price" type="number" min="0" placeholder="Harga produk"/>
-          </div>
-        </label>
-
-        <label class="field">
-          <span>Jenis Kain</span>
-          <div class="input-shell select-shell">
-            <select class="fabric-type">
-              <option value="">Pilih kain</option>
-              <option>Katun</option>
-              <option>Rayon</option>
-              <option>Drill</option>
-              <option>Wol</option>
-              <option>Satin</option>
-              <option>Linen</option>
-              <option>Poliester</option>
-              <option value="custom">Custom</option>
-            </select>
-          </div>
-        </label>
-
-        <label class="field custom-fabric-field is-hidden">
-          <span>Jenis Kain Custom</span>
-          <div class="input-shell">
-            <input class="custom-fabric" type="text" placeholder="Tulis jenis kain"/>
-          </div>
-        </label>
-
-        <div class="field media-field">
-          <span>Foto/Gambar Model Pakaian dari Toko</span>
-          <label class="upload-box">
-            <input class="model-store-image" type="file" accept="image/*"/>
-            <span class="upload-icon">+</span>
-            <span class="upload-text">Pilih gambar dari toko</span>
+        <div class="product-row product-row-one">
+          <label class="field product-name-field">
+            <span>Nama Produk</span>
+            <div class="input-shell"><input class="product-name" type="text" placeholder="Contoh: Kemeja Karawo"/></div>
           </label>
-          <div class="preview-box store-preview"></div>
-        </div>
 
-        <div class="field media-field">
-          <span>Foto/Gambar Model Custom <small>(opsional)</small></span>
-          <label class="upload-box">
-            <input class="model-custom-image" type="file" accept="image/*"/>
-            <span class="upload-icon">+</span>
-            <span class="upload-text">Pilih gambar pelanggan</span>
+          <label class="field">
+            <span>Kategori Produk</span>
+            <div class="input-shell select-shell">
+              <select class="product-category">
+                <option value="">Pilih kategori</option>
+                <option>Kemeja</option><option>Blouse</option><option>Jas</option><option>Seragam</option>
+                <option>Outer</option><option>Dress</option><option>Rompi</option><option>Celana</option>
+                <option>Rok</option><option>Lainnya</option>
+              </select>
+            </div>
+            <input class="custom-category is-hidden" type="text" placeholder="Tuliskan kategori lainnya" aria-label="Kategori produk lainnya"/>
           </label>
-          <div class="preview-box custom-model-preview"></div>
-        </div>
 
-        <div class="field media-field motif-field">
-          <span>Motif Sulaman dari Toko</span>
-          <div class="motif-combo">
-            <input class="motif-store-name" type="text" placeholder="Nama motif sulaman"/>
-            <label class="mini-upload">
-              <input class="motif-store-image" type="file" accept="image/*"/>
-              <span>+ Foto Motif</span>
+          <div class="field-group">
+            <label class="field">
+              <span>Jenis Kain</span>
+              <div class="input-shell select-shell">
+                <select class="fabric-type">
+                  <option value="">Pilih kain</option><option>Katun</option><option>Rayon</option><option>Drill</option>
+                  <option>Wol</option><option>Satin</option><option>Linen</option><option>Poliester</option><option value="custom">Custom</option>
+                </select>
+              </div>
+            </label>
+            <label class="field custom-fabric-field is-hidden">
+              <input class="custom-fabric" type="text" placeholder="Tulis jenis kain"/>
             </label>
           </div>
-          <div class="preview-box motif-store-preview"></div>
-        </div>
 
-        <div class="field media-field">
-          <span>Motif Sulaman Custom <small>(opsional)</small></span>
-          <div class="motif-combo">
-            <input class="motif-custom-name" type="text" placeholder="Nama motif custom"/>
-            <label class="mini-upload">
-              <input class="motif-custom-image" type="file" accept="image/*"/>
-              <span>+ Foto Motif</span>
-            </label>
+          <label class="field price-field"><span>Harga Produk</span><div class="input-shell currency-shell"><span>Rp</span><input class="product-price" type="number" min="0" placeholder="Harga produk"/></div></label>
+          <div class="field color-field">
+            <span>Warna Kain Tersedia di Toko</span>
+            <div class="store-choice-grid fabric-color-options"><p class="choice-loading">Memuat pilihan warna kain...</p></div>
+            <small class="choice-note">Warna pada layar dapat berbeda dari warna kain asli karena pencahayaan dan pengaturan layar. Untuk menghindari kesalahpahaman, pelanggan disarankan melihat dan mencocokkan warna kain secara langsung di toko sebelum pesanan diproses.</small>
+            <input class="fabric-color-name" type="hidden"/>
+            <input class="fabric-color-id" type="hidden"/>
           </div>
-          <div class="preview-box motif-custom-preview"></div>
-        </div>
 
-        <div class="field media-field color-field">
-          <span>Warna Kain</span>
-          <div class="motif-combo">
-            <input class="fabric-color-name" type="text" placeholder="Nama warna kain"/>
-            <label class="mini-upload">
-              <input class="fabric-color-image" type="file" accept="image/*"/>
-              <span>+ Foto Warna</span>
-            </label>
+          <div class="field size-matrix-field">
+            <span>Ukuran dan Jumlah Pesanan</span>
+            <div class="size-quantity-grid">
+              <label>XS <input class="size-qty" data-size="XS" type="number" min="0" step="1" value="0"></label>
+              <label>S <input class="size-qty" data-size="S" type="number" min="0" step="1" value="0"></label>
+              <label>M <input class="size-qty" data-size="M" type="number" min="0" step="1" value="0"></label>
+              <label>L <input class="size-qty" data-size="L" type="number" min="0" step="1" value="0"></label>
+              <label>XL <input class="size-qty" data-size="XL" type="number" min="0" step="1" value="0"></label>
+              <label>XXL <input class="size-qty" data-size="XXL" type="number" min="0" step="1" value="0"></label>
+              <label>XXXL <input class="size-qty" data-size="XXXL" type="number" min="0" step="1" value="0"></label>
+            </div>
+            <small class="size-total">Total produk: <b>0</b> pcs</small>
           </div>
-          <div class="preview-box fabric-color-preview"></div>
         </div>
 
-        <label class="field description-field">
-          <span>Deskripsi Motif / Model / Pakaian Produk</span>
-          <textarea class="product-description" placeholder="Tulis detail motif, model, atau permintaan pakaian"></textarea>
-        </label>
+        <div class="product-row product-row-two">
+          <div class="field motif-field">
+            <span>Pilih Motif Sulaman</span>
+            <div class="store-choice-grid store-motif-options"><p class="choice-loading">Memuat katalog motif toko...</p></div>
+            <input class="motif-store-name" type="hidden"/>
+            <input class="motif-store-id" type="hidden"/>
+            <div class="custom-motif-upload">
+              <label class="custom-motif-label">Atau unggah foto motif sulaman sendiri (opsional)
+                <input class="motif-custom-image" type="file" accept="image/*"/>
+              </label>
+              <div class="preview-box motif-custom-preview"></div>
+            </div>
+            <small class="choice-note">Pilih motif yang tersedia di katalog toko atau unggah referensi motif sendiri. Jika mengunggah motif sendiri, admin akan memeriksa kemungkinan pengerjaan dan kebutuhan biayanya terlebih dahulu.</small>
+          </div>
+
+          <div class="field media-field model-image-field">
+            <span>Model Pakaian dari Toko/Pelanggan</span>
+            <label class="upload-box">
+              <input class="model-custom-image" type="file" accept="image/*"/>
+              <span class="upload-icon">+</span><span class="upload-text">Pilih gambar pelanggan</span>
+            </label>
+            <div class="preview-box custom-model-preview"></div>
+          </div>
+          <label class="field description-field">
+            <span>Catatan tambahan Motif / Model / Pakaian Produk</span>
+            <textarea class="product-description" placeholder="Tulis detail motif, model, atau permintaan pakaian"></textarea>
+          </label>
+        </div>
       </div>
     </article>
   </template>
 
-  <script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/nouva-config.js"></script>
+<script src="../js/nouva-supabase.js"></script>
+<script src="../js/nouva-workflow.js"></script>
+<script>
     const form = document.getElementById("orderForm");
     const customerTypes = document.querySelectorAll(".customer-type");
     const institutionField = document.getElementById("institutionField");
@@ -432,25 +385,18 @@
     }
 
     function updateTotals() {
-      let qty = 0;
-      let total = 0;
-
+      let qty = 0, total = 0;
       productList.querySelectorAll(".product-item").forEach(item => {
-        const q = Number(item.querySelector(".product-qty")?.value || 0);
-        const p = Number(item.querySelector(".product-price")?.value || 0);
-        qty += Math.max(0, q);
-        total += Math.max(0, q) * Math.max(0, p);
+        const q = [...item.querySelectorAll(".size-qty")].reduce((s,x)=>s+Math.max(0,Math.floor(Number(x.value||0))),0);
+        const price = Math.max(0, Number(item.querySelector(".product-price")?.value || 0));
+        qty += q; total += q * price;
+        const local = item.querySelector(".size-total b"); if (local) local.textContent = q;
       });
-
       totalQty.textContent = qty;
       totalPayment.textContent = rupiah(total);
-
       const dp = Math.max(0, Number(dpInput.value || 0));
-      const remaining = Math.max(0, total - dp);
-      remainingPayment.textContent = rupiah(remaining);
-
-      if (remaining === 0 && total > 0) paymentStatus.value = "Lunas";
-      else if (dp < total) paymentStatus.value = "Belum Lunas";
+      remainingPayment.textContent = rupiah(Math.max(0,total-dp));
+      paymentStatus.value = total > 0 && dp >= total ? "Lunas" : "Belum Lunas";
     }
 
     function previewFile(input, preview) {
@@ -471,42 +417,43 @@
       item.querySelector(".delete-product").addEventListener("click", () => {
         const items = productList.querySelectorAll(".product-item");
         if (items.length === 1) {
-          item.querySelectorAll("input, textarea, select").forEach(el => {
-            if (el.type === "file") el.value = "";
-            else el.value = "";
-          });
+          item.querySelectorAll("input, textarea, select").forEach(el => { el.value = ""; });
+          item.querySelectorAll(".size-qty").forEach(el => el.value = 0);
           item.querySelectorAll(".preview-box").forEach(el => el.innerHTML = "");
-          updateTotals();
-          return;
+          item.querySelectorAll(".custom-category, .custom-fabric").forEach(el => el.classList.add("is-hidden"));
+          updateTotals(); return;
         }
-        item.remove();
-        updateProductIndexes();
-        updateTotals();
+        item.remove(); updateProductIndexes(); updateTotals();
       });
-
-      item.querySelectorAll(".product-qty, .product-price").forEach(input => {
-        input.addEventListener("input", updateTotals);
+      item.querySelectorAll(".size-qty, .product-price").forEach(input => input.addEventListener("input", updateTotals));
+      const category = item.querySelector(".product-category"), customCategory = item.querySelector(".custom-category");
+      category.addEventListener("change",()=>{const yes=category.value==="Lainnya";customCategory.classList.toggle("is-hidden",!yes);customCategory.required=yes;});
+      const fabric = item.querySelector(".fabric-type"), customFabric = item.querySelector(".custom-fabric-field");
+      fabric.addEventListener("change",()=>customFabric.classList.toggle("is-hidden",fabric.value!=="custom"));
+      [[".model-custom-image",".custom-model-preview"],[".motif-custom-image",".motif-custom-preview"]].forEach(([a,b])=>{
+        const input=item.querySelector(a), preview=item.querySelector(b); if(input&&preview) input.addEventListener("change",()=>previewFile(input,preview));
       });
+    }
 
-      const fabricType = item.querySelector(".fabric-type");
-      const customFabricField = item.querySelector(".custom-fabric-field");
-      fabricType.addEventListener("change", () => {
-        customFabricField.classList.toggle("is-hidden", fabricType.value !== "custom");
-      });
-
-      const previews = [
-        [".model-store-image", ".store-preview"],
-        [".model-custom-image", ".custom-model-preview"],
-        [".motif-store-image", ".motif-store-preview"],
-        [".motif-custom-image", ".motif-custom-preview"],
-        [".fabric-color-image", ".fabric-color-preview"]
-      ];
-
-      previews.forEach(([inputSelector, previewSelector]) => {
-        const input = item.querySelector(inputSelector);
-        const preview = item.querySelector(previewSelector);
-        input.addEventListener("change", () => previewFile(input, preview));
-      });
+    const customCatalog = { colors: [], motifs: [] };
+    function escapeHtml(value){return String(value||"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
+    async function loadCustomCatalog(){
+      if(!sb)return;
+      const [cr,mr]=await Promise.all([
+        sb.from("custom_fabric_colors").select("id,name,image_url,description").eq("is_active",true).order("sort_order").order("name"),
+        sb.from("custom_embroidery_motifs").select("id,name,image_url,description").eq("is_active",true).order("sort_order").order("name")
+      ]);
+      if(cr.error)throw new Error("Katalog warna kain belum siap: "+cr.error.message);
+      if(mr.error)throw new Error("Katalog motif sulaman belum siap: "+mr.error.message);
+      customCatalog.colors=cr.data||[];customCatalog.motifs=mr.data||[];
+      document.querySelectorAll(".product-item").forEach(renderStoreChoices);
+    }
+    function renderStoreChoices(item){
+      const cw=item.querySelector(".fabric-color-options"),mw=item.querySelector(".store-motif-options");
+      if(cw){cw.innerHTML=customCatalog.colors.length?customCatalog.colors.map(c=>`<label class="store-choice"><input type="radio" name="color-${item.dataset.productIndex||Math.random().toString(36).slice(2)}" value="${c.id}" data-choice-name="${escapeHtml(c.name)}"><img src="${c.image_url}" alt="${escapeHtml(c.name)}"><span><b>${escapeHtml(c.name)}</b>${c.description?`<small>${escapeHtml(c.description)}</small>`:""}</span></label>`).join(""):'<p class="choice-empty">Belum ada warna kain aktif. Silakan tambahkan stok melalui menu Stok.</p>';
+        cw.querySelectorAll('input[type="radio"]').forEach(r=>r.addEventListener("change",()=>{item.querySelector(".fabric-color-id").value=r.value;item.querySelector(".fabric-color-name").value=r.dataset.choiceName;}));}
+      if(mw){mw.innerHTML=customCatalog.motifs.length?customCatalog.motifs.map(m=>`<label class="store-choice"><input type="radio" name="motif-${item.dataset.productIndex||Math.random().toString(36).slice(2)}" value="${m.id}" data-choice-name="${escapeHtml(m.name)}"><img src="${m.image_url}" alt="${escapeHtml(m.name)}"><span><b>${escapeHtml(m.name)}</b>${m.description?`<small>${escapeHtml(m.description)}</small>`:""}</span></label>`).join(""):'<p class="choice-empty">Belum ada motif aktif. Admin dapat menambahkan stok motif.</p>';
+        mw.querySelectorAll('input[type="radio"]').forEach(r=>r.addEventListener("change",()=>{item.querySelector(".motif-store-id").value=r.value;item.querySelector(".motif-store-name").value=r.dataset.choiceName;}));}
     }
 
     function addProductCard() {
@@ -514,6 +461,7 @@
       const item = fragment.querySelector(".product-item");
       productList.appendChild(item);
       bindProduct(item);
+      renderStoreChoices(item);
       updateProductIndexes();
     }
 
@@ -525,15 +473,67 @@
       paymentProofName.textContent = paymentProof.files[0]?.name || "Belum ada file dipilih";
     });
 
-    form.addEventListener("submit", event => {
+    const sb = window.nouvaSupabase;
+    const clean = value => String(value || "").trim();
+    const uploadAdminImage = async file => {
+      if (!file) return null;
+      const cfg = window.NOUVA_CONFIG || {};
+      if (!cfg.CLOUDINARY_CLOUD_NAME || !cfg.CLOUDINARY_UPLOAD_PRESET) throw new Error("Konfigurasi Cloudinary belum tersedia.");
+      const body = new FormData(); body.append("file", file); body.append("upload_preset", cfg.CLOUDINARY_UPLOAD_PRESET);
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${cfg.CLOUDINARY_CLOUD_NAME}/image/upload`, {method:"POST",body});
+      const result = await response.json();
+      if (!response.ok || !result.secure_url) throw new Error(result.error?.message || "Upload gambar gagal.");
+      return result.secure_url;
+    };
+    form.addEventListener("submit", async event => {
       event.preventDefault();
-      alert("Pesanan siap disimpan.");
+      const submit = form.querySelector('[type="submit"]') || document.querySelector('[type="submit"][form="orderForm"]');
+      if (submit) { submit.disabled=true; submit.dataset.originalText ||= submit.textContent; submit.textContent="Menyimpan..."; }
+      try {
+        if (!sb) throw new Error("Supabase belum siap. Periksa konfigurasi website.");
+        await NouvaWorkflow.requireRole("admin", "../auth/login_admin.html");
+        const cards=[...productList.querySelectorAll(".product-item")];
+        const products=cards.map(item=>({
+          item, name:clean(item.querySelector(".product-name").value),
+          category:item.querySelector(".product-category").value==="Lainnya"?clean(item.querySelector(".custom-category").value):clean(item.querySelector(".product-category").value),
+          sizeBreakdown:Object.fromEntries([...item.querySelectorAll(".size-qty")].map(x=>[x.dataset.size,Math.max(0,Math.floor(Number(x.value||0)))])),
+          quantity:[...item.querySelectorAll(".size-qty")].reduce((s,x)=>s+Math.max(0,Math.floor(Number(x.value||0))),0),
+          price:Math.max(0,Number(item.querySelector(".product-price").value||0)),
+          fabricRaw:clean(item.querySelector(".fabric-type").value),
+          fabric:item.querySelector(".fabric-type").value==="custom"?clean(item.querySelector(".custom-fabric").value):clean(item.querySelector(".fabric-type").value),
+          motif:clean(item.querySelector(".motif-store-name").value), motifId:clean(item.querySelector(".motif-store-id").value),
+          color:clean(item.querySelector(".fabric-color-name").value), colorId:clean(item.querySelector(".fabric-color-id").value),
+          description:clean(item.querySelector(".product-description").value)
+        }));
+        if(!products.length) throw new Error("Tambahkan minimal satu produk custom.");
+        for(const [i,p] of products.entries()){
+          if(!p.name||!p.category||p.quantity<1) throw new Error(`Lengkapi nama, kategori, dan jumlah ukuran Produk ${i+1}.`);
+          if(!Number.isFinite(p.price)||p.price<0) throw new Error(`Harga Produk ${i+1} tidak valid.`);
+          if(customCatalog.colors.length&&!p.colorId) throw new Error(`Pilih warna kain dari stok toko untuk Produk ${i+1}.`);
+        }
+        const customerName=clean(document.getElementById("customerName").value), phone=clean(document.getElementById("phone").value);
+        const kind=document.querySelector(".customer-type.selected")?.dataset.type==="individu"?"individual":"institution";
+        const institution=clean(institutionName.value);
+        if(!customerName||!phone) throw new Error("Nama pemesan dan nomor HP wajib diisi.");
+        if(kind==="institution"&&!institution) throw new Error("Nama instansi wajib diisi.");
+        for(const p of products) p.customMotifImage=await uploadAdminImage(p.item.querySelector(".motif-custom-image").files[0]);
+        for(const p of products) p.modelImage=await uploadAdminImage(p.item.querySelector(".model-custom-image").files[0]);
+        const total=products.reduce((s,p)=>s+p.quantity*p.price,0);
+        const {data:order,error:orderError}=await sb.from("orders").insert({customer_id:null,source:"walk_in",order_type:"custom",customer_name:customerName,customer_type:kind,institution_name:kind==="institution"?institution:null,customer_phone:phone,deadline:form.elements.deadline.value||null,notes:clean(form.elements.note.value)||null,total_amount:total,quote_status:"quoted"}).select("id,reference_no").single();
+        if(orderError) throw orderError;
+        const rows=products.map(p=>({order_id:order.id,product_name:p.name,category:p.category,model_image_url:p.modelImage,store_motif_image_url:null,custom_motif_image_url:p.customMotifImage,store_motif_id:p.motifId||null,fabric_color_id:p.colorId||null,size_breakdown:p.sizeBreakdown,design_description:[p.motif?`Motif dari toko: ${p.motif}`:"",p.description].filter(Boolean).join("\n")||null,size:Object.entries(p.sizeBreakdown).find(([,q])=>q>0)?.[0]||"M",quantity:p.quantity,fabric_color:p.color||null,fabric_image_url:null,fabric_type:p.fabricRaw==="custom"?"custom":(p.fabric||null),custom_fabric_type:p.fabricRaw==="custom"?(p.fabric||null):null}));
+        const {error:detailError}=await sb.from("custom_order_details").insert(rows);
+        if(detailError) throw new Error(`Pesanan ${order.reference_no} dibuat tetapi detail produk gagal disimpan: ${detailError.message}`);
+        alert(`Pesanan custom berhasil dicatat!\nNomor referensi: ${order.reference_no}`); location.href="pesanan.html";
+      }catch(error){console.error(error);alert("Pesanan gagal disimpan: "+(error.message||error));}
+      finally{if(submit){submit.disabled=false;if(submit.dataset.originalText)submit.textContent=submit.dataset.originalText;}}
     });
 
     // Form dimulai kosong: satu kartu produk kosong siap diisi.
     setCustomerType("instansi");
     addProductCard();
     updateTotals();
+    loadCustomCatalog().catch(error => { console.error(error); alert(error.message || error); });
   </script>
 </body>
 </html>

@@ -955,3 +955,34 @@ footer small {
     white-space: nowrap !important;
   }
 }
+
+
+/* Label jenis pesanan di kolom Pesanan — tambahan tanpa mengubah layout asli */
+.order-description > b {
+  display: block;
+  color: #302035;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+.order-kind-label {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 5px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1.4;
+  letter-spacing: .35px;
+}
+.order-kind-label.display {
+  color: #6d35a5;
+  background: #f1e7fa;
+  border: 1px solid #dec8ef;
+}
+.order-kind-label.custom {
+  color: #986000;
+  background: #fff3dc;
+  border: 1px solid #f5d69c;
+}

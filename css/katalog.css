@@ -671,3 +671,7 @@ body {
     font-size: 9px;
   }
 }
+
+.nouva-db-status{grid-column:1/-1;text-align:center;padding:26px 18px;color:var(--purple,#391e46);line-height:1.6}
+.nouva-db-status.error{background:#fff7f7;border:1px solid #edcaca;border-radius:12px;color:#9b2525}
+.product-info .availability.out-of-stock{color:#9b2525}

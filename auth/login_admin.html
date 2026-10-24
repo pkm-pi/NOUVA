@@ -1,31 +1,5 @@
-<!DOCTYPE html>
-<html lang="id"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login Admin — NOUVA</title><link rel="stylesheet" href="../css/login_admin.css">
-</head>
-<body><main class="login-page"><section class="login-container">
-<img class="logo" src="https://c.animaapp.com/eMauf843/img/logo-nouva-fiks-2@2x.png" alt="Logo Nouva">
-<h1>Selamat Datang Kembali!</h1><p class="desc">Masuk untuk mengelola UtiKarawo dengan lebih mudah</p>
-<form class="login-card" id="loginForm">
-<label for="identifier">Email atau Nomor Telepon</label><input id="identifier" type="text" placeholder="Email atau 08xxxxxxxxxx" autocomplete="username" required>
-<label for="password">Kata Sandi</label><input id="password" type="password" autocomplete="current-password" required>
-<button class="btn" id="submitButton" type="submit">Masuk</button><p class="message" id="message" role="alert" aria-live="polite"></p>
-</form><a class="switch" href="./login_pelanggan.html">Masuk sebagai Pelanggan</a>
-<a class="back-home" href="../index.html">← Kembali ke Beranda</a>
-</section></main>
-
-<script>
-/* DEMO LOKAL: tidak menggunakan database dan tidak membutuhkan akun khusus. */
-const form=document.getElementById("loginForm"), msg=document.getElementById("message"), btn=document.getElementById("submitButton");
-form.addEventListener("submit", e => {
-  e.preventDefault();
-  msg.textContent=""; msg.className="message";
-  const id=document.getElementById("identifier").value.trim();
-  const password=document.getElementById("password").value;
-  if(!id || !password){msg.textContent="Isi email/nomor telepon dan kata sandi terlebih dahulu.";msg.classList.add("error");return;}
-  btn.disabled=true; btn.textContent="Membuka dashboard...";
-  sessionStorage.setItem("nouva_demo_role","admin");
-  sessionStorage.setItem("nouva_demo_identifier",id);
-  window.location.href="../admin/dashboard_admin.html";
-});
+<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Login Admin — NOUVA</title><link rel="stylesheet" href="../css/login_admin.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../js/nouva-config.js"></script><script src="../js/nouva-supabase.js"></script></head><body><main class="login-page"><section class="login-container"><img class="logo" src="https://c.animaapp.com/eMauf843/img/logo-nouva-fiks-2@2x.png" alt="Logo Nouva"><h1>Selamat Datang Kembali!</h1><p class="desc">Masuk untuk mengelola Nouva dengan lebih mudah.</p><form class="login-card" id="loginForm"><label for="identifier">Email atau Username</label><input id="identifier" type="text" placeholder="Masukkan email atau username" autocomplete="username" required><label for="password">Kata Sandi</label><div class="password-wrap"><input id="password" type="password" autocomplete="current-password" placeholder="Masukkan kata sandi" required><button class="toggle-password" type="button" data-toggle="password" aria-label="Tampilkan kata sandi" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button></div><button class="btn" id="submitButton" type="submit">Masuk</button><p class="message" id="message" role="status" aria-live="polite"></p></form><a class="switch" href="./login_pelanggan.html">Masuk sebagai Pelanggan</a><a class="back-home" href="../index.html">← Kembali ke Beranda</a></section></main><script>
+const form=document.getElementById('loginForm'),msg=document.getElementById('message'),btn=document.getElementById('submitButton');function showMessage(t,type='error'){msg.textContent=t;msg.className='message '+type;}
+document.querySelectorAll('[data-toggle]').forEach(toggle=>toggle.addEventListener('click',()=>{const input=document.getElementById(toggle.dataset.toggle),show=input.type==='password';input.type=show?'text':'password';toggle.setAttribute('aria-pressed',String(show));toggle.setAttribute('aria-label',show?'Sembunyikan kata sandi':'Tampilkan kata sandi');toggle.classList.toggle('is-visible',show);}));
+form.addEventListener('submit',async e=>{e.preventDefault();showMessage('');const id=document.getElementById('identifier').value.trim(),password=document.getElementById('password').value;if(!window.nouvaSupabaseReady){showMessage('Supabase belum dikonfigurasi. Periksa js/nouva-config.js.');return;}btn.disabled=true;btn.textContent='Memeriksa akun...';try{let email=id;if(!id.includes('@')){const {data,error}=await window.nouvaSupabase.rpc('nouva_get_login_email',{p_username:id.toLowerCase()});if(error)throw new Error('Fitur login username belum disiapkan. Jalankan SQL migration pada folder supabase di ZIP.');if(!data)throw new Error('Username atau kata sandi tidak sesuai.');email=data;}const {data,error}=await window.nouvaSupabase.auth.signInWithPassword({email,password});if(error)throw error;const {data:profile,error:profileError}=await window.nouvaSupabase.from('profiles').select('role').eq('id',data.user.id).single();if(profileError)throw profileError;if(profile?.role!=='admin'){await window.nouvaSupabase.auth.signOut();throw new Error('Akun ini bukan akun admin.');}window.location.href='../admin/dashboard_admin.html';}catch(err){showMessage(err.message||'Login gagal. Periksa email/username dan kata sandi.');}finally{btn.disabled=false;btn.textContent='Masuk';}});
 </script></body></html>

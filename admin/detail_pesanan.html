@@ -5,6 +5,10 @@
   <meta content="width=device-width,initial-scale=1" name="viewport"/>
   <title>Detail Pesanan - NOUVA</title>
   <link href="../css/detail_pesanan.css" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/nouva-config.js"></script>
+  <script src="../js/nouva-supabase.js"></script>
+  <script src="../js/nouva-workflow.js"></script>
 </head>
 <body>
 <div class="app">
@@ -41,6 +45,7 @@
           <h1>Detail Pesanan</h1>
           <p>Lihat informasi lengkap pesanan</p>
         </div>
+        <span id="orderTypeBadge" class="order-type-badge">Memuat jenis pesanan…</span>
       </div>
       <a class="edit-order-btn" id="editOrderBtn" href="edit_pes.html">
         <img src="https://c.animaapp.com/ZEhLyd1X/img/edit-1.svg" alt=""/>
@@ -58,7 +63,8 @@
         </small>
         <small class="customer-type-line" id="customerType">Individu</small>
       </div>
-      <div class="col"><strong>No.Referensi</strong><span id="invoiceNo">CUS-000-000</span></div>
+      <div class="col"><strong id="referenceLabel">No. Pesanan</strong><span id="invoiceNo">—</span></div>
+      <div class="col"><strong>No. Referensi Produk</strong><span id="productReference">—</span></div>
       <div class="col"><strong>Tanggal Pesan</strong><span id="orderDate">-</span></div>
       <div class="col"><strong>Deadline</strong><span class="deadline-value" id="deadline">-</span></div>
     </section>
@@ -122,15 +128,15 @@
             <b class="total-amount" id="totalPayment">Rp 0</b>
           </div>
           <hr/>
-          <div class="payment-row">
+          <div class="payment-row" id="dpPaymentRow">
             <strong>Nominal DP</strong>
             <div class="payment-value">
               <span id="dpPayment">Rp 0</span>
               <em class="paid" id="dpStatus">Belum Lunas</em>
             </div>
           </div>
-          <hr/>
-          <div class="payment-row">
+          <hr id="dpDivider"/>
+          <div class="payment-row" id="remainingPaymentRow">
             <strong>Sisa Pembayaran</strong>
             <div class="payment-value">
               <span class="remaining" id="remainingPayment">Rp 0</span>
@@ -150,247 +156,170 @@
 </div>
 
 <script>
-const orders = {
-  1: {
-    customer: "SDN 27", type: "Instansi", institution: "SDN 27", phone: "0812-3456-7890",
-    invoice: "CUS-000-001", orderDate: "25 September 2026", deadline: "12 Oktober 2026",
-    status: "Sedang Dijahit", note: "Ukuran dan motif mengikuti kesepakatan.",
-    payment: {total:12500000, dp:7500000, dpStatus:"Lunas", remaining:5000000, remainingStatus:"Belum Lunas", proof:""},
-    progressStage: "Proses",
-    progress: [
-      ["done","Pesanan Diterima","25 September 2026"],
-      ["done","Pembayaran DP","25 September 2026"],
-      ["now","Proses","26 September 2026"],
-      ["","Siap Diambil","12 Oktober 2026"],
-      ["","Selesai",""]
-    ],
-    items: [
-      {
-        name:"Seragam Karawo", category:"Seragam", qty:20, price:625000,
-        description:"Seragam karawo untuk kebutuhan sekolah.",
-        sizeSummary:"S 2 pcs • M 3 pcs • L 2 pcs • XL 1 pcs",
-        fabric:"Katun", fabricCustom:"", color:"Putih", colorImage:"",
-        modelImage:"https://c.animaapp.com/XYqZOEOx/img/jumper-2@2x.png",
-        customModel:"", motif:"Motif Bunga", motifImage:"../img/motif_karawo_bunga.svg",
-        customMotif:"", customMotifImage:"",
-        colors:[["Putih",2,3,2,1],["Cream",1,3,2,1],["Maroon",1,2,1,1]]
-      },
-      {
-        name:"Seragam Karawo", category:"Seragam", qty:15, price:625000,
-        description:"Seragam karawo dengan motif daun.", sizeSummary:"S 1 pcs • M 2 pcs • L 2 pcs • XL 1 pcs",
-        fabric:"Katun", fabricCustom:"", color:"Navy", colorImage:"",
-        modelImage:"https://c.animaapp.com/XYqZOEOx/img/jumper-2@2x.png",
-        customModel:"", motif:"Motif Daun", motifImage:"../img/motif_karawo_daun.svg",
-        customMotif:"", customMotifImage:"",
-        colors:[["Navy",1,2,2,1],["Putih",1,1,2,1],["Hitam",1,1,1,1]]
-      },
-      {
-        name:"Seragam Karawo", category:"Seragam", qty:15, price:625000,
-        description:"Seragam karawo dengan motif geometris.", sizeSummary:"S 2 pcs • M 3 pcs • L 2 pcs • XL 1 pcs",
-        fabric:"Katun", fabricCustom:"", color:"Maroon", colorImage:"",
-        modelImage:"https://c.animaapp.com/XYqZOEOx/img/jumper-2@2x.png",
-        customModel:"", motif:"Motif Geometris", motifImage:"../img/motif_karawo_geometris.svg",
-        customMotif:"", customMotifImage:"",
-        colors:[["Maroon",2,2,2,1],["Hitam",2,3,2,1]]
-      }
-    ]
-  },
-  2: {
-    customer:"Ayu", type:"Individu", institution:"", phone:"0813-2222-7788",
-    invoice:"CUS-000-002", orderDate:"20 September 2026", deadline:"10 November 2026",
-    status:"Sedang Dijahit", note:"Ukuran mengikuti hasil pengukuran pelanggan.",
-    payment:{total:650000,dp:350000,dpStatus:"Lunas",remaining:300000,remainingStatus:"Belum Lunas",proof:""},
-    progressStage:"Proses",
-    progress:[
-      ["done","Pesanan Diterima","20 September 2026"],["done","Pembayaran DP","20 September 2026"],
-      ["now","Proses","21 September 2026"],["","Siap Diambil","10 November 2026"],["","Selesai",""]
-    ],
-    items:[{name:"Kemeja Karawo",category:"Kemeja",qty:2,price:325000,description:"Kemeja karawo pesanan individu.",sizeSummary:"M 1 pcs • L 1 pcs",fabric:"Katun",fabricCustom:"",color:"Hitam",colorImage:"",modelImage:"https://c.animaapp.com/XYqZOEOx/img/jumper-2@2x.png",customModel:"",motif:"Motif Bunga",motifImage:"../img/motif_karawo_bunga.svg",customMotif:"",customMotifImage:"",colors:[["Hitam",0,1,0,0],["Putih",0,0,1,0]]}]
-  }
-};
+(async function () {
+  const $ = (id) => document.getElementById(id);
+  const sb = window.nouvaSupabase;
+  const orderId = new URLSearchParams(location.search).get("id");
+  const fallbackModel = "https://c.animaapp.com/XYqZOEOx/img/jumper-2@2x.png";
+  const esc = (value) => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const money = (value) => "Rp " + Number(value || 0).toLocaleString("id-ID");
+  const date = (value) => window.NouvaWorkflow.date(value ? String(value).slice(0,10) : "");
+  const image = (url, alt="") => url ? `<img src="${esc(url)}" alt="${esc(alt)}" loading="lazy" onerror="this.style.display='none'">` : `<div class="empty-media-placeholder">Opsional • belum ada</div>`;
 
-function money(value) {
-  return "Rp " + Number(value || 0).toLocaleString("id-ID");
-}
-function rowTotal(row) {
-  return row.slice(1).reduce((a,b)=>a+Number(b || 0),0);
-}
-function safeImage(src, fallback) {
-  return src || fallback;
-}
-function statusLabel(status) {
-  return ["Sedang Disulam","Sedang Dijahit"].includes(status) ? "✂ " + status : status;
-}
-
-function renderItems(items) {
-  const wrap = document.getElementById("orderItems");
-  wrap.innerHTML = items.map((item,index) => {
-    const subtotal = Number(item.qty || 0) * Number(item.price || 0);
-    const customModel = item.customModel
-      ? `<div class="media-box"><span>Model custom pelanggan</span><img src="${item.customModel}" alt="Model custom pelanggan"/></div>`
-      : `<div class="media-box empty-media"><span>Model custom pelanggan</span><div>Opsional • belum ada</div></div>`;
-    const customMotif = item.customMotifImage || item.customMotif
-      ? `<div class="media-box"><span>Motif custom pelanggan</span>${item.customMotifImage ? `<img src="${item.customMotifImage}" alt="${item.customMotif || 'Motif custom'}"/>` : `<div class="text-media">${item.customMotif || 'Nama motif custom'}</div>`}</div>`
-      : `<div class="media-box empty-media"><span>Motif custom pelanggan</span><div>Opsional • belum ada</div></div>`;
-
-    return `
-      <div class="order-detail-wrap">
+  function renderItems(items) {
+    const wrap = $("orderItems");
+    if (!items.length) { wrap.innerHTML = '<p>Belum ada rincian produk pada pesanan ini.</p>'; return; }
+    wrap.innerHTML = items.map((it, index) => {
+      const subtotal = Number(it.qty || 0) * Number(it.price || 0);
+      const sizeColumns = it.orderType === "custom" ? (it.sizeColumns || []) : ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
+      const colors = it.colors.length ? it.colors : [[it.color || "Belum diisi", ...sizeColumns.map(() => 0)]];
+      const storeMotif = it.motifImage || it.motif ? `<div class="media-box motif-store"><span>Motif sulaman dari toko</span>${it.motifImage ? image(it.motifImage,it.motif || "Motif toko") : `<div class="text-media">${esc(it.motif || "Motif toko")}</div>`}${it.motifImage && it.motif ? `<strong>${esc(it.motif)}</strong>` : ""}</div>` : "";
+      const fabricColor = it.fabricImage || it.color ? `<div class="media-box fabric-color-box"><span>Warna kain</span>${it.fabricImage ? image(it.fabricImage,it.color || "Warna kain") : `<div class="fabric-color-swatch" style="background:${/^#[0-9a-f]{3,8}$/i.test(it.colorHex||"") ? it.colorHex : "#d92d20"}"></div>`}<strong>${esc(it.color || "Warna kain")}</strong></div>` : "";
+      const customModel = it.customModel ? `<div class="media-box"><span>Model Pakaian dari Toko/Pelanggan</span>${image(it.customModel,"Model Pakaian dari Toko/Pelanggan")}</div>` : `<div class="media-box empty-media"><span>Model Pakaian dari Toko/Pelanggan</span><div>Opsional • belum ada</div></div>`;
+      const customMotif = it.customMotifImage || it.customMotif ? `<div class="media-box"><span>Motif custom pelanggan</span>${it.customMotifImage ? image(it.customMotifImage,it.customMotif || "Motif custom") : `<div class="text-media">${esc(it.customMotif)}</div>`}</div>` : `<div class="media-box empty-media"><span>Motif custom pelanggan</span><div>Opsional • belum ada</div></div>`;
+      return `<div class="order-detail-wrap">
         <button class="order-item ${index===0?'open':''}" type="button" aria-expanded="${index===0}">
-          <span class="item-number">${index+1}</span>
-          <span class="item-icon"><img src="${safeImage(item.modelImage,'https://c.animaapp.com/XYqZOEOx/img/jumper-2@2x.png')}" alt=""/></span>
-          <span class="item-name">${item.name}<small>${item.category} • ${item.qty} pcs</small></span>
-          <span class="item-price">${money(subtotal)}</span>
-          <span class="item-arrow">${index===0?'⌃':'⌄'}</span>
+          <span class="item-number">${index+1}</span><span class="item-icon">${image(it.modelImage,"")}</span>
+          <span class="item-name">${esc(it.name)}<small>${esc(it.category || "Produk")} • ${Number(it.qty||0)} pcs</small></span>
+          <span class="item-price">${money(subtotal)}</span><span class="item-arrow">${index===0?'⌃':'⌄'}</span>
         </button>
         <div class="item-detail ${index===0?'show':''}">
-          <div class="product-overview">
-            <div class="model-preview">
-              <span>Model pakaian dari toko</span>
-              <img src="${safeImage(item.modelImage,'https://c.animaapp.com/XYqZOEOx/img/jumper-2@2x.png')}" alt="${item.name}"/>
-            </div>
-            <div class="product-summary">
-              <div><small>Nama Produk</small><strong>${item.name}</strong></div>
-              <div><small>Kategori</small><strong>${item.category || "Belum diisi"}</strong></div>
-              <div><small>Jumlah</small><strong>${item.qty} pcs</strong></div>
-              <div><small>Jenis Kain</small><strong>${item.fabric || "Belum diisi"}</strong></div>
-              <div><small>Harga Produk</small><strong>${money(item.price)}</strong></div>
-              <div><small>Subtotal</small><strong class="accent">${money(subtotal)}</strong></div>
-            </div>
+          <div class="product-overview"><div class="model-preview"><span>Model pakaian dari toko</span>${image(it.modelImage,it.name)}</div>
+            <div class="product-summary"><div><small>Nama Produk</small><strong>${esc(it.name)}</strong></div><div><small>Kategori</small><strong>${esc(it.category||"Belum diisi")}</strong></div><div><small>Jumlah</small><strong>${Number(it.qty||0)} pcs</strong></div><div><small>Jenis Kain</small><strong>${esc(it.fabric||"Belum diisi")}</strong></div><div><small>Harga Produk</small><strong>${it.orderType === "custom" ? "Menunggu penawaran" : money(it.price)}</strong></div><div><small>Subtotal</small><strong class="accent">${it.orderType === "custom" ? "Menunggu penawaran" : money(subtotal)}</strong></div></div>
           </div>
-          <div class="media-grid">
-            ${customModel}
-            <div class="media-box motif-store">
-              <span>Motif sulaman dari toko</span>
-              <img src="${safeImage(item.motifImage,'')}" alt="${item.motif || ''}"/>
-              <strong>${item.motif || "Belum diisi"}</strong>
-            </div>
-            ${customMotif}
-          </div>
-          <div class="spec-grid">
-            <div class="spec-box full"><span>Deskripsi Motif / Model / Pakaian</span><strong>${item.description || "Belum ada deskripsi."}</strong></div>
-          </div>
-          <div class="size-table-wrap">
-            <table class="size-table">
-              <thead><tr><th>Warna</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>Total</th></tr></thead>
-              <tbody>
-                ${item.colors.map(c=>`<tr>
-                  <td><span class="color-chip"><i></i>${c[0]}</span></td>
-                  <td>${c[1]||0}</td><td>${c[2]||0}</td><td>${c[3]||0}</td><td>${c[4]||0}</td><td><b>${rowTotal(c)}</b></td>
-                </tr>`).join("")}
-              </tbody>
-              <tfoot><tr><th>Total</th>
-                ${[1,2,3,4].map(i=>`<th>${item.colors.reduce((s,c)=>s+Number(c[i]||0),0)}</th>`).join("")}
-                <th>${item.colors.reduce((s,c)=>s+rowTotal(c),0)}</th>
-              </tr></tfoot>
-            </table>
-          </div>
-        </div>
-      </div>`;
-  }).join("");
-
-  wrap.querySelectorAll(".order-item").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const detail = btn.nextElementSibling;
-      const open = detail.classList.toggle("show");
-      btn.classList.toggle("open", open);
-      btn.setAttribute("aria-expanded", open);
-      btn.querySelector(".item-arrow").textContent = open ? "⌃" : "⌄";
-    });
-  });
-}
-
-function renderProgress(status, baseData) {
-  const stages = [
-    { label: "Pesanan diterima", description: "Pesanan berhasil diterima", date: baseData.orderDate || "" },
-    { label: "Sedang Disulam", description: "Proses pengerjaan sulaman", date: "" },
-    { label: "Sedang Dijahit", description: "Menunggu proses penjahitan", date: "" },
-    { label: "Siap diambil", description: "Pesanan siap diambil pelanggan", date: baseData.deadline || "" },
-    { label: "Selesai", description: "Pesanan telah diterima pelanggan", date: "" }
-  ];
-  const normalizedStatus = String(status || "").toLowerCase();
-  let current = 0;
-  if (normalizedStatus.includes("disulam")) current = 1;
-  else if (normalizedStatus.includes("dijahit") || normalizedStatus === "proses") current = 2;
-  else if (normalizedStatus.includes("siap diambil")) current = 3;
-  else if (normalizedStatus.includes("selesai")) current = 4;
-  else if (normalizedStatus.includes("dibatalkan")) current = -1;
-
-  document.getElementById("progressList").innerHTML = stages.map((stage, i) => {
-    const state = current < 0 ? "" : (i < current ? "done" : (i === current ? "now" : ""));
-    const detail = stage.date ? stage.date : stage.description;
-    return `<li class="${state}"><span>${stage.label}</span><small>${detail}</small></li>`;
-  }).join("");
-}
-
-const id = new URLSearchParams(location.search).get("id") || "1";
-const baseData = orders[id] || orders[1];
-
-let saved = null;
-try {
-  const raw = localStorage.getItem(`nouva_edit_order_${id}`);
-  saved = raw ? JSON.parse(raw) : null;
-} catch(e) {
-  saved = null;
-}
-
-const data = {
-  ...baseData,
-  ...(saved || {}),
-  payment: {
-    ...baseData.payment,
-    total: saved?.total ?? baseData.payment.total,
-    dp: saved?.dp ?? baseData.payment.dp,
-    dpStatus: saved?.dpStatus ?? baseData.payment.dpStatus,
-    remaining: Math.max(0, (saved?.total ?? baseData.payment.total) - (saved?.dp ?? baseData.payment.dp)),
-    remainingStatus: saved?.remainingStatus ?? baseData.payment.remainingStatus
-  },
-  items: saved?.items?.length
-    ? saved.items.map((item,i)=>({...baseData.items[i],...item}))
-    : baseData.items
-};
-
-if(!data.progressStage){
-  data.progressStage = ["Sedang Disulam","Sedang Dijahit"].includes(data.status) ? "Proses"
-    : data.status === "Siap Diambil" ? "Siap Diambil"
-    : data.status === "Selesai" ? "Selesai"
-    : "Pesanan Diterima";
-}
-
-document.getElementById("customerName").textContent = data.customer;
-document.getElementById("customerPhone").textContent = data.phone;
-document.getElementById("customerType").textContent = data.type;
-document.getElementById("invoiceNo").textContent = data.invoice;
-document.getElementById("orderDate").textContent = data.orderDate;
-document.getElementById("deadline").textContent = data.deadline;
-document.getElementById("detailCustomerName").textContent = data.customer;
-document.getElementById("detailCustomerType").textContent = data.type;
-document.getElementById("detailInstitution").textContent = data.institution || "Tidak ada";
-document.getElementById("detailPhone").textContent = data.phone;
-document.getElementById("orderNote").textContent = data.note || "Belum ada catatan.";
-document.getElementById("editOrderBtn").href = `edit_pes.html?id=${id}`;
-
-document.getElementById("totalPayment").textContent = money(data.payment.total);
-document.getElementById("dpPayment").textContent = money(data.payment.dp);
-document.getElementById("remainingPayment").textContent = money(data.payment.remaining);
-document.getElementById("dpStatus").textContent = data.payment.dpStatus;
-document.getElementById("remainingStatus").textContent = data.payment.remainingStatus;
-
-if (data.payment.dpStatus === "Belum Lunas") {
-  document.getElementById("dpStatus").classList.remove("paid");
-  document.getElementById("dpStatus").classList.add("unpaid");
-}
-if (data.payment.remainingStatus === "Lunas") {
-  document.getElementById("remainingStatus").classList.remove("unpaid");
-  document.getElementById("remainingStatus").classList.add("paid");
-}
-
-if (data.payment.proof) {
-  document.getElementById("proofPayment").textContent = data.payment.proof;
-  document.getElementById("proofBtn").hidden = false;
-}
-
-renderItems(data.items);
-renderProgress(data.status || data.progressStage, baseData);
+          ${it.orderType === "display" ? `<div class="spec-grid"><div class="spec-box"><span>Ukuran</span><strong>${esc(it.size||"—")}</strong></div><div class="spec-box"><span>Warna</span><strong>${esc(it.color||"—")}</strong></div><div class="spec-box"><span>No. Referensi Produk</span><strong>${esc(it.productReference||"—")}</strong></div><div class="spec-box full"><span>Deskripsi Produk</span><strong>${esc(it.description||"Belum ada deskripsi.")}</strong></div></div>` : `<div class="media-grid custom-media-grid">${storeMotif}${customMotif}${fabricColor}</div>
+          <div class="spec-grid"><div class="spec-box full"><span>Deskripsi Motif / Model / Pakaian</span><strong>${esc(it.description||"Belum ada deskripsi.")}</strong></div></div>
+          <div class="size-table-wrap"><table class="size-table"><thead><tr><th>Warna</th>${sizeColumns.map(size=>`<th>${esc(size)}</th>`).join('')}<th>Total</th></tr></thead><tbody>${colors.map(c=>`<tr><td><span class="color-chip"><i></i>${esc(c[0])}</span></td>${sizeColumns.map((size,i)=>`<td>${Number(c[i+1]||0)}</td>`).join('')}<td><b>${c.slice(1).reduce((a,b)=>a+Number(b||0),0)}</b></td></tr>`).join('')}</tbody><tfoot><tr><th>Total</th>${sizeColumns.map((size,i)=>`<th>${colors.reduce((sum,c)=>sum+Number(c[i+1]||0),0)}</th>`).join('')}<th>${colors.reduce((sum,c)=>sum+c.slice(1).reduce((a,b)=>a+Number(b||0),0),0)}</th></tr></tfoot></table></div>`}
+        </div></div>`;
+    }).join("");
+    wrap.querySelectorAll(".order-item").forEach(btn => btn.addEventListener("click", () => {
+      const detail=btn.nextElementSibling, open=detail.classList.toggle("show"); btn.classList.toggle("open",open); btn.setAttribute("aria-expanded",open); btn.querySelector(".item-arrow").textContent=open?"⌃":"⌄";
+    }));
+  }
+  function renderProgress(status, orderDate, deadline, orderType) {
+    const isDisplay = orderType === "display";
+    const labels = isDisplay
+      ? [{label:"Pesanan diterima",description:"Pesanan display masuk dan stok ditahan",date:orderDate},
+         {label:"Menunggu pembayaran",description:"Pelanggan menyelesaikan pembayaran",date:""},
+         {label:"Siap diambil",description:"Barang display sudah tersedia",date:""},
+         {label:"Selesai",description:"Pembayaran lunas dan barang sudah diambil",date:""}]
+      : [{label:"Menunggu Konfirmasi Harga",description:"Admin meninjau spesifikasi dan menentukan harga custom",date:orderDate},
+         {label:"Menunggu Persetujuan Pelanggan",description:"Harga penawaran dikirim untuk disetujui pelanggan",date:""},
+         {label:"Sedang Disulam",description:"Proses pengerjaan sulaman",date:""},
+         {label:"Sedang Dijahit",description:"Proses penjahitan pakaian",date:""},
+         {label:"Siap diambil",description:"Pesanan siap diambil pelanggan",date:deadline},
+         {label:"Selesai",description:"Pesanan telah diterima pelanggan",date:""}];
+    const normalized=String(status||"").toLowerCase();
+    let current=0;
+    if (normalized.includes("menunggu konfirmasi")) current=0;
+    else if (normalized.includes("menunggu persetujuan")) current=1;
+    else if (normalized.includes("disulam")) current=isDisplay?1:2;
+    else if (normalized.includes("dijahit")) current=isDisplay?1:3;
+    else if (normalized.includes("siap diambil") || normalized.includes("siap diambil")) current=isDisplay?2:4;
+    else if (normalized.includes("selesai")) current=labels.length-1;
+    else if (normalized.includes("dibatalkan")) current=-1;
+    $("progressList").innerHTML = normalized.includes("dibatalkan")
+      ? '<li class="now"><span>Pesanan dibatalkan</span><small>Pesanan ini tidak dilanjutkan.</small></li>'
+      : labels.map((st,i)=>`<li class="${current<0?'':i<current?'done':i===current?'now':''}"><span>${st.label}</span><small>${st.date?date(st.date):st.description}</small></li>`).join("");
+  }
+  try {
+    if (!sb || !window.nouvaSupabaseReady) throw new Error("Supabase belum siap. Periksa js/nouva-config.js.");
+    await window.NouvaWorkflow.requireRole("admin", "../auth/login_admin.html");
+    if (!orderId) throw new Error("ID pesanan tidak ada pada URL.");
+    const {data:o,error}=await sb.from("orders").select(`*, order_items(*, product_variants(size,color_name,products(reference_no,name,category,description,fabric_type,motif_name,motif_description,motif_image_url,product_images(image_url,sort_order)))), custom_order_details(*, custom_embroidery_motifs(name,image_url), custom_fabric_colors(name,image_url)), payments(*)`).eq("id",orderId).single();
+    if(error) throw error;
+    const pay=Array.isArray(o.payments)?o.payments[0]:o.payments;
+    $("customerName").textContent=o.customer_name||"Pelanggan"; $("customerPhone").textContent=o.customer_phone||"—";
+    const isDisplay = o.order_type === "display";
+    $("customerType").textContent=o.customer_type==="institution"?"Instansi":"Individu";
+    $("orderTypeBadge").textContent=isDisplay ? "DISPLAY" : "CUSTOM";
+    $("orderTypeBadge").classList.add(isDisplay ? "display" : "custom");
+    $("referenceLabel").textContent = "No. Pesanan";
+    $("invoiceNo").textContent=o.reference_no||"—";
+    $("orderDate").textContent=date(o.ordered_at); $("deadline").textContent=date(o.deadline);
+    $("productReference").textContent = "—";
+    $("detailCustomerName").textContent=o.customer_name||"Pelanggan"; $("detailCustomerType").textContent=o.customer_type==="institution"?"Instansi":"Individu";
+    $("detailInstitution").textContent=o.institution_name||"Tidak ada"; $("detailPhone").textContent=o.customer_phone||"—"; $("orderNote").textContent=o.notes||"Belum ada catatan.";
+    $("totalPayment").textContent=money(pay?.total_amount ?? o.quoted_price ?? o.total_amount);
+    if (isDisplay) {
+      $("dpPaymentRow").style.display="none";
+      $("dpDivider").style.display="none";
+      $("dpStatus").textContent="Tidak diperlukan";
+      $("remainingPayment").textContent=money(pay?.remaining_amount ?? o.total_amount);
+      $("remainingStatus").textContent=pay?(pay.payment_status||"Belum Lunas"):"Belum ada data pembayaran";
+    } else {
+      $("dpPaymentRow").style.display="";
+      $("dpDivider").style.display="";
+      $("dpPayment").textContent=money(pay?.dp_amount||0);
+      $("remainingPayment").textContent=money(pay?.remaining_amount ?? Math.max(0,Number(o.total_amount||0)-Number(pay?.dp_amount||0)));
+      $("dpStatus").textContent=pay?(pay.payment_status||"Belum Lunas"):"Belum ada data pembayaran";
+      $("remainingStatus").textContent=pay?(Number(pay.remaining_amount||0)<=0?"Lunas":"Belum Lunas"):"Belum ada data pembayaran";
+    }
+    if($("dpStatus").textContent!=="Lunas") { $("dpStatus").classList.remove("paid"); $("dpStatus").classList.add("unpaid"); }
+    if($("remainingStatus").textContent==="Lunas") { $("remainingStatus").classList.remove("unpaid"); $("remainingStatus").classList.add("paid"); }
+    $("editOrderBtn").href=`edit_pes.html?id=${encodeURIComponent(orderId)}`;
+    $("editOrderBtn").style.display="inline-flex";
+    let items=[];
+    if(o.order_type==="custom") {
+      // Pesan Custom menyimpan satu baris custom_order_details untuk SETIAP produk.
+      // Ambil seluruh baris, bukan hanya [0], agar rincian admin sama dengan formulir pelanggan.
+      const details = Array.isArray(o.custom_order_details)
+        ? o.custom_order_details
+        : (o.custom_order_details ? [o.custom_order_details] : []);
+      items = details.map((d) => {
+        const breakdown = d.size_breakdown && typeof d.size_breakdown === "object"
+          ? d.size_breakdown : {};
+        // Seluruh ukuran pada formulir Pesan Custom pelanggan.
+        const sizeKeys = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
+        const qty = Number(d.quantity || sizeKeys.reduce((sum, size) => sum + Number(breakdown[size] || 0), 0));
+        const motifRecord = Array.isArray(d.custom_embroidery_motifs) ? d.custom_embroidery_motifs[0] : d.custom_embroidery_motifs;
+        const colorRecord = Array.isArray(d.custom_fabric_colors) ? d.custom_fabric_colors[0] : d.custom_fabric_colors;
+        const color = d.fabric_color || colorRecord?.name || "Belum diisi";
+        const descriptionParts = String(d.design_description || "").split(/\r?\n/).filter(Boolean);
+        const motifLine = descriptionParts.find(line => line.startsWith("Motif dari toko:"));
+        const motifName = motifLine ? motifLine.replace("Motif dari toko:", "").trim() : (motifRecord?.name || "");
+        const description = descriptionParts.filter(line => !line.startsWith("Motif dari toko:")).join("\n");
+        // Hanya tampilkan kolom ukuran yang benar-benar dipilih pelanggan (jumlah > 0).
+        const selectedSizes = sizeKeys.filter(size => Number(breakdown[size] || 0) > 0);
+        const visibleSizes = selectedSizes.length ? selectedSizes : [String(d.size || "M").toUpperCase()];
+        const sizes = visibleSizes.map(size => Number(breakdown[size] || (size === String(d.size || "").toUpperCase() ? d.quantity : 0) || 0));
+        return {
+          orderType: "custom",
+          name: d.product_name || "Pesanan custom",
+          category: d.category || "Custom",
+          qty,
+          // Harga custom ditentukan admin setelah pemeriksaan; jangan mengarang harga per produk.
+          price: 0,
+          description,
+          fabric: d.custom_fabric_type || (d.fabric_type === "custom" ? "Kain custom" : d.fabric_type) || "",
+          color,
+          fabricImage: d.fabric_image_url || colorRecord?.image_url || "",
+          colorHex: colorRecord?.hex_code || colorRecord?.color_hex || "",
+          modelImage: d.model_image_url || fallbackModel,
+          customModel: d.model_image_url || "",
+          motif: motifName || "Belum dipilih",
+          motifImage: d.store_motif_image_url || motifRecord?.image_url || "",
+          customMotifImage: d.custom_motif_image_url || "",
+          customMotif: "",
+          sizeColumns: visibleSizes,
+          colors: [[color, ...sizes]]
+        };
+      });
+    } else {
+      items=(o.order_items||[]).map(it=>{const v=it.product_variants||{},p=v.products||{},imgs=(p.product_images||[]).slice().sort((a,b)=>(a.sort_order||0)-(b.sort_order||0)); const sz=String(it.size_snapshot||v.size||"").toUpperCase(); const sizes=["S","M","L","XL"]; const vals=sizes.map(s=>s===sz?Number(it.quantity||0):0); return {orderType:"display",productReference:p.reference_no||"",size:sz,name:it.product_name_snapshot||p.name||"Produk",category:p.category||"Produk",qty:it.quantity||0,price:Number(it.unit_price||0),description:p.motif_description||p.description||"",fabric:p.fabric_type||"",color:it.color_snapshot||v.color_name||"",modelImage:imgs[0]?.image_url||fallbackModel,customModel:"",motif:p.motif_name||"",motifImage:p.motif_image_url||"",customMotifImage:"",customMotif:"",colors:[[it.color_snapshot||v.color_name||"Belum diisi",...vals]]}; });
+    }
+    if (isDisplay && items.length) {
+      const first = o.order_items?.[0];
+      const product = first?.product_variants?.products;
+      $("productReference").textContent = product?.reference_no || "—";
+    }
+    renderItems(items);
+    renderProgress(o.process_status,o.ordered_at,o.deadline,o.order_type);
+  } catch(e) {
+    console.error(e); const wrap=$("orderItems"); if(wrap) wrap.innerHTML=`<p role="alert">Gagal memuat detail pesanan: ${String(e.message||e)}</p>`;
+    const name=$("customerName"); if(name) name.textContent="Pesanan tidak dapat dimuat";
+  }
+})();
 </script>
 </body>
 </html>

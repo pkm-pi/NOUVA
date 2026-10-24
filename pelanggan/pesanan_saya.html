@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Pesanan Saya - NOUVA</title>
   <link rel="stylesheet" href="../css/pesanan_saya.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/nouva-config.js"></script><script src="../js/nouva-supabase.js"></script><script src="../js/nouva-workflow.js"></script>
 </head>
 <body>
   <div class="orders-page">    
@@ -49,50 +51,33 @@
 <button class="tab" data-status="Selesai">Selesai <b>1</b></button>
 <button class="tab" data-status="Dibatalkan">Dibatalkan <b>1</b></button>
 </nav>
-<section class="orders-table"><div class="table-head"><span>No. Referensi</span><span>Produk</span><span>Total</span><span>Status</span><span>Detail</span></div><div id="orderRows">
-<article class="order-row" data-status="Sedang Disulam" data-date="2026-07" data-search="CUS-482-731 Baju Karawo Custom Sedang Disulam">
-<div class="order-number"><strong>CUS-482-731</strong></div>
-<div class="order-product"><div class="product-thumb thumb-one">Karawo</div><div><strong>Baju Karawo Custom</strong><small>1 produk</small></div></div>
-<div class="order-total">Rp 250.000</div><div><span class="status embroider"><i></i>Sedang Disulam</span></div>
-<div><a class="detail-button" href="lihat_detail_cus.html">Lihat <span>›</span></a></div></article><article class="order-row" data-status="Sedang Dijahit" data-date="2026-06" data-search="DIS-615-204 Setelan Karawo Display Sedang Dijahit">
-<div class="order-number"><strong>DIS-615-204</strong></div>
-<div class="order-product"><div class="product-thumb thumb-two">Karawo</div><div><strong>Setelan Karawo Display</strong><small>1 produk</small></div></div>
-<div class="order-total">Rp 225.000</div><div><span class="status sewing"><i></i>Sedang Dijahit</span></div>
-<div><a class="detail-button" href="lihat_detail_dis.html">LIhat <span>›</span></a></div></article><article class="order-row" data-status="Siap Diambil" data-date="2026-06" data-search="DIS-327-859 Kemeja Karawo Display Siap Diambil">
-<div class="order-number"><strong>DIS-327-859</strong></div>
-<div class="order-product"><div class="product-thumb thumb-three">Karawo</div><div><strong>Kemeja Karawo Display</strong><small>2 produk</small></div></div>
-<div class="order-total">Rp 375.000</div><div><span class="status ready"><i></i>Siap Diambil</span></div>
-<div><a class="detail-button" href="lihat_detail_dis.html">LIhat <span>›</span></a></div></article><article class="order-row" data-status="Selesai" data-date="2026-05" data-search="CUS-794-126 Outer Karawo Custom Selesai">
-<div class="order-number"><strong>CUS-794-126</strong></div>
-<div class="order-product"><div class="product-thumb thumb-four">Karawo</div><div><strong>Outer Karawo Custom</strong><small>1 produk</small></div></div>
-<div class="order-total">Rp 180.000</div><div><span class="status completed"><i></i>Selesai</span></div>
-<div><a class="detail-button" href="lihat_detail_cus.html">LIhat <span>›</span></a></div></article><article class="order-row" data-status="Dibatalkan" data-date="2026-04" data-search="DIS-258-643 Baju Karawo Classic Dibatalkan">
-<div class="order-number"><strong>DIS-258-643</strong></div>
-<div class="order-product"><div class="product-thumb thumb-one">Karawo</div><div><strong>Baju Karawo Classic</strong><small>1 produk</small></div></div>
-<div class="order-total">Rp 265.000</div><div><span class="status cancelled"><i></i>Dibatalkan</span></div>
-<div><a class="detail-button" href="lihat_detail_dis.html">LIhat <span>›</span></a></div></article></div><p id="emptyState" class="empty-state" hidden>Tidak ada pesanan yang sesuai.</p></section></main></div>
+<section class="orders-table"><div class="table-head"><span>No. Referensi</span><span>Produk</span><span>Total</span><span>Status</span><span>Detail</span></div><div id="orderRows" class="order-rows"><p>Memuat pesanan dari Supabase...</p></div><p id="emptyState" class="empty-state" hidden>Tidak ada pesanan yang sesuai.</p></section></main></div>
 <script>
-const tabs = [...document.querySelectorAll(".tab")];
-const rows = [...document.querySelectorAll(".order-row")];
-const search = document.getElementById("searchOrders");
-const emptyState = document.getElementById("emptyState");
-let activeStatus = "Semua";
-function filterOrders() {
-  const term = search.value.trim().toLowerCase();
-  let visible = 0;
-  rows.forEach(row => {
-    const statusMatch = activeStatus === "Semua" || row.dataset.status === activeStatus;
-    const searchMatch = row.dataset.search.toLowerCase().includes(term);
-    const show = statusMatch && searchMatch;
-    row.hidden = !show;
-    if (show) visible++;
+(async()=>{
+ const sb=window.nouvaSupabase, wrap=document.getElementById("orderRows"), search=document.getElementById("searchOrders"), empty=document.getElementById("emptyState");
+ let orders=[],activeStatus="Semua";
+ const esc=NouvaWorkflow.escape,money=NouvaWorkflow.money;
+ try{
+  const {session,profile}=await NouvaWorkflow.requireRole("customer","../auth/login_pelanggan.html");
+  const {data,error}=await sb.from("orders").select("id,reference_no,order_type,customer_name,ordered_at,deadline,process_status,total_amount,order_items(product_name_snapshot,size_snapshot,color_snapshot,quantity),custom_order_details(product_name,quantity)").eq("customer_id",session.user.id).order("created_at",{ascending:false});
+  if(error)throw error;orders=data||[];render();
+ }catch(e){console.error(e);wrap.innerHTML=`<p class="order-load-error">Pesanan gagal dimuat: ${esc(e.message||e)}</p>`;return}
+ function render(){
+  const q=(search?.value||"").trim().toLowerCase();
+  const shown=orders.filter(o=>(activeStatus==="Semua"||o.process_status===activeStatus)&&[o.reference_no,o.order_type,o.process_status,...(o.order_items||[]).map(i=>i.product_name_snapshot)].join(" ").toLowerCase().includes(q));
+  wrap.innerHTML=shown.map(o=>{const items=o.order_items||[],customItems=o.custom_order_details||[],activeItems=o.order_type==="custom"?customItems:items,qty=activeItems.reduce((n,i)=>n+Number(i.quantity||0),0),names=(o.order_type==="custom"?customItems.map(i=>i.product_name):items.map(i=>i.product_name_snapshot)).filter(Boolean).join(", ")||"Detail item belum tersedia";const st=o.process_status||"Menunggu Konfirmasi";const cls=st==="Selesai"?"completed":st==="Dibatalkan"?"cancelled":st==="Siap Diambil"?"ready":"";return `<article class="order-row" data-status="${esc(st)}" data-search="${esc(o.reference_no+" "+names+" "+st)}">
+ <div class="order-number"><strong>${esc(o.reference_no||"Pesanan")}</strong></div>
+ <div class="order-product"><div class="product-thumb thumb-one">Nouva</div><div><strong>${esc(names)}</strong><small>${qty} pcs · ${o.order_type==="custom"?"Custom":"Display"}</small></div></div>
+ <div class="order-total">${money(o.total_amount)}</div><div><span class="status ${cls}"><i></i>${esc(st)}</span></div>
+ <div><span class="detail-button" title="Nomor pesanan ${esc(o.reference_no)}">Tercatat ✓</span></div></article>`}).join("");
+  empty.hidden=shown.length>0;
+  document.querySelectorAll(".tab").forEach(tab=>{
+    const key=tab.dataset.status;
+    const count=key==="Semua"?orders.length:orders.filter(o=>o.process_status===key).length;
+    const badge=tab.querySelector("b"); if(badge) badge.textContent=String(count);
   });
-  emptyState.hidden = visible > 0;
-}
-tabs.forEach(tab => tab.addEventListener("click", () => {
-  activeStatus = tab.dataset.status;
-  tabs.forEach(item => item.classList.toggle("active", item === tab));
-  filterOrders();
-}));
-search.addEventListener("input", filterOrders);
+ }
+ document.querySelectorAll(".tab").forEach(tab=>tab.addEventListener("click",()=>{activeStatus=tab.dataset.status;document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===tab));render()}));
+ search?.addEventListener("input",render);
+})();
 </script></body></html>

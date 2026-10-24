@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tambah Stok - NOUVA</title>
+<link rel="stylesheet" href="../globals.css"><link rel="stylesheet" href="../css/stok_warna_motif.css"></head><body>
+<div class="dashboard-admin">
+<aside class="sidebar">
+      <div class="brand">
+        <img class="logo-nouva-FIKS" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/logo-nouva-fiks-2.png" alt="Logo Nouva">
+        <div class="brand-name">NOUVA</div>
+        <div class="brand-tagline">NOU Menuju Inovasi</div>
+      </div>
+
+      <div class="admin-profile">
+        <img class="profile" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/profile.png" alt="Admin">
+        <div class="admin-name">Admin</div>
+      </div>
+
+      <nav class="menu" aria-label="Menu aplikasi">
+        <a class="menu-link dashboard-menu-link" href="dashboard_admin.html">
+          <img class="desktop-dashboard-icon" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--3--1.png" alt="">
+          <img class="mobile-dashboard-logo" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/logo-nouva-fiks-2.png" alt="">
+          <span>Dashboard</span>
+        </a>
+        <a class="menu-link" href="pesanan.html">
+          <img src="https://c.animaapp.com/P7Ah09FQ/img/image-removebg-preview--12--3@2x.png" alt="">
+          <span>Pesanan</span>
+        </a>
+        <a class="menu-link" href="produksi.html">
+          <img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--13--1.png" alt="">
+          <span>Produksi Jahit</span>
+        </a>
+        <a class="menu-link active" href="produk.html" aria-current="page">
+          <img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--14--1.png" alt="">
+          <span>Produk</span>
+        </a>
+        <a class="menu-link" href="pemasaran.html">
+          <img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--17--1.png" alt="">
+          <span>Pemasaran</span>
+        </a>
+        <a class="menu-link" href="pembukuan.html">
+          <img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--18--1.png" alt="">
+          <span>Pembukuan</span>
+        </a>
+        <a class="menu-link" href="pengaturan.html">
+          <img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--15--1.png" alt="">
+          <span>Pengaturan</span>
+        </a>
+      </nav>
+    </aside>
+<main class="main-content edit-content">
+<section class="edit-heading">
+  <a class="title-icon back-title-button" href="dashboard_admin.html" aria-label="Kembali ke dashboard admin" title="Kembali ke dashboard admin"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H5M12 19l-7-7 7-7" /></svg></a>
+  <div><h1>Tambah Stok</h1><p>Kelola stok warna kain dan motif sulaman untuk pilihan pelanggan.</p></div>
+</section>
+<div class="tabs"><button class="tab active" data-kind="color">Warna Kain</button><button class="tab" data-kind="motif">Motif Sulaman</button></div>
+<section class="panel"><h2 id="formTitle">Tambah Warna Kain</h2><p class="hint">Isi nama, foto, dan keterangan. Foto akan ditampilkan sebagai kartu pilihan untuk pelanggan.</p>
+<form id="catalogForm"><input type="hidden" id="editId"><div class="form-grid">
+<label class="field">Nama pilihan<input id="name" required maxlength="90" placeholder="Contoh: Maroon"></label>
+<label class="field">Foto pilihan<input id="photo" type="file" accept="image/*"></label>
+<label class="field full">Keterangan (opsional)<textarea id="description" rows="2" placeholder="Contoh: Katun, stok terbatas, kode warna..."></textarea></label>
+</div><div class="actions" style="margin-top:14px"><button class="primary" type="submit">Simpan</button><button class="secondary" type="button" id="cancelEdit">Batal edit</button></div><p id="message" class="msg"></p></form></section>
+<section class="panel"><h2 id="listTitle">Daftar Warna Kain</h2><p class="hint">Nonaktifkan pilihan jika stok habis. Data pesanan lama tetap menyimpan nama pilihan saat dipesan.</p><div id="items" class="items"><p class="empty">Memuat data...</p></div></section>
+</main>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../js/nouva-config.js"></script><script src="../js/nouva-supabase.js"></script><script src="../js/nouva-workflow.js"></script>
+<script>
+const sb=window.nouvaSupabase;let kind="color",rows=[];const $=id=>document.getElementById(id);
+const cfg=window.NOUVA_CONFIG||{};
+function table(){return kind==="color"?"custom_fabric_colors":"custom_embroidery_motifs"}
+function setMessage(t,ok=false){$("message").textContent=t;$("message").className="msg"+(ok?" ok":"")}
+async function guard(){if(!sb)throw Error("Supabase belum terhubung.");await NouvaWorkflow.requireRole("admin","../auth/login_admin.html")}
+async function upload(file){if(!file)return null;if(!cfg.CLOUDINARY_CLOUD_NAME||!cfg.CLOUDINARY_UPLOAD_PRESET)throw Error("Konfigurasi Cloudinary belum tersedia.");if(!file.type.startsWith("image/"))throw Error("File harus berupa gambar.");if(file.size>10*1024*1024)throw Error("Ukuran gambar maksimal 10 MB.");const fd=new FormData();fd.append("file",file);fd.append("upload_preset",cfg.CLOUDINARY_UPLOAD_PRESET);const r=await fetch("https://api.cloudinary.com/v1_1/"+cfg.CLOUDINARY_CLOUD_NAME+"/image/upload",{method:"POST",body:fd});const j=await r.json();if(!r.ok||!j.secure_url)throw Error(j.error?.message||"Upload foto gagal.");return j.secure_url}
+async function load(){const {data,error}=await sb.from(table()).select("*").order("sort_order").order("name");if(error)throw error;rows=data||[];render()}
+function render(){$("items").innerHTML=rows.length?rows.map(r=>`<article class="item"><img src="${r.image_url}" alt=""><div class="item-body"><h3>${safe(r.name)}</h3><p>${safe(r.description||"Tanpa keterangan")}</p><div class="item-actions"><span class="status ${r.is_active?"":"off"}">${r.is_active?"Tampil ke pelanggan":"Nonaktif"}</span><div class="actions"><button class="secondary" onclick="editItem('${r.id}')">Edit</button><button class="secondary" onclick="toggleItem('${r.id}',${!r.is_active})">${r.is_active?"Nonaktifkan":"Aktifkan"}</button></div></div></div></article>`).join(""):'<p class="empty">Belum ada data. Tambahkan pilihan pertama melalui formulir di atas.</p>'}
+function safe(v){return String(v||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+window.editItem=id=>{const r=rows.find(x=>x.id===id);if(!r)return;$("editId").value=r.id;$("name").value=r.name;$("description").value=r.description||"";$("photo").required=false;$("formTitle").textContent="Edit "+(kind==="color"?"Warna Kain":"Motif Sulaman")}
+window.toggleItem=async(id,value)=>{try{const {error}=await sb.from(table()).update({is_active:value}).eq("id",id);if(error)throw error;await load()}catch(e){alert(e.message)}}
+$("cancelEdit").onclick=()=>{$("catalogForm").reset();$("editId").value="";$("photo").required=true;$("formTitle").textContent="Tambah "+(kind==="color"?"Warna Kain":"Motif Sulaman");setMessage("")}
+document.querySelectorAll(".tab").forEach(b=>b.onclick=async()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));kind=b.dataset.kind;$("formTitle").textContent="Tambah "+(kind==="color"?"Warna Kain":"Motif Sulaman");$("listTitle").textContent="Daftar "+(kind==="color"?"Warna Kain":"Motif Sulaman");$("cancelEdit").click();await load()});
+$("catalogForm").onsubmit=async e=>{e.preventDefault();const btn=e.submitter;btn.disabled=true;try{const id=$("editId").value;let image=await upload($("photo").files[0]);if(!image&&id)image=rows.find(r=>r.id===id).image_url;if(!image)throw Error("Foto wajib diunggah.");const payload={name:$("name").value.trim(),description:$("description").value.trim()||null,image_url:image,is_active:true,updated_at:new Date().toISOString()};const result=id?await sb.from(table()).update(payload).eq("id",id):await sb.from(table()).insert(payload);if(result.error)throw result.error;$("cancelEdit").click();setMessage("Data berhasil disimpan.",true);await load()}catch(err){setMessage(err.message)}finally{btn.disabled=false}};
+(async()=>{try{await guard();await load()}catch(e){$("items").innerHTML='<p class="empty">'+safe(e.message)+'</p>'}})();
+</script>
+</body></html>

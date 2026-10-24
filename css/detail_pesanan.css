@@ -361,3 +361,31 @@ main{flex:1;min-width:0;padding:22px clamp(18px,2.2vw,34px) 34px}
 .back-icon-btn.back-title-button { width: 36px; height: 36px; flex: 0 0 36px; border-radius: 5px; }
 .back-icon-btn.back-title-button svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .back-icon-btn.back-title-button:hover { background: #794691; color: #fff; transform: translateX(-1px); }
+
+/* Penanda jenis dan nomor produk pada Detail Pesanan */
+.order-type-badge{display:inline-flex;align-items:center;margin-left:8px;padding:5px 9px;border-radius:20px;font-size:9px;font-weight:800;letter-spacing:.5px;white-space:nowrap;background:#eee7f4;color:#542969;border:1px solid #d8c8e2}
+.order-type-badge.display{background:#e8f5eb;color:#176b35;border-color:#b9dfc3}
+.order-type-badge.custom{background:#fff0dd;color:#8a4d00;border-color:#f3d2a3}
+@media(max-width:760px){.order-type-badge{margin:5px 0 0 0}.page-title-group{flex-wrap:wrap}}
+
+/* Detail custom: media sejajar dan foto warna kain */
+.custom-media-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 8px;
+  margin: 0 0 10px;
+}
+.custom-media-grid .media-box { min-width: 0; height: 100%; }
+.custom-media-grid .media-box img,
+.custom-media-grid .fabric-color-swatch {
+  width: 100%;
+  height: 82px;
+  object-fit: cover;
+  border-radius: 6px;
+  background: #f5f1f7;
+}
+.custom-media-grid .fabric-color-swatch { border: 1px solid rgba(0,0,0,.12); }
+@media (max-width: 700px) {
+  .custom-media-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

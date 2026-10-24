@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pemasukan | NOUVA</title>
   <link rel="stylesheet" href="../globals.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/nouva-config.js"></script>
+  <script src="../js/nouva-finance.js"></script>
   <link rel="stylesheet" href="../css/cttn_pem.css">
 </head>
 <body>
@@ -178,215 +181,76 @@
 </div>
 
 <script>
-const STORAGE_KEY = 'nouvaTransactions';
-
-const incomeBody = document.getElementById('incomeBody');
-const totalIncomePage = document.getElementById('totalIncomePage');
-const dateStart = document.getElementById('dateStart');
-const dateEnd = document.getElementById('dateEnd');
-
-const modal = document.getElementById('incomeModal');
-const form = document.getElementById('incomeForm');
-
-function getTransactions() {
-  try {
-    const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    return Array.isArray(data) ? data : [];
-  } catch (error) {
-    return [];
-  }
+const db=window.nouvaFinanceClient;
+const incomeBody=document.getElementById('incomeBody'), totalIncomePage=document.getElementById('totalIncomePage');
+const dateStart=document.getElementById('dateStart'), dateEnd=document.getElementById('dateEnd');
+const modal=document.getElementById('incomeModal'), form=document.getElementById('incomeForm');
+let incomeRows=[];
+const rupiah=v=>'Rp '+Number(v||0).toLocaleString('id-ID');
+const esc=v=>String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
+function fmt(d){if(!d)return '-';return new Date(d+'T00:00:00').toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});}
+function fmtInput(d){if(!d)return '';const [y,m,day]=d.split('-');return `${day}/${m}/${y}`;}
+function syncDates(){document.getElementById('dateStartDisplay').value=fmtInput(dateStart.value);document.getElementById('dateEndDisplay').value=fmtInput(dateEnd.value);}
+function keepRange(changed){if(dateStart.value&&dateEnd.value&&dateEnd.value<dateStart.value){if(changed===dateStart)dateEnd.value=dateStart.value;else dateStart.value=dateEnd.value;}syncDates();}
+async function loadIncome(){
+ if(!db){alert('Supabase belum terhubung. Periksa nouva-config.js dan koneksi internet.');return;}
+ const {data,error}=await db.from('income_records').select('id,transaction_date,description,transaction_type,reference_no,amount,source,order_id,created_at').order('transaction_date',{ascending:false});
+ if(error){alert('Gagal memuat pemasukan: '+window.nouvaFinanceError(error));return;}
+ incomeRows=(data||[]).map(r=>({id:r.id,date:r.transaction_date,description:r.description,category:r.transaction_type,reference:r.reference_no,orderId:r.order_id,amount:Number(r.amount||0),createdAt:new Date(r.created_at).getTime(),accountingLabel:r.description==='Penjualan'?`Penjualan - ${r.reference_no}`:r.description}));
+ renderIncome();
 }
-
-function saveTransactions(rows) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(rows));
+function renderIncome(){let rows=incomeRows.filter(r=>(!dateStart.value||r.date>=dateStart.value)&&(!dateEnd.value||r.date<=dateEnd.value));rows.sort((a,b)=>b.date.localeCompare(a.date));
+ incomeBody.innerHTML=rows.length?rows.map(r=>`<tr><td>${fmt(r.date)}</td><td class="transaction-name">${esc(r.description||'-')}</td><td>${esc(r.category||'-')}</td><td>${esc(r.reference||'-')}</td><td class="amount-cell">${rupiah(r.amount)}</td><td>${r.orderId?'<span title="Pemasukan otomatis dari pesanan">—</span>':`<button class="delete-row" type="button" data-id="${r.id}" title="Hapus">×</button>`}</td></tr>`).join(''):`<tr class="empty-row"><td colspan="6">Belum ada data pemasukan pada periode yang dipilih.</td></tr>`;
+ totalIncomePage.textContent=rupiah(rows.reduce((a,r)=>a+r.amount,0));
+ incomeBody.querySelectorAll('.delete-row').forEach(b=>b.addEventListener('click',()=>deleteIncome(b.dataset.id)));
 }
-
-// Format yang dipakai pada kolom Keterangan di halaman Pembukuan.
-function getAccountingLabel(transaction) {
-  const category = String(transaction.category || '').toUpperCase();
-  const prefix = category === 'DISPLAY' ? 'DIS' : 'CUS';
-  const reference = String(transaction.reference || '000-000').trim() || '000-000';
-  return `Penjualan - ${prefix}-${reference}`;
-}
-
-function rupiah(value) {
-  return 'Rp ' + Number(value || 0).toLocaleString('id-ID');
-}
-
-function formatDate(dateString) {
-  if (!dateString) return '-';
-  return new Date(dateString + 'T00:00:00').toLocaleDateString('id-ID', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric'
-  });
-}
-
-function formatDateInput(dateString) {
-  if (!dateString) return '';
-  const [year, month, day] = dateString.split('-');
-  return `${day}/${month}/${year}`;
-}
-
-function syncDateDisplays() {
-  document.getElementById('dateStartDisplay').value = formatDateInput(dateStart.value);
-  document.getElementById('dateEndDisplay').value = formatDateInput(dateEnd.value);
-}
-
-function keepDateRangeValid(changedInput) {
-  if (dateStart.value && dateEnd.value && dateEnd.value < dateStart.value) {
-    if (changedInput === dateStart) {
-      dateEnd.value = dateStart.value;
-    } else {
-      dateStart.value = dateEnd.value;
-    }
-  }
-  syncDateDisplays();
-}
-
-function renderIncomeTable() {
-  const start = dateStart.value;
-  const end = dateEnd.value;
-  let rows = getTransactions().filter(t => t.type === 'income');
-
-  if (start) rows = rows.filter(t => t.date >= start);
-  if (end) rows = rows.filter(t => t.date <= end);
-  rows.sort((a, b) => b.date.localeCompare(a.date));
-
-  if (rows.length === 0) {
-    incomeBody.innerHTML = `
-      <tr class="empty-row">
-        <td colspan="6">Belum ada data pemasukan pada periode yang dipilih.</td>
-      </tr>
-    `;
-  } else {
-    incomeBody.innerHTML = rows.map((t, index) => `
-      <tr>
-        <td>${formatDate(t.date)}</td>
-        <td class="transaction-name">${escapeHtml(t.description || '-')}</td>
-        <td>${escapeHtml(t.category || '-')}</td>
-        <td>${escapeHtml(t.reference || '-')}</td>
-        <td class="amount-cell">${rupiah(t.amount)}</td>
-        <td>
-          <button class="delete-row" type="button" data-index="${index}" title="Hapus">×</button>
-        </td>
-      </tr>
-    `).join('');
-  }
-
-
-  const total = rows.reduce((sum, t) => sum + Number(t.amount || 0), 0);
-  totalIncomePage.textContent = rupiah(total);
-
-  incomeBody.querySelectorAll('.delete-row').forEach((button, index) => {
-    button.addEventListener('click', () => deleteIncome(rows[index]));
-  });
-}
-
-function deleteIncome(target) {
-  const all = getTransactions();
-  const index = all.findIndex(t =>
-    t === target ||
-    (t.date === target.date &&
-     t.description === target.description &&
-     t.type === target.type &&
-     Number(t.amount) === Number(target.amount) &&
-     (t.reference || '') === (target.reference || ''))
-  );
-
-  if (index === -1) return;
-
-  if (confirm('Hapus transaksi pemasukan ini?')) {
-    all.splice(index, 1);
-    saveTransactions(all);
-    renderIncomeTable();
-  }
-}
-
-function escapeHtml(value) {
-  return String(value)
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#039;');
-}
-
-function openModal() {
-  document.getElementById('incomeDate').value =
-    new Date().toISOString().slice(0, 10);
-  form.reset();
-  document.getElementById('incomeDate').value =
-    new Date().toISOString().slice(0, 10);
-  document.getElementById('incomeDescription').value = 'Penjualan';
-  document.getElementById('incomeReference').value = '000-000';
-  modal.classList.add('show');
-  modal.setAttribute('aria-hidden', 'false');
-}
-
-function closeModal() {
-  modal.classList.remove('show');
-  modal.setAttribute('aria-hidden', 'true');
-  form.reset();
-}
-
-document.getElementById('openIncomeModal').addEventListener('click', openModal);
-document.getElementById('closeIncomeModal').addEventListener('click', closeModal);
-document.getElementById('cancelIncome').addEventListener('click', closeModal);
-
-modal.addEventListener('click', event => {
-  if (event.target === modal) closeModal();
+async function deleteIncome(id){if(!confirm('Hapus transaksi pemasukan ini?'))return;const {error}=await db.from('income_records').delete().eq('id',id);if(error){alert('Gagal menghapus: '+window.nouvaFinanceError(error));return;}await loadIncome();}
+function openModal(){form.reset();document.getElementById('incomeDate').value=new Date().toISOString().slice(0,10);document.getElementById('incomeDescription').value='Penjualan';document.getElementById('incomeReference').value='';modal.classList.add('show');modal.setAttribute('aria-hidden','false');}
+function closeModal(){modal.classList.remove('show');modal.setAttribute('aria-hidden','true');form.reset();}
+document.getElementById('openIncomeModal').addEventListener('click',openModal);document.getElementById('closeIncomeModal').addEventListener('click',closeModal);document.getElementById('cancelIncome').addEventListener('click',closeModal);modal.addEventListener('click',e=>{if(e.target===modal)closeModal();});
+form.addEventListener('submit',async e=>{
+ e.preventDefault();
+ if(!db){alert('Supabase belum terhubung.');return;}
+ const category=document.getElementById('incomeCategory').value;
+ let reference=document.getElementById('incomeReference').value.trim();
+ if(!reference)reference='MAN-'+Date.now();
+ // Referensi ORD/CUS mungkin sudah tercatat otomatis dari pesanan.
+ const existing=incomeRows.find(r=>String(r.reference||'').trim().toLowerCase()===reference.toLowerCase());
+ if(existing){
+   const kind=existing.orderId?'otomatis dari pesanan':'pemasukan manual';
+   alert(`Nomor referensi ${reference} sudah tercatat sebagai ${kind} pada ${fmt(existing.date)} (${rupiah(existing.amount)}).\n\nGunakan nomor referensi lain jika ini transaksi yang berbeda. Jika ini pembayaran untuk pesanan yang sama, jangan catat ulang di menu Pemasukan.`);
+   return;
+ }
+ // Pastikan transaksi dicatat oleh sesi admin yang sedang aktif.
+ const {data:authData,error:authError}=await db.auth.getUser();
+ const currentUser=authData?.user;
+ if(authError||!currentUser){
+   alert('Sesi login tidak ditemukan. Silakan login ulang menggunakan akun admin.');
+   return;
+ }
+ const payload={transaction_date:document.getElementById('incomeDate').value,description:document.getElementById('incomeDescription')?.value?.trim()||'Penjualan',transaction_type:category,reference_no:reference,amount:Number(document.getElementById('incomeAmount').value),source:'other',order_id:null,created_by:currentUser.id};
+ const {error}=await db.from('income_records').insert(payload);
+ if(error){
+   if(error.code==='23505'){
+     alert(`Nomor referensi ${reference} sudah digunakan pada catatan pemasukan lain. Silakan periksa daftar pemasukan atau gunakan nomor referensi berbeda.`);
+     await loadIncome();
+     return;
+   }
+   if(error.code==='42501'||/row-level security|permission denied/i.test(error.message||'')){
+     alert('Supabase menolak penyimpanan karena akun ini belum dikenali sebagai admin oleh RLS. Jalankan SQL MIGRATION_FIX_INCOME_RLS.sql, lalu pastikan profiles.role untuk akun yang sedang login bernilai admin. Setelah itu logout dan login kembali.');
+     console.error('RLS income_records:',error);
+     return;
+   }
+   alert('Gagal menyimpan pemasukan: '+window.nouvaFinanceError(error));
+   console.error(error);
+   return;
+ }
+ closeModal();
+ await loadIncome();
 });
-
-form.addEventListener('submit', event => {
-  event.preventDefault();
-
-  const transactions = getTransactions();
-
-  const category = document.getElementById('incomeCategory').value;
-  const reference = document.getElementById('incomeReference').value.trim() || '000-000';
-
-  const transaction = {
-    date: document.getElementById('incomeDate').value,
-    description: 'Penjualan',
-    type: 'income',
-    category,
-    reference,
-    amount: Number(document.getElementById('incomeAmount').value),
-    createdAt: Date.now()
-  };
-
-  transaction.accountingLabel = getAccountingLabel(transaction);
-  transactions.push(transaction);
-
-  saveTransactions(transactions);
-  closeModal();
-  renderIncomeTable();
-});
-
-dateStart.addEventListener('change', () => {
-  keepDateRangeValid(dateStart);
-  renderIncomeTable();
-});
-
-dateEnd.addEventListener('change', () => {
-  keepDateRangeValid(dateEnd);
-  renderIncomeTable();
-});
-
-document.querySelectorAll('.calendar-button').forEach(button => {
-  button.addEventListener('click', () => {
-    const picker = document.getElementById(button.dataset.picker);
-    if (picker && typeof picker.showPicker === 'function') {
-      picker.showPicker();
-    } else if (picker) {
-      picker.click();
-    }
-  });
-});
-
-syncDateDisplays();
-renderIncomeTable();
+dateStart.addEventListener('change',()=>{keepRange(dateStart);renderIncome();});dateEnd.addEventListener('change',()=>{keepRange(dateEnd);renderIncome();});
+document.querySelectorAll('.calendar-button').forEach(b=>b.addEventListener('click',()=>{const p=document.getElementById(b.dataset.picker);if(p?.showPicker)p.showPicker();else p?.click();}));
+const today=new Date(),todayKey=today.toISOString().slice(0,10),monthStart=todayKey.slice(0,8)+'01';dateStart.value=monthStart;dateEnd.value=todayKey;syncDates();loadIncome();
 </script>
 </body>
 </html>

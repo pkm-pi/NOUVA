@@ -708,3 +708,15 @@ body{overflow-x:hidden}
     font-size: 7.5px !important;
   }
 }
+
+
+/* Integrasi data pesanan Supabase */
+.order-kind-label{display:block;width:fit-content;margin:5px auto 0;padding:2px 7px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:.04em}
+.order-kind-label.custom{background:#f1e5fa;color:#7135a0}
+.order-kind-label.display{background:#e9e5f4;color:#56346c}
+.status-pending{background:#f1edf5!important;color:#6d6075!important;cursor:default!important}
+.status-cancelled{background:#fdebec!important;color:#b42332!important;cursor:default!important}
+.status-menu button:disabled{opacity:.45;cursor:not-allowed}
+.production-status:disabled{opacity:.65;cursor:wait}
+#productionBody tr{cursor:pointer}
+#productionBody tr td .status-dropdown{cursor:default}

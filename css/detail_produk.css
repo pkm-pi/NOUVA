@@ -914,3 +914,6 @@ body {
     border-radius: 20px !important;
   }
 }
+
+.detail-status{margin:12px 0;padding:10px 12px;border-radius:10px;background:#fff7f7;color:#7b3440;font-size:13px;line-height:1.5}
+.order-btn:disabled{opacity:.55;cursor:not-allowed}

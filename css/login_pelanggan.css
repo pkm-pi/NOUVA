@@ -1,79 +1,15 @@
-@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800|Cinzel:400,700");
-*{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:#f7f7f0;font-family:"Poppins",sans-serif;color:#391e46}
-.login-page{width:100%;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:28px 16px}
-.login-container{width:100%;max-width:570px;text-align:center}
-.logo{width:95px;height:95px;object-fit:contain;background:#fff;border-radius:12px;margin-bottom:15px}
-h1{margin:0;color:#391e46;font-size:clamp(23px,4vw,32px);font-weight:700}
-.desc{margin:8px 0 22px;color:#555;font-size:15px;line-height:1.6}
-.login-card{background:#fff;border:2px solid #aaa;border-radius:6px;padding:25px 30px;text-align:left}
-label{display:block;color:#391e46;font-size:15px;font-weight:600;margin:0 0 7px}
-input{display:block;width:100%;min-height:44px;border:1px solid #ddd;border-radius:7px;margin:0 0 20px;padding:10px 12px;font:inherit;color:#391e46;background:#fff}
-input:focus{outline:2px solid #a78bfa;outline-offset:1px;border-color:#5b21b6}
-.btn{width:100%;min-height:44px;border:0;background:#5b21b6;color:#fff;border-radius:6px;display:flex;justify-content:center;align-items:center;text-decoration:none;font:inherit;font-weight:600;cursor:pointer}
-.btn:hover{background:#4c1d95}.btn:disabled{opacity:.7;cursor:wait}
-.switch{display:block;margin-top:16px;color:#391e46;text-decoration:none;font-size:14px}
-.switch:hover{text-decoration:underline}.secondary-switch{margin-top:10px}
-.register-prompt{margin:17px 0 0;font-size:14px}
-.message{margin:12px 0 0;font-size:13px;line-height:1.5;overflow-wrap:anywhere}
-.message:empty{display:none}.message.error{color:#b42318}.message.success{color:#167647}
-small{display:block;color:#666;margin:-14px 0 18px;font-size:12px}
-@media(max-width:520px){.login-card{padding:22px 18px}.desc{font-size:13px}}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+:root{--purple:#391e46;--purple2:#5b21b6;--line:#e3d9e8;--cream:#f7f7f0;--muted:#666}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:var(--cream);font-family:Poppins,sans-serif;color:var(--purple)}.login-page{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:28px 16px 76px;position:relative}.login-container{width:min(100%,520px);margin:auto;text-align:center}.logo{width:82px;height:82px;object-fit:contain;background:#fff;border-radius:14px;margin-bottom:12px}h1{margin:0;font-size:clamp(24px,4vw,32px);line-height:1.25;font-weight:700}.desc{margin:8px 0 20px;color:#555;font-size:14px;line-height:1.6}.login-card{width:100%;background:#fff;border:1px solid var(--line);border-radius:15px;padding:clamp(20px,4vw,30px);text-align:left;box-shadow:0 12px 30px #391e460d}label{display:block;font-size:13px;font-weight:600;margin:0 0 7px}.login-card>input,.password-wrap input{width:100%;min-width:0;min-height:44px;border:1px solid #ddd;border-radius:8px;padding:10px 12px;margin:0 0 16px;font:inherit;font-size:13px;color:var(--purple);background:#fff}.login-card input:focus{outline:2px solid #c4a6d4;outline-offset:1px;border-color:var(--purple2)}small{display:block;color:var(--muted);font-size:11px;line-height:1.5;margin:-11px 0 15px}.password-wrap{position:relative;display:flex;align-items:center;margin-bottom:16px}.password-wrap input{padding-right:48px;margin:0}.toggle-password{position:absolute;right:5px;top:50%;transform:translateY(-50%);width:36px;height:36px;border:0;background:transparent;color:#765580;border-radius:7px;display:grid;place-items:center;cursor:pointer}.toggle-password:hover,.toggle-password.is-visible{background:#f3edf6}.toggle-password svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.btn{width:100%;min-height:45px;border:0;background:var(--purple2);color:#fff;border-radius:8px;display:flex;justify-content:center;align-items:center;font:inherit;font-size:14px;font-weight:600;cursor:pointer}.btn:hover{background:#4c1d95}.login-actions{display:flex;flex-direction:column;gap:10px}.forgot-link{align-self:center;border:0;background:transparent;color:var(--purple2);font:inherit;font-size:12px;font-weight:600;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:3px 8px}.forgot-link:hover{color:#4c1d95}.forgot-link:disabled{opacity:.65;cursor:wait}.btn:disabled{opacity:.7;cursor:wait}.switch{display:block;margin-top:16px;color:var(--purple);text-decoration:none;font-size:13px}.switch:hover{text-decoration:underline}.register-prompt{margin:16px 0 -10px;font-size:13px}.message{margin:12px 0 0;font-size:12px;line-height:1.55;overflow-wrap:anywhere}.message:empty{display:none}.message.error{color:#b42318}.message.success{color:#167647}.back-home{position:fixed;right:16px;bottom:16px;z-index:10;display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:0 14px;border:1px solid #794691;border-radius:999px;background:#fff;color:var(--purple);text-decoration:none;font-size:12px;font-weight:600;box-shadow:0 5px 16px #391e461f}.back-home:hover{background:#f1e8f5}@media(max-width:600px){.login-page{padding:18px 14px 68px}.login-container{max-width:400px}.logo{width:68px;height:68px;margin-bottom:9px}h1{font-size:25px}.desc{font-size:12px;margin:7px 0 15px}.login-card{padding:18px 15px;border-radius:12px}label{font-size:12px;margin-bottom:5px}.login-card>input,.password-wrap input{min-height:41px;margin-bottom:13px;padding:9px 10px;font-size:12px}.password-wrap{margin-bottom:13px}.password-wrap input{padding-right:44px}.toggle-password{width:32px;height:32px}small{font-size:10px}.btn{min-height:42px;font-size:13px}.switch,.register-prompt{font-size:12px}.back-home{right:11px;bottom:11px;min-height:35px;padding:0 11px;font-size:11px}}
 
-
-/* Responsif NOUVA: form tetap di tengah, lebih ringkas di layar HP */
-.login-page {
-  min-height: 100vh;
-  min-height: 100dvh;
-  align-items: center;
-  justify-content: center;
-  padding: 24px 16px 72px;
-  position: relative;
+/* Sembunyikan ikon tampilkan kata sandi bawaan Microsoft Edge.
+   Tombol mata ungu milik Nouva tetap digunakan. */
+.password-wrap input::-ms-reveal,
+.password-wrap input::-ms-clear {
+  display: none;
+  pointer-events: none;
 }
-.login-container { width: min(100%, 520px); margin: auto; }
-.login-card {
-  width: 100%;
-  border-radius: 14px;
-  border-color: #e3d9e8;
-  padding: clamp(18px, 3vw, 28px);
-  box-shadow: 0 10px 28px rgba(57, 30, 70, .06);
-}
-.back-home {
-  position: fixed;
-  right: 18px;
-  bottom: 18px;
-  z-index: 10;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 40px;
-  padding: 0 15px;
-  border: 1px solid #794691;
-  border-radius: 999px;
-  background: #fff;
-  color: #391e46;
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
-  box-shadow: 0 5px 16px rgba(57, 30, 70, .12);
-}
-.back-home:hover { background: #f1e8f5; }
-@media (max-width: 600px) {
-  .login-page { padding: 18px 14px 68px; }
-  .login-container { max-width: 390px; }
-  .logo { width: 72px; height: 72px; margin-bottom: 10px; }
-  h1 { font-size: clamp(21px, 6vw, 27px); line-height: 1.2; }
-  .desc { margin: 7px 0 16px; font-size: 12px; line-height: 1.45; }
-  .login-card { padding: 17px 15px; border-width: 1px; border-radius: 12px; }
-  label { font-size: 12px; margin-bottom: 5px; }
-  input { min-height: 40px; margin-bottom: 14px; padding: 9px 10px; font-size: 13px; }
-  .btn { min-height: 41px; font-size: 13px; }
-  .switch, .register-prompt { font-size: 12px; }
-  small { font-size: 10px; }
-  .back-home { right: 12px; bottom: 12px; min-height: 36px; padding: 0 12px; font-size: 11px; }
-}
-@media (max-width: 360px) {
-  .login-page { padding-left: 10px; padding-right: 10px; }
-  .login-container { max-width: 340px; }
-  .login-card { padding: 14px 12px; }
+.password-wrap input::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+  display: none !important;
+  pointer-events: none;
 }

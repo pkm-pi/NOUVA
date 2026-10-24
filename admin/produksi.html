@@ -6,6 +6,10 @@
   <title>Produksi Jahit - NOUVA</title>
   <link rel="stylesheet" href="../globals.css">
   <link rel="stylesheet" href="../css/produksi.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/nouva-config.js"></script>
+  <script src="../js/nouva-supabase.js"></script>
+  <script src="../js/nouva-workflow.js"></script>
 </head>
 <body>
 <div class="dashboard-admin">
@@ -94,178 +98,7 @@
               <th>Deadline</th>
             </tr>
           </thead>
-          <tbody id="productionBody">
-            <tr data-status="Sedang Disulam" data-search="CUS-2507-001 SDN 27 instansi seragam karawo">
-              <td><strong>CUS-2507-001</strong></td>
-              <td><div class="customer"><strong>SDN 27</strong><small>Instansi</small></div></td>
-              <td>Seragam Karawo</td>
-              <td>
-  <div class="status-dropdown">
-    <button class="production-status status-waiting" type="button" aria-haspopup="true" aria-expanded="false">Sedang Disulam <span>⌄</span></button>
-    <div class="status-menu">
-      <button type="button" data-value="Sedang Disulam" data-class="status-waiting">Sedang Disulam</button>
-      <button type="button" data-value="Sedang Dijahit" data-class="status-sewing">Sedang Dijahit</button>
-      <button type="button" data-value="Siap Diambil" data-class="status-finishing">Siap Diambil</button>
-      <button type="button" data-value="Selesai" data-class="status-ready">Selesai</button>
-    </div>
-  </div>
-</td>
-              <td class="deadline">12 Oktober 2026</td>
-            </tr>
-            <tr data-status="Sedang Dijahit" data-search="DIS-2507-002 Ayu individu kemeja karawo">
-              <td><strong>DIS-2507-002</strong></td>
-              <td><div class="customer"><strong>Ayu</strong><small>Individu</small></div></td>
-              <td>Kemeja Karawo</td>
-              <td>
-  <div class="status-dropdown">
-    <button class="production-status status-sewing" type="button" aria-haspopup="true" aria-expanded="false">Sedang Dijahit <span>⌄</span></button>
-    <div class="status-menu">
-      <button type="button" data-value="Sedang Disulam" data-class="status-waiting">Sedang Disulam</button>
-      <button type="button" data-value="Sedang Dijahit" data-class="status-sewing">Sedang Dijahit</button>
-      <button type="button" data-value="Siap Diambil" data-class="status-finishing">Siap Diambil</button>
-      <button type="button" data-value="Selesai" data-class="status-ready">Selesai</button>
-    </div>
-  </div>
-</td>
-              <td class="deadline">10 November 2026</td>
-            </tr>
-            <tr data-status="Selesai" data-search="CUS-2507-003 Dinas Kesehatan instansi seragam karawo">
-              <td><strong>CUS-2507-003</strong></td>
-              <td><div class="customer"><strong>Dinas Kesehatan</strong><small>Instansi</small></div></td>
-              <td>Seragam Karawo</td>
-              <td>
-  <div class="status-dropdown">
-    <button class="production-status status-ready" type="button" aria-haspopup="true" aria-expanded="false">Selesai <span>⌄</span></button>
-    <div class="status-menu">
-      <button type="button" data-value="Sedang Disulam" data-class="status-waiting">Sedang Disulam</button>
-      <button type="button" data-value="Sedang Dijahit" data-class="status-sewing">Sedang Dijahit</button>
-      <button type="button" data-value="Siap Diambil" data-class="status-finishing">Siap Diambil</button>
-      <button type="button" data-value="Selesai" data-class="status-ready">Selesai</button>
-    </div>
-  </div>
-</td>
-              <td class="deadline">31 Maret 2026</td>
-            </tr>
-            <tr data-status="Siap Diambil" data-search="DIS-2507-004 Siti individu blus karawo">
-              <td><strong>DIS-2507-004</strong></td>
-              <td><div class="customer"><strong>Siti</strong><small>Individu</small></div></td>
-              <td>Blus Karawo</td>
-              <td>
-  <div class="status-dropdown">
-    <button class="production-status status-finishing" type="button" aria-haspopup="true" aria-expanded="false">Siap Diambil <span>⌄</span></button>
-    <div class="status-menu">
-      <button type="button" data-value="Sedang Disulam" data-class="status-waiting">Sedang Disulam</button>
-      <button type="button" data-value="Sedang Dijahit" data-class="status-sewing">Sedang Dijahit</button>
-      <button type="button" data-value="Siap Diambil" data-class="status-finishing">Siap Diambil</button>
-      <button type="button" data-value="Selesai" data-class="status-ready">Selesai</button>
-    </div>
-  </div>
-</td>
-              <td class="deadline">31 Juli 2026</td>
-            </tr>
-            <tr data-status="Sedang Dijahit" data-search="CUS-2507-005 SMK Negeri 1 Gorontalo instansi jas karawo">
-              <td><strong>CUS-2507-005</strong></td>
-              <td><div class="customer"><strong>SMK Negeri 1 Gorontalo</strong><small>Instansi</small></div></td>
-              <td>Jas Karawo</td>
-              <td>
-  <div class="status-dropdown">
-    <button class="production-status status-sewing" type="button" aria-haspopup="true" aria-expanded="false">Sedang Dijahit <span>⌄</span></button>
-    <div class="status-menu">
-      <button type="button" data-value="Sedang Disulam" data-class="status-waiting">Sedang Disulam</button>
-      <button type="button" data-value="Sedang Dijahit" data-class="status-sewing">Sedang Dijahit</button>
-      <button type="button" data-value="Siap Diambil" data-class="status-finishing">Siap Diambil</button>
-      <button type="button" data-value="Selesai" data-class="status-ready">Selesai</button>
-    </div>
-  </div>
-</td>
-              <td class="deadline">28 September 2026</td>
-            </tr>
-            <tr data-status="Sedang Disulam" data-search="DIS-2507-006 Rina individu selendang karawo">
-              <td><strong>DIS-2507-006</strong></td>
-              <td><div class="customer"><strong>Rina</strong><small>Individu</small></div></td>
-              <td>Selendang Karawo</td>
-              <td>
-  <div class="status-dropdown">
-    <button class="production-status status-waiting" type="button" aria-haspopup="true" aria-expanded="false">Sedang Disulam <span>⌄</span></button>
-    <div class="status-menu">
-      <button type="button" data-value="Sedang Disulam" data-class="status-waiting">Sedang Disulam</button>
-      <button type="button" data-value="Sedang Dijahit" data-class="status-sewing">Sedang Dijahit</button>
-      <button type="button" data-value="Siap Diambil" data-class="status-finishing">Siap Diambil</button>
-      <button type="button" data-value="Selesai" data-class="status-ready">Selesai</button>
-    </div>
-  </div>
-</td>
-              <td class="deadline">18 Juni 2026</td>
-            </tr>
-            <tr data-status="Siap Diambil" data-search="CUS-2507-007 Kantor Kecamatan Suwawa instansi batik karawo">
-              <td><strong>CUS-2507-007</strong></td>
-              <td><div class="customer"><strong>Kantor Kecamatan Suwawa</strong><small>Instansi</small></div></td>
-              <td>Batik Karawo</td>
-              <td>
-  <div class="status-dropdown">
-    <button class="production-status status-finishing" type="button" aria-haspopup="true" aria-expanded="false">Siap Diambil <span>⌄</span></button>
-    <div class="status-menu">
-      <button type="button" data-value="Sedang Disulam" data-class="status-waiting">Sedang Disulam</button>
-      <button type="button" data-value="Sedang Dijahit" data-class="status-sewing">Sedang Dijahit</button>
-      <button type="button" data-value="Siap Diambil" data-class="status-finishing">Siap Diambil</button>
-      <button type="button" data-value="Selesai" data-class="status-ready">Selesai</button>
-    </div>
-  </div>
-</td>
-              <td class="deadline">5 Oktober 2026</td>
-            </tr>
-            <tr data-status="Sedang Dijahit" data-search="DIS-2507-008 Fitria individu kebaya karawo">
-              <td><strong>DIS-2507-008</strong></td>
-              <td><div class="customer"><strong>Fitria</strong><small>Individu</small></div></td>
-              <td>Kebaya Karawo</td>
-              <td>
-  <div class="status-dropdown">
-    <button class="production-status status-sewing" type="button" aria-haspopup="true" aria-expanded="false">Sedang Dijahit <span>⌄</span></button>
-    <div class="status-menu">
-      <button type="button" data-value="Sedang Disulam" data-class="status-waiting">Sedang Disulam</button>
-      <button type="button" data-value="Sedang Dijahit" data-class="status-sewing">Sedang Dijahit</button>
-      <button type="button" data-value="Siap Diambil" data-class="status-finishing">Siap Diambil</button>
-      <button type="button" data-value="Selesai" data-class="status-ready">Selesai</button>
-    </div>
-  </div>
-</td>
-              <td class="deadline">2 Desember 2026</td>
-            </tr>
-            <tr data-status="Sedang Disulam" data-search="CUS-2507-009 Dinas Pendidikan instansi seragam karawo">
-              <td><strong>CUS-2507-009</strong></td>
-              <td><div class="customer"><strong>Dinas Pendidikan</strong><small>Instansi</small></div></td>
-              <td>Seragam Karawo</td>
-              <td>
-  <div class="status-dropdown">
-    <button class="production-status status-waiting" type="button" aria-haspopup="true" aria-expanded="false">Sedang Disulam <span>⌄</span></button>
-    <div class="status-menu">
-      <button type="button" data-value="Sedang Disulam" data-class="status-waiting">Sedang Disulam</button>
-      <button type="button" data-value="Sedang Dijahit" data-class="status-sewing">Sedang Dijahit</button>
-      <button type="button" data-value="Siap Diambil" data-class="status-finishing">Siap Diambil</button>
-      <button type="button" data-value="Selesai" data-class="status-ready">Selesai</button>
-    </div>
-  </div>
-</td>
-              <td class="deadline">22 Mei 2026</td>
-            </tr>
-            <tr data-status="Siap Diambil" data-search="CUS-2507-010 Nadia individu tunik karawo">
-              <td><strong>CUS-2507-010</strong></td>
-              <td><div class="customer"><strong>Nadia</strong><small>Individu</small></div></td>
-              <td>Tunik Karawo</td>
-              <td>
-  <div class="status-dropdown">
-    <button class="production-status status-finishing" type="button" aria-haspopup="true" aria-expanded="false">Siap Diambil <span>⌄</span></button>
-    <div class="status-menu">
-      <button type="button" data-value="Sedang Disulam" data-class="status-waiting">Sedang Disulam</button>
-      <button type="button" data-value="Sedang Dijahit" data-class="status-sewing">Sedang Dijahit</button>
-      <button type="button" data-value="Siap Diambil" data-class="status-finishing">Siap Diambil</button>
-      <button type="button" data-value="Selesai" data-class="status-ready">Selesai</button>
-    </div>
-  </div>
-</td>
-              <td class="deadline">20 Agustus 2026</td>
-            </tr>
-          </tbody>
+          <tbody id="productionBody"><tr><td colspan="5">Memuat data pesanan dari Supabase...</td></tr></tbody>
         </table>
       </div>
 
@@ -287,177 +120,146 @@
         <div class="detail-item"><span>No. Referensi</span><strong id="dNo">CUS-2507-001</strong></div>
         <div class="detail-item"><span>Pemesan</span><strong id="dCustomer">SDN 27</strong></div>
         <div class="detail-item"><span>Pesanan</span><strong id="dOrder">Seragam Karawo</strong></div>
-        <div class="detail-item"><span>Ukuran</span><strong id="dSize">L</strong></div>
-        <div class="detail-item"><span>Jumlah</span><strong id="dQty">50 Pcs</strong></div>
-        <div class="detail-item"><span>Status Produksi</span><strong id="dStatus">Menunggu Dijahit</strong></div>
-        <div class="detail-item"><span>Deadline</span><strong id="dDeadline">12 Oktober 2026</strong></div>
-        <div class="detail-item"><span>Estimasi Selesai</span><strong id="dEstimate">9 Oktober 2026</strong></div>
-        <div class="detail-item detail-note"><span>Catatan Custom Baju</span><strong id="dNote">Model kerah standar, sulaman Karawo pada bagian dada.</strong></div>
+        <div class="detail-item"><span>Ukuran</span><strong id="dSize">—</strong></div>
+        <div class="detail-item"><span>Jumlah</span><strong id="dQty">—</strong></div>
+        <div class="detail-item"><span>Status Produksi</span><strong id="dStatus">—</strong></div>
+        <div class="detail-item"><span>Estimasi Selesai</span><strong id="dEstimate">—</strong></div>
+        <div class="detail-item detail-note"><span>Catatan Custom Baju</span><strong id="dNote">—</strong></div>
       </div>
     </section>
   </main>
 </div>
 
 <script>
-(() => {
-  const rows = [...document.querySelectorAll("#productionBody tr")];
-  const tabs = [...document.querySelectorAll(".status-tab")];
-  const search = document.getElementById("productionSearch");
-  const scroll = document.getElementById("productionScroll");
-  const rangeText = document.getElementById("rangeText");
-  let activeStatus = "all";
+(async () => {
+  const sb = window.nouvaSupabase;
+  const body = document.getElementById('productionBody');
+  const search = document.getElementById('productionSearch');
+  const tabs = [...document.querySelectorAll('.status-tab')];
+  const esc = NouvaWorkflow.escape;
+  let orders = [];
+  let activeStatus = 'all';
+  let selectedOrder = null;
 
-  function updateStatusCounts() {
-    const counts = {
-      all: rows.length,
-      "Sedang Disulam": 0,
-      "Sedang Dijahit": 0,
-      "Siap Diambil": 0,
-      "Selesai": 0
+  const statusClass = {
+    'Sedang Disulam':'status-waiting',
+    'Sedang Dijahit':'status-sewing',
+    'Siap Diambil':'status-finishing',
+    'Selesai':'status-ready',
+    'Menunggu Konfirmasi':'status-pending',
+    'Dibatalkan':'status-cancelled'
+  };
+  const customStatuses = ['Sedang Disulam','Sedang Dijahit','Siap Diambil','Selesai'];
+  const displayStatuses = ['Siap Diambil','Selesai'];
+
+  function customerName(o) { return o.institution_name || o.customer_name || 'Pelanggan'; }
+  function groupName(o) { return o.customer_type === 'institution' ? 'Instansi' : 'Individu'; }
+  function itemsOf(o) { return o.order_type === 'custom' ? (o.custom_order_details || []) : (o.order_items || []); }
+  function itemNames(o) {
+    return itemsOf(o).map(x => o.order_type === 'custom' ? x.product_name : x.product_name_snapshot).filter(Boolean);
+  }
+  function totalQty(o) { return itemsOf(o).reduce((n,x) => n + Number(x.quantity || 0), 0); }
+  function sizeLabel(o) {
+    if (o.order_type === 'display') return [...new Set((o.order_items || []).map(x => x.size_snapshot).filter(Boolean))].join(', ') || '—';
+    return [...new Set((o.custom_order_details || []).map(x => {
+      if (x.size_breakdown && typeof x.size_breakdown === 'object') return Object.entries(x.size_breakdown).filter(([,v]) => Number(v)>0).map(([k])=>k).join(', ');
+      return x.size || '';
+    }).filter(Boolean))].join('; ') || '—';
+  }
+  function statusControl(o) {
+    const status = o.process_status || 'Menunggu Konfirmasi';
+    const options = o.order_type === 'custom' ? customStatuses : displayStatuses;
+    if (status === 'Dibatalkan') {
+      return `<span class="production-status ${statusClass[status] || ''}">${esc(status)}</span>`;
+    }
+    return `<div class="status-dropdown"><button class="production-status ${statusClass[status] || ''}" type="button" aria-haspopup="true" aria-expanded="false">${esc(status)} <span>⌄</span></button><div class="status-menu">${options.map(v=>`<button type="button" data-value="${v}" ${v===status?'disabled':''}>${v}</button>`).join('')}</div></div>`;
+  }
+  function updateCounts(rows) {
+    const counts = {'all':rows.length,'Sedang Disulam':0,'Sedang Dijahit':0,'Siap Diambil':0,'Selesai':0};
+    rows.forEach(o => { if (counts[o.process_status] !== undefined) counts[o.process_status]++; });
+    const values = [counts.all, counts['Sedang Disulam'], counts['Sedang Dijahit'], counts['Siap Diambil'], counts['Selesai']];
+    tabs.forEach((tab,i)=>{ const b=tab.querySelector('b'); if(b)b.textContent=values[i] ?? 0; });
+  }
+  function filteredOrders() {
+    const q = (search.value || '').trim().toLowerCase();
+    return orders.filter(o => (activeStatus==='all' || o.process_status===activeStatus) && [o.reference_no,customerName(o),o.customer_name,o.institution_name,...itemNames(o)].join(' ').toLowerCase().includes(q));
+  }
+  function render() {
+    const rows = filteredOrders();
+    updateCounts(orders);
+    body.innerHTML = rows.length ? rows.map(o => {
+      const kind = o.order_type === 'custom' ? 'CUSTOM' : 'DISPLAY';
+      const names = itemNames(o).join(', ') || (o.order_type==='custom'?'Pesanan Custom':'Produk Display');
+      return `<tr data-id="${o.id}" data-status="${esc(o.process_status)}"><td><strong>${esc(o.reference_no || '—')}</strong></td><td><div class="customer"><strong>${esc(customerName(o))}</strong><small>${groupName(o)}</small></div></td><td class="order-description"><strong>${esc(names)}</strong><small class="order-kind-label ${o.order_type==='custom'?'custom':'display'}">${kind}</small></td><td>${statusControl(o)}</td><td class="deadline">${esc(o.deadline ? NouvaWorkflow.date(o.deadline) : 'Belum ditentukan')}</td></tr>`;
+    }).join('') : '<tr><td colspan="5">Belum ada pesanan yang sesuai.</td></tr>';
+    document.getElementById('rangeText').textContent = `Menampilkan ${rows.length} dari ${orders.length} pesanan`;
+  }
+  function showDetail(o) {
+    selectedOrder = o;
+    const values = {
+      dNo:o.reference_no || '—', dCustomer:customerName(o),
+      dOrder:itemNames(o).join(', ') || '—', dSize:sizeLabel(o),
+      dQty:totalQty(o) ? `${totalQty(o)} Pcs` : '—',
+      dStatus:o.process_status || 'Menunggu Konfirmasi',
+      dEstimate:o.deadline ? NouvaWorkflow.date(o.deadline) : 'Belum ditentukan', dNote:o.notes || (o.custom_order_details||[]).map(x=>x.design_description).filter(Boolean).join(' | ') || '—'
     };
-
-    rows.forEach(row => {
-      if (counts[row.dataset.status] !== undefined) counts[row.dataset.status]++;
-    });
-
-    const values = [
-      counts.all,
-      counts["Sedang Disulam"],
-      counts["Sedang Dijahit"],
-      counts["Siap Diambil"],
-      counts["Selesai"]
-    ];
-
-    tabs.forEach((tab, index) => {
-      const count = tab.querySelector("b");
-      if (count) count.textContent = values[index];
-    });
+    Object.entries(values).forEach(([id,value])=>{const el=document.getElementById(id);if(el)el.textContent=value;});
+    document.getElementById('detailCard').classList.remove('collapsed');
+    document.querySelectorAll('#productionBody tr').forEach(r=>r.classList.toggle('selected-row',r.dataset.id===o.id));
   }
 
-  const details = [
-    ["CUS-2507-001","SDN 27","Seragam Karawo","L","50 Pcs","Sedang Disulam","12 Oktober 2026","9 Oktober 2026","Model kerah standar, sulaman Karawo pada bagian dada."],
-    ["DIS-2507-002","Ayu","Kemeja Karawo","M","2 Pcs","Sedang Dijahit","10 November 2026","7 November 2026","Lengan panjang, sulaman Karawo pada bagian manset."],
-    ["CUS-2507-003","Dinas Kesehatan","Seragam Karawo","L","75 Pcs","Selesai","31 Maret 2026","28 Maret 2026","Logo instansi di bagian dada kiri."],
-    ["DIS-2507-004","Siti","Blus Karawo","M","1 Pcs","Siap Diambil","31 Juli 2026","29 Juli 2026","Blus longgar dengan sulaman Karawo pada bagian lengan."],
-    ["CUS-2507-005","SMK Negeri 1 Gorontalo","Jas Karawo","XL","30 Pcs","Sedang Dijahit","28 September 2026","25 September 2026","Warna dasar gelap dengan motif Karawo geometris."],
-    ["DIS-2507-006","Rina","Selendang Karawo","All Size","3 Pcs","Sedang Disulam","18 Juni 2026","15 Juni 2026","Motif bunga kecil di bagian tengah."],
-    ["CUS-2507-007","Kantor Kecamatan Suwawa","Batik Karawo","L","20 Pcs","Siap Diambil","5 Oktober 2026","2 Oktober 2026","Motif disesuaikan dengan identitas kantor."],
-    ["DIS-2507-008","Fitria","Kebaya Karawo","M","1 Pcs","Sedang Dijahit","2 Desember 2026","29 November 2026","Kebaya modern dengan detail sulaman pada bahu."],
-    ["CUS-2507-009","Dinas Pendidikan","Seragam Karawo","XL","60 Pcs","Sedang Disulam","22 Mei 2026","19 Mei 2026","Logo dinas di dada dan motif seragam."],
-    ["CUS-2507-010","Nadia","Tunik Karawo","M","2 Pcs","Siap Diambil","20 Agustus 2026","17 Agustus 2026","Potongan A-line dengan motif Karawo pada bagian depan."]
-  ];
-
-  function filtered() {
-    const q = search.value.trim().toLowerCase();
-    return rows.filter(row => {
-      const statusOK = activeStatus === "all" || row.dataset.status === activeStatus;
-      const searchOK = !q || row.dataset.search.toLowerCase().includes(q);
-      return statusOK && searchOK;
-    });
+  try {
+    await NouvaWorkflow.requireRole('admin','../auth/login_admin.html');
+    const {data,error} = await sb.from('orders')
+      .select('id,reference_no,customer_name,customer_type,institution_name,customer_phone,ordered_at,deadline,process_status,order_type,notes,order_items(product_name_snapshot,size_snapshot,quantity),custom_order_details(product_name,quantity,size,size_breakdown,design_description)')
+      .order('created_at',{ascending:false});
+    if(error) throw error;
+    orders = data || [];
+    render();
+  } catch(e) {
+    console.error(e);
+    body.innerHTML = `<tr><td colspan="5">Gagal memuat produksi: ${esc(e.message || e)}</td></tr>`;
+    return;
   }
 
-  function updateRange() {
-    const visible = filtered();
-    if (!visible.length) {
-      rangeText.textContent = "Menampilkan 0 dari 0 data";
+  tabs.forEach(tab=>tab.addEventListener('click',()=>{
+    tabs.forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active'); activeStatus=tab.dataset.status; render();
+  }));
+  search.addEventListener('input',render);
+  body.addEventListener('click',async event=>{
+    const option=event.target.closest('.status-menu button');
+    if(option){
+      event.stopPropagation();
+      const row=option.closest('tr'); const order=orders.find(o=>o.id===row?.dataset.id);
+      if(!order)return;
+      const next=option.dataset.value;
+      const allowed=order.order_type==='custom'?customStatuses:displayStatuses;
+      if(!allowed.includes(next))return;
+      const trigger=option.closest('.status-dropdown').querySelector('.production-status');
+      trigger.disabled=true;
+      const {error}=await sb.from('orders').update({process_status:next}).eq('id',order.id);
+      trigger.disabled=false;
+      if(error){alert('Status gagal diperbarui: '+error.message);return;}
+      order.process_status=next;
+      render();
+      if(selectedOrder?.id===order.id)showDetail(order);
       return;
     }
-    const first = Math.min(visible.length, Math.floor(scroll.scrollTop / 68) + 1);
-    const last = Math.min(visible.length, first + 3);
-    rangeText.textContent = `Menampilkan ${first}–${last} dari ${visible.length} data`;
-  }
-
-  function applyFilter() {
-    const visible = filtered();
-    rows.forEach(row => row.hidden = !visible.includes(row));
-    scroll.scrollTop = 0;
-    updateRange();
-  }
-
-  tabs.forEach(tab => tab.addEventListener("click", () => {
-    tabs.forEach(t => t.classList.remove("active"));
-    tab.classList.add("active");
-    activeStatus = tab.dataset.status;
-    applyFilter();
-  }));
-
-  search.addEventListener("input", applyFilter);
-  scroll.addEventListener("scroll", updateRange);
-
-  rows.forEach((row, index) => {
-    row.addEventListener("click", (event) => {
-      if (event.target.closest(".status-dropdown")) return;
-
-      const d = details[index];
-      ["dNo","dCustomer","dOrder","dSize","dQty","dStatus","dDeadline","dEstimate","dNote"]
-        .forEach((id, i) => document.getElementById(id).textContent = d[i]);
-      rows.forEach(r => r.classList.remove("selected-row"));
-      row.classList.add("selected-row");
-    });
+    const row=event.target.closest('tr[data-id]');
+    if(row){const order=orders.find(o=>o.id===row.dataset.id);if(order)showDetail(order);}
   });
-
-  // Dropdown status: klik tombol/ikon ⌄ untuk membuka pilihan.
-  const statusDropdowns = [...document.querySelectorAll(".status-dropdown")];
-
-  function closeStatusMenus(except = null) {
-    statusDropdowns.forEach(dropdown => {
-      if (dropdown !== except) {
-        dropdown.classList.remove("open");
-        const trigger = dropdown.querySelector(".production-status");
-        if (trigger) trigger.setAttribute("aria-expanded", "false");
-      }
-    });
-  }
-
-  statusDropdowns.forEach(dropdown => {
-    const trigger = dropdown.querySelector(".production-status");
-    const options = [...dropdown.querySelectorAll(".status-menu button")];
-    const row = dropdown.closest("tr");
-
-    trigger.addEventListener("click", (event) => {
-      event.stopPropagation();
-      const willOpen = !dropdown.classList.contains("open");
-      closeStatusMenus();
-      dropdown.classList.toggle("open", willOpen);
-      trigger.setAttribute("aria-expanded", String(willOpen));
-    });
-
-    options.forEach(option => {
-      option.addEventListener("click", (event) => {
-        event.stopPropagation();
-
-        const value = option.dataset.value;
-        const className = option.dataset.class;
-
-        trigger.className = "production-status " + className;
-        trigger.innerHTML = value + ' <span>⌄</span>';
-
-        row.dataset.status = value;
-
-        // Detail status ikut diperbarui bila baris sedang dipilih.
-        const rowIndex = rows.indexOf(row);
-        if (rowIndex >= 0) details[rowIndex][5] = value;
-
-        dropdown.classList.remove("open");
-        trigger.setAttribute("aria-expanded", "false");
-
-        // Angka pada kotak status ikut berubah otomatis.
-        updateStatusCounts();
-
-        // Jika sedang memakai filter status, langsung sesuaikan tampilan.
-        applyFilter();
-      });
-    });
+  document.addEventListener('click',event=>{
+    document.querySelectorAll('.status-dropdown.open').forEach(d=>{if(!d.contains(event.target)){d.classList.remove('open');d.querySelector('.production-status')?.setAttribute('aria-expanded','false');}});
   });
-
-  document.addEventListener("click", () => closeStatusMenus());
-
-  updateStatusCounts();
-
-  document.getElementById("closeDetail").addEventListener("click", () => {
-    document.getElementById("detailCard").classList.toggle("collapsed");
+  body.addEventListener('click',event=>{
+    const trigger=event.target.closest('.status-dropdown .production-status');
+    if(!trigger)return;
+    event.stopPropagation(); const d=trigger.closest('.status-dropdown');
+    document.querySelectorAll('.status-dropdown.open').forEach(x=>{if(x!==d)x.classList.remove('open');});
+    d.classList.toggle('open'); trigger.setAttribute('aria-expanded',String(d.classList.contains('open')));
   });
-
+  document.getElementById('closeDetail').addEventListener('click',()=>document.getElementById('detailCard').classList.toggle('collapsed'));
 })();
 </script>
 </body>

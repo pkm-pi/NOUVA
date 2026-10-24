@@ -411,3 +411,17 @@ th:nth-child(5) {
     max-width: 48px !important;
   }
 }
+
+
+/* Status koneksi data pemasaran Supabase */
+.marketing-message {
+  margin: 8px 0 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  line-height: 1.45;
+  color: #4b3655;
+  background: #f3edf6;
+}
+.marketing-message[data-kind="success"] { background: #edf7ef; color: #27613a; }
+.marketing-message[data-kind="error"] { background: #fff0f0; color: #9b2929; }

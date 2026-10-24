@@ -6,6 +6,10 @@
   <title>Pesanan - NOUVA</title>
   <link href="../globals.css" rel="stylesheet"/>
   <link href="../css/pesanan.css" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/nouva-config.js"></script>
+  <script src="../js/nouva-supabase.js"></script>
+  <script src="../js/nouva-workflow.js"></script>
  </head>
  <body>
   <div class="app">
@@ -141,9 +145,12 @@
           <span>Status</span>
           <select id="statusFilter" class="status-select" aria-label="Pilih status">
            <option value="all">Semua</option>
-           <option value="Diproses">Diproses</option>
+           <option value="Menunggu Konfirmasi">Menunggu Konfirmasi</option>
+           <option value="Sedang Disulam">Sedang Disulam</option>
+           <option value="Sedang Dijahit">Sedang Dijahit</option>
            <option value="Siap Diambil">Siap Diambil</option>
            <option value="Selesai">Selesai</option>
+           <option value="Dibatalkan">Dibatalkan</option>
           </select>
          </th>
          <th>
@@ -151,328 +158,7 @@
          </th>
         </tr>
        </thead>
-       <tbody id="body">
-        <tr data-date="2026-10-12" data-group="instansi" data-status="Diproses">
-         <td>
-          1
-         </td>
-         <td>
-          <b>
-           SDN 27
-          </b>
-          <small>
-           instansi
-          </small>
-         </td>
-         <td>
-          Seragam Karawo
-         </td>
-         <td>
-          50 pcs
-         </td>
-         <td class="date">
-          12 Oktober 2026
-         </td>
-         <td>
-          <span class="badge blue">
-           ● Diproses
-          </span>
-         </td>
-         <td>
-          <a class="detail" href="detail_pesanan.html?id=1">
-           Lihat Detail ›
-          </a>
-         </td>
-        </tr>
-        <tr data-date="2026-11-10" data-group="individu" data-status="Diproses">
-         <td>
-          2
-         </td>
-         <td>
-          <b>
-           Ayu
-          </b>
-          <small>
-           individu
-          </small>
-         </td>
-         <td>
-          Kemeja Karawo
-         </td>
-         <td>
-          2 pcs
-         </td>
-         <td class="date">
-          10 November 2026
-         </td>
-         <td>
-          <span class="badge blue">
-           ● Diproses
-          </span>
-         </td>
-         <td>
-          <a class="detail" href="detail_pesanan.html?id=2">
-           Lihat Detail ›
-          </a>
-         </td>
-        </tr>
-        <tr data-date="2026-03-31" data-group="instansi" data-status="Selesai">
-         <td>
-          3
-         </td>
-         <td>
-          <b>
-           Dinas Kesehatan
-          </b>
-          <small>
-           instansi
-          </small>
-         </td>
-         <td>
-          Seragam Karawo
-         </td>
-         <td>
-          75 pcs
-         </td>
-         <td class="date">
-          31 Maret 2026
-         </td>
-         <td>
-          <span class="badge green">
-           ● Selesai
-          </span>
-         </td>
-         <td>
-          <a class="detail" href="detail_pesanan.html?id=3">
-           Lihat Detail ›
-          </a>
-         </td>
-        </tr>
-        <tr data-date="2026-07-31" data-group="individu" data-status="Siap Diambil">
-         <td>
-          4
-         </td>
-         <td>
-          <b>
-           Siti
-          </b>
-          <small>
-           individu
-          </small>
-         </td>
-         <td>
-          Blus Karawo
-         </td>
-         <td>
-          1 pcs
-         </td>
-         <td class="date">
-          31 Juli 2026
-         </td>
-         <td>
-          <span class="badge orange">
-           ● Siap Diambil
-          </span>
-         </td>
-         <td>
-          <a class="detail" href="detail_pesanan.html?id=4">
-           Lihat Detail ›
-          </a>
-         </td>
-        </tr>
-        <tr data-date="2026-09-28" data-group="instansi" data-status="Diproses">
-         <td>
-          5
-         </td>
-         <td>
-          <b>
-           SMK Negeri 1 Gorontalo
-          </b>
-          <small>
-           instansi
-          </small>
-         </td>
-         <td>
-          Jas Karawo
-         </td>
-         <td>
-          30 pcs
-         </td>
-         <td class="date">
-          28 September 2026
-         </td>
-         <td>
-          <span class="badge blue">
-           ● Diproses
-          </span>
-         </td>
-         <td>
-          <a class="detail" href="detail_pesanan.html?id=5">
-           Lihat Detail ›
-          </a>
-         </td>
-        </tr>
-        <tr data-date="2026-06-18" data-group="individu" data-status="Selesai">
-         <td>
-          6
-         </td>
-         <td>
-          <b>
-           Rina
-          </b>
-          <small>
-           individu
-          </small>
-         </td>
-         <td>
-          Selendang Karawo
-         </td>
-         <td>
-          3 pcs
-         </td>
-         <td class="date">
-          18 Juni 2026
-         </td>
-         <td>
-          <span class="badge green">
-           ● Selesai
-          </span>
-         </td>
-         <td>
-          <a class="detail" href="detail_pesanan.html?id=6">
-           Lihat Detail ›
-          </a>
-         </td>
-        </tr>
-        <tr data-date="2026-10-05" data-group="instansi" data-status="Siap Diambil">
-         <td>
-          7
-         </td>
-         <td>
-          <b>
-           Kantor Kecamatan Suwawa
-          </b>
-          <small>
-           instansi
-          </small>
-         </td>
-         <td>
-          Batik Karawo
-         </td>
-         <td>
-          20 pcs
-         </td>
-         <td class="date">
-          5 Oktober 2026
-         </td>
-         <td>
-          <span class="badge orange">
-           ● Siap Diambil
-          </span>
-         </td>
-         <td>
-          <a class="detail" href="detail_pesanan.html?id=7">
-           Lihat Detail ›
-          </a>
-         </td>
-        </tr>
-        <tr data-date="2026-12-02" data-group="individu" data-status="Diproses">
-         <td>
-          8
-         </td>
-         <td>
-          <b>
-           Fitria
-          </b>
-          <small>
-           individu
-          </small>
-         </td>
-         <td>
-          Kebaya Karawo
-         </td>
-         <td>
-          1 pcs
-         </td>
-         <td class="date">
-          2 Desember 2026
-         </td>
-         <td>
-          <span class="badge blue">
-           ● Diproses
-          </span>
-         </td>
-         <td>
-          <a class="detail" href="detail_pesanan.html?id=8">
-           Lihat Detail ›
-          </a>
-         </td>
-        </tr>
-        <tr data-date="2026-05-22" data-group="instansi" data-status="Selesai">
-         <td>
-          9
-         </td>
-         <td>
-          <b>
-           Dinas Pendidikan
-          </b>
-          <small>
-           instansi
-          </small>
-         </td>
-         <td>
-          Seragam Karawo
-         </td>
-         <td>
-          60 pcs
-         </td>
-         <td class="date">
-          22 Mei 2026
-         </td>
-         <td>
-          <span class="badge green">
-           ● Selesai
-          </span>
-         </td>
-         <td>
-          <a class="detail" href="detail_pesanan.html?id=9">
-           Lihat Detail ›
-          </a>
-         </td>
-        </tr>
-        <tr data-date="2026-08-20" data-group="individu" data-status="Siap Diambil">
-         <td>
-          10
-         </td>
-         <td>
-          <b>
-           Nadia
-          </b>
-          <small>
-           individu
-          </small>
-         </td>
-         <td>
-          Tunik Karawo
-         </td>
-         <td>
-          2 pcs
-         </td>
-         <td class="date">
-          20 Agustus 2026
-         </td>
-         <td>
-          <span class="badge orange">
-           ● Siap Diambil
-          </span>
-         </td>
-         <td>
-          <a class="detail" href="detail_pesanan.html?id=10">
-           Lihat Detail ›
-          </a>
-         </td>
-        </tr>
-       </tbody>
+       <tbody id="body"><tr><td colspan="7">Memuat pesanan dari Supabase...</td></tr></tbody>
       </table>
      </div>
      <footer>
@@ -487,13 +173,38 @@
    </main>
   </div>
   <script>
-   const rows=[...document.querySelectorAll('#body tr')],body=document.getElementById('body'),scroll=document.getElementById('scroll'),range=document.getElementById('range'),statusFilter=document.getElementById('statusFilter');let group='all',status='all',sort='none';
-function filtered(){return rows.filter(r=>(group==='all'||r.dataset.group===group)&&(status==='all'||r.dataset.status===status))}
-function render(reset=true){const f=filtered();rows.forEach(r=>r.hidden=!f.includes(r));if(reset)scroll.scrollTop=0;let n=f.length;if(!n)range.textContent='Menampilkan 0 dari 0 data';else{let first=Math.min(n,Math.floor(scroll.scrollTop/76)+1),last=Math.min(n,first+4);range.textContent=`Menampilkan ${first}–${last} dari ${n} data`}document.getElementById('filterLabel').textContent=(group==='all'?'Semua':group[0].toUpperCase()+group.slice(1))+(status==='all'?'':' • '+status)}
-document.querySelectorAll('.group').forEach(b=>b.onclick=()=>{document.querySelectorAll('.group').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');group=b.dataset.group;render()});
-statusFilter.onchange=()=>{status=statusFilter.value;render()};
-document.getElementById('deadline').onclick=()=>{sort=sort==='none'?'asc':sort==='asc'?'desc':'none';rows.sort((a,b)=>sort==='none'?+a.cells[0].textContent-+b.cells[0].textContent:(sort==='asc'?1:-1)*(new Date(a.dataset.date)-new Date(b.dataset.date))).forEach(r=>body.appendChild(r));document.getElementById('arrow').textContent=sort==='asc'?'↓':sort==='desc'?'↑':'⇅';document.getElementById('arrow').title=sort==='asc'?'Terbaru ke terlama':sort==='desc'?'Terlama ke terbaru':'Urutan awal';render()};
-scroll.onscroll=()=>render(false);document.getElementById('nAll').textContent=rows.length;document.getElementById('nInst').textContent=rows.filter(r=>r.dataset.group==='instansi').length;document.getElementById('nInd').textContent=rows.filter(r=>r.dataset.group==='individu').length;render(false);
+(async()=>{
+ const sb=window.nouvaSupabase, body=document.getElementById("body"), scroll=document.getElementById("scroll");
+ const statusFilter=document.getElementById("statusFilter"), search=document.getElementById("searchInput");
+ let orders=[],group="all",status="all",sort="none";
+ const esc=NouvaWorkflow.escape, money=NouvaWorkflow.money;
+ try{
+  await NouvaWorkflow.requireRole("admin","../auth/login_admin.html");
+  const {data,error}=await sb.from("orders").select("id,reference_no,customer_name,customer_type,institution_name,customer_phone,ordered_at,deadline,process_status,order_type,total_amount,order_items(product_name_snapshot,quantity),custom_order_details(product_name,quantity)").order("created_at",{ascending:false});
+  if(error)throw error;orders=data||[];render();
+ }catch(e){console.error(e);body.innerHTML=`<tr><td colspan="7">Pesanan gagal dimuat: ${esc(e.message||e)}</td></tr>`;return}
+ function groupOf(o){return o.customer_type==="institution"?"instansi":"individu"}
+ function render(){
+  const q=(search?.value||"").trim().toLowerCase();
+  let rows=orders.filter(o=>(group==="all"||groupOf(o)===group)&&(status==="all"||o.process_status===status)&&[o.reference_no,o.customer_name,o.institution_name,o.customer_phone,...(o.order_items||[]).map(i=>i.product_name_snapshot)].join(" ").toLowerCase().includes(q));
+  if(sort!=="none")rows.sort((a,b)=>{const da=a.deadline||"9999-12-31",db=b.deadline||"9999-12-31";return (sort==="asc"?1:-1)*da.localeCompare(db)});
+  body.innerHTML=rows.length?rows.map((o,i)=>{const customItems=o.custom_order_details||[];const displayItems=o.order_items||[];const itemNames=(o.order_type==="custom"?customItems.map(x=>x.product_name):displayItems.map(x=>x.product_name_snapshot)).filter(Boolean);const qty=(o.order_type==="custom"?customItems:displayItems).reduce((n,x)=>n+Number(x.quantity||0),0);const statusClass=o.process_status==="Selesai"?"green":o.process_status==="Siap Diambil"?"orange":o.process_status==="Dibatalkan"?"red":"blue";return `<tr data-group="${groupOf(o)}" data-status="${esc(o.process_status)}" data-date="${esc(o.deadline||"9999-12-31")}">
+  <td>${i+1}</td><td><b>${esc(o.institution_name||o.customer_name||"Pelanggan")}</b><small>${groupOf(o)==="instansi"?"Instansi":"Individu"} · ${esc(o.reference_no||"")}</small></td>
+  <td class="order-description"><b>${esc(itemNames.join(", ")|| (o.order_type==="custom"?"Pesanan Custom":"Produk display"))}</b><small class="order-kind-label ${o.order_type==="custom"?"custom":"display"}">${o.order_type==="custom"?"CUSTOM":"DISPLAY"}</small></td><td>${qty?qty+" pcs":"—"}</td>
+  <td class="date">${esc(o.deadline?NouvaWorkflow.date(o.deadline):NouvaWorkflow.date(o.ordered_at?.slice(0,10)))}</td>
+  <td><span class="badge ${statusClass}">● ${esc(o.process_status)}</span></td>
+  <td><a class="detail" href="detail_pesanan.html?id=${encodeURIComponent(o.id)}">Lihat Detail ›</a></td></tr>`}).join(""):'<tr><td colspan="7">Belum ada pesanan yang sesuai.</td></tr>';
+  document.getElementById("nAll").textContent=rows.length;
+  document.getElementById("nInst").textContent=rows.filter(o=>groupOf(o)==="instansi").length;
+  document.getElementById("nInd").textContent=rows.filter(o=>groupOf(o)==="individu").length;
+  document.getElementById("filterLabel").textContent=(group==="all"?"Semua":group[0].toUpperCase()+group.slice(1))+(status==="all"?"":" • "+status);
+  document.getElementById("range").textContent=`Menampilkan ${rows.length} pesanan`;
+ }
+ document.querySelectorAll(".group").forEach(b=>b.onclick=()=>{document.querySelectorAll(".group").forEach(x=>x.classList.toggle("selected",x===b));group=b.dataset.group;render()});
+ statusFilter.onchange=()=>{status=statusFilter.value;render()};
+ if(search)search.addEventListener("input",render);
+ document.getElementById("deadline").onclick=()=>{sort=sort==="none"?"asc":sort==="asc"?"desc":"none";document.getElementById("arrow").textContent=sort==="asc"?"↑":sort==="desc"?"↓":"⇅";render()};
+})();
 </script>
  </body>
 </html>

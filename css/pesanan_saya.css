@@ -647,3 +647,6 @@
   .dashboard-admin > .pengaturan-content .setting-row { min-width: 0; }
   .orders-page > .main-content { padding-left: 8px !important; padding-right: 8px !important; }
 }
+
+.order-load-error{padding:18px;color:#9b2525;background:#fff5f5;border-radius:10px}
+.order-rows{display:grid;gap:10px}

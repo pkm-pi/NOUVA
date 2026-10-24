@@ -1,35 +1,48 @@
 <!DOCTYPE html>
-<html lang="id"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Daftar Akun Pelanggan — NOUVA</title><link rel="stylesheet" href="../css/daftar_akun.css">
+<html lang="id">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daftar Akun Pelanggan — NOUVA</title>
+  <link rel="stylesheet" href="../css/daftar_akun.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/nouva-config.js"></script><script src="../js/nouva-supabase.js"></script>
 </head>
-<body><main class="login-page"><section class="login-container">
-<img class="logo" src="https://c.animaapp.com/eMauf843/img/logo-nouva-fiks-2@2x.png" alt="Logo Nouva">
-<h1>Buat Akun Nouva</h1><p class="desc">Daftar sebagai pelanggan untuk memesan produk dan melihat pesananmu</p>
-<form class="login-card" id="registerForm">
-<label for="fullName">Nama Lengkap</label><input id="fullName" type="text" autocomplete="name" required>
-<label for="identifier">Email atau Nomor Telepon</label><input id="identifier" type="text" placeholder="Email atau 08xxxxxxxxxx" autocomplete="username" required>
-<label for="password">Kata Sandi</label><input id="password" type="password" minlength="8" autocomplete="new-password" required><small>Gunakan minimal 8 karakter.</small>
-<label for="confirmPassword">Konfirmasi Kata Sandi</label><input id="confirmPassword" type="password" minlength="8" autocomplete="new-password" required>
-<button class="btn" id="submitButton" type="submit">Daftar</button><p class="message" id="message" role="alert" aria-live="polite"></p>
-</form><a class="switch" href="./login_pelanggan.html">Sudah punya akun? Masuk</a>
-<a class="back-home" href="../index.html">← Kembali ke Beranda</a>
+<body>
+<main class="login-page"><section class="login-container">
+  <img class="logo" src="https://c.animaapp.com/eMauf843/img/logo-nouva-fiks-2@2x.png" alt="Logo Nouva">
+  <h1>Buat Akun Nouva</h1><p class="desc">Daftar sebagai pelanggan untuk memesan produk dan melihat pesananmu.</p>
+  <form class="login-card" id="registerForm">
+    <label for="fullName">Nama Lengkap</label><input id="fullName" name="fullName" type="text" autocomplete="name" placeholder="Masukkan nama lengkap" required>
+    <label for="username">Username</label><input id="username" name="username" type="text" autocomplete="username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]+" placeholder="Contoh: nabila_nouva" aria-describedby="usernameHelp" required>
+    <small id="usernameHelp">Minimal 3 karakter; gunakan huruf, angka, atau garis bawah (_).</small>
+    <label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" placeholder="Masukkan email aktif" required>
+    <label for="phone">Nomor HP</label><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="08xxxxxxxxxx" required>
+    <label for="password">Kata Sandi</label><div class="password-wrap"><input id="password" name="password" type="password" minlength="8" autocomplete="new-password" placeholder="Minimal 8 karakter" required><button class="toggle-password" type="button" data-toggle="password" aria-label="Tampilkan kata sandi" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button></div><small>Gunakan minimal 8 karakter.</small>
+    <label for="confirmPassword">Konfirmasi Kata Sandi</label><div class="password-wrap"><input id="confirmPassword" name="confirmPassword" type="password" minlength="8" autocomplete="new-password" placeholder="Ketik ulang kata sandi" required><button class="toggle-password" type="button" data-toggle="confirmPassword" aria-label="Tampilkan konfirmasi kata sandi" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+    <button class="btn" id="submitButton" type="submit">Daftar</button><p class="message" id="message" role="status" aria-live="polite"></p>
+  </form>
+  <a class="switch" href="./login_pelanggan.html">Sudah punya akun? Masuk</a><a class="back-home" href="../index.html">← Kembali ke Beranda</a>
 </section></main>
-
 <script>
-/* DEMO LOKAL: pendaftaran hanya simulasi dan tidak menyimpan data. */
-const form=document.getElementById("registerForm"), msg=document.getElementById("message"), btn=document.getElementById("submitButton");
-form.addEventListener("submit", e => {
-  e.preventDefault();
-  msg.textContent=""; msg.className="message";
-  const name=document.getElementById("fullName").value.trim();
-  const id=document.getElementById("identifier").value.trim();
-  const password=document.getElementById("password").value;
-  const confirmation=document.getElementById("confirmPassword").value;
-  if(!name || !id){msg.textContent="Lengkapi semua kolom terlebih dahulu.";msg.classList.add("error");return;}
-  if(password.length<8){msg.textContent="Kata sandi minimal 8 karakter.";msg.classList.add("error");return;}
-  if(password!==confirmation){msg.textContent="Konfirmasi kata sandi tidak sama.";msg.classList.add("error");return;}
-  msg.textContent="Simulasi pendaftaran berhasil. Data belum disimpan dan belum menjadi akun sungguhan.";
-  msg.classList.add("success");
+const form=document.getElementById('registerForm'),msg=document.getElementById('message'),btn=document.getElementById('submitButton');
+function showMessage(text,type='error'){msg.textContent=text;msg.className='message '+type;}
+document.querySelectorAll('[data-toggle]').forEach(toggle=>toggle.addEventListener('click',()=>{const input=document.getElementById(toggle.dataset.toggle);const show=input.type==='password';input.type=show?'text':'password';toggle.setAttribute('aria-pressed',String(show));toggle.setAttribute('aria-label',show?'Sembunyikan kata sandi':'Tampilkan kata sandi');toggle.classList.toggle('is-visible',show);}));
+form.addEventListener('submit',async e=>{e.preventDefault();showMessage('');
+ const fullName=document.getElementById('fullName').value.trim(),username=document.getElementById('username').value.trim().toLowerCase(),email=document.getElementById('email').value.trim().toLowerCase(),phone=document.getElementById('phone').value.trim(),password=document.getElementById('password').value,confirm=document.getElementById('confirmPassword').value;
+ if(!window.nouvaSupabaseReady){showMessage('Supabase belum dikonfigurasi. Periksa js/nouva-config.js.');return;}
+ if(!/^[a-z0-9_]{3,24}$/.test(username)){showMessage('Username 3–24 karakter, hanya huruf, angka, dan garis bawah.');return;}
+ if(password.length<8){showMessage('Kata sandi minimal 8 karakter.');return;}if(password!==confirm){showMessage('Konfirmasi kata sandi tidak sama.');return;}
+ btn.disabled=true;btn.textContent='Membuat akun...';
+ try{
+  const {data:existing,error:lookupError}=await window.nouvaSupabase.rpc('nouva_username_available',{p_username:username});
+  if(lookupError) throw new Error('Pengaturan username Supabase belum diterapkan. Jalankan SQL migration yang ada di folder supabase pada ZIP.');
+  if(existing===false){showMessage('Username sudah digunakan. Silakan pilih username lain.');return;}
+  const {data,error}=await window.nouvaSupabase.auth.signUp({email,password,options:{data:{full_name:fullName,username,phone}}});
+  if(error) throw error;
+  if(data.user&&!data.session){showMessage('Pendaftaran berhasil dikirim. Periksa email untuk konfirmasi, lalu masuk menggunakan email atau username dan kata sandi.','success');form.reset();}
+  else if(data.user){showMessage('Akun berhasil dibuat. Silakan masuk.','success');form.reset();}
+  else showMessage('Pendaftaran diproses. Periksa email kamu.','success');
+ }catch(err){showMessage(err.message||'Pendaftaran gagal. Periksa kembali data kamu.');}
+ finally{btn.disabled=false;btn.textContent='Daftar';}
 });
 </script></body></html>
