@@ -37,7 +37,8 @@ form.addEventListener('submit',async e=>{e.preventDefault();showMessage('');
   const {data:existing,error:lookupError}=await window.nouvaSupabase.rpc('nouva_username_available',{p_username:username});
   if(lookupError) throw new Error('Pengaturan username Supabase belum diterapkan. Jalankan SQL migration yang ada di folder supabase pada ZIP.');
   if(existing===false){showMessage('Username sudah digunakan. Silakan pilih username lain.');return;}
-  const {data,error}=await window.nouvaSupabase.auth.signUp({email,password,options:{data:{full_name:fullName,username,phone}}});
+  const emailRedirectTo = new URL('./login_pelanggan.html', window.location.href).href;
+  const {data,error}=await window.nouvaSupabase.auth.signUp({email,password,options:{emailRedirectTo,data:{full_name:fullName,username,phone}}});
   if(error) throw error;
   if(data.user&&!data.session){showMessage('Pendaftaran berhasil dikirim. Periksa email untuk konfirmasi, lalu masuk menggunakan email atau username dan kata sandi.','success');form.reset();}
   else if(data.user){showMessage('Akun berhasil dibuat. Silakan masuk.','success');form.reset();}
