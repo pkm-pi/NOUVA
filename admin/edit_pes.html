@@ -9,6 +9,7 @@
   <script src="../js/nouva-config.js"></script>
   <script src="../js/nouva-supabase.js"></script>
   <script src="../js/nouva-workflow.js"></script>
+<style>.size-breakdown-field{margin:16px 0;padding:14px;border:1px solid #ddd;border-radius:12px}.size-breakdown-grid{display:grid;grid-template-columns:repeat(7,minmax(50px,1fr));gap:8px;margin-top:10px}@media(max-width:700px){.size-breakdown-grid{grid-template-columns:repeat(4,minmax(50px,1fr))}}</style>
 </head>
 <body>
 <div class="app">
@@ -255,6 +256,7 @@
           <label class="field"><span>Kategori</span><input class="item-category" type="text"></label>
           <label class="field"><span>Jumlah</span><input class="item-qty" type="number" min="1"></label>
           <label class="field"><span>Jenis Kain</span><input class="item-fabric" type="text"></label>
+          <label class="field"><span>Warna Kain</span><input class="item-fabric-color" type="text"></label>
           <label class="field"><span>Harga Produk</span><input class="item-price-input" type="number" min="0"></label>
           <div class="field calculated"><span>Subtotal</span><strong class="item-subtotal">Rp 0</strong></div>
         </div>
@@ -297,6 +299,18 @@
         <textarea class="item-description" rows="3"></textarea>
       </label>
 
+      <div class="size-breakdown-field">
+        <strong>Jumlah per Ukuran</strong>
+        <div class="size-breakdown-grid">
+          <label class="field"><span>XS</span><input class="size-breakdown-input" data-size="XS" type="number" min="0" value="0"></label>
+          <label class="field"><span>S</span><input class="size-breakdown-input" data-size="S" type="number" min="0" value="0"></label>
+          <label class="field"><span>M</span><input class="size-breakdown-input" data-size="M" type="number" min="0" value="0"></label>
+          <label class="field"><span>L</span><input class="size-breakdown-input" data-size="L" type="number" min="0" value="0"></label>
+          <label class="field"><span>XL</span><input class="size-breakdown-input" data-size="XL" type="number" min="0" value="0"></label>
+          <label class="field"><span>XXL</span><input class="size-breakdown-input" data-size="XXL" type="number" min="0" value="0"></label>
+          <label class="field"><span>XXXL</span><input class="size-breakdown-input" data-size="XXXL" type="number" min="0" value="0"></label>
+        </div>
+      </div>
       <div class="size-section">
         <div class="sub-heading">
           <strong>Ukuran & Warna</strong>
@@ -328,7 +342,7 @@ $("backBtn").href=`detail_pesanan.html?id=${encodeURIComponent(id||"")}`;
 $("cancelBtn").href=`detail_pesanan.html?id=${encodeURIComponent(id||"")}`;
 const money=v=>"Rp "+Number(v||0).toLocaleString("id-ID");
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let order=null, kind="custom", itemRows=[], customDetail=null, payment=null;
+let order=null, kind="custom", itemRows=[], customDetails=[], payment=null;
 function show(el,yes){if(el)el.style.display=yes?"":"none";}
 function setupKind(){
  const display=kind==="display";
@@ -409,13 +423,16 @@ async function loadOrder(){
  if(!id)throw new Error("ID pesanan tidak ditemukan pada URL.");
  const {data:o,error}=await sb.from("orders").select("*,order_items(*,product_variants(size,color_name,products(reference_no,name,category,description,fabric_type,motif_name,motif_description,motif_image_url,product_images(image_url,sort_order)))),custom_order_details(*),payments(*)").eq("id",id).single();
  if(error)throw error;order=o;kind=o.order_type;
- customDetail=Array.isArray(o.custom_order_details)?o.custom_order_details[0]:o.custom_order_details;
+ customDetails=Array.isArray(o.custom_order_details)?o.custom_order_details:(o.custom_order_details?[o.custom_order_details]:[]);
  payment=Array.isArray(o.payments)?o.payments[0]:o.payments;
  $("customer").value=o.customer_name||"";$("type").value=o.customer_type==="institution"?"Instansi":"Individu";
  $("institution").value=o.institution_name||"";$("phone").value=o.customer_phone||"";
  $("invoice").value=o.reference_no||"";$("orderDate").value=String(o.ordered_at||"").slice(0,10);$("deadline").value=o.deadline||"";
  $("note").value=o.notes||"";$("total").value=payment?.total_amount??o.quoted_price??o.total_amount??0;
  $("dp").value=payment?.dp_amount||0;$("dpStatus").value=payment?.payment_status||"Belum Lunas";
+ $("dp").disabled=true;$("dpStatus").disabled=true;
+ $("dp").title="Data pembayaran dikelola terpisah; perubahan detail pesanan tidak mengubah pembayaran.";
+ $("dpStatus").title="Data pembayaran dikelola terpisah; perubahan detail pesanan tidak mengubah pembayaran.";
  $("status").value=o.process_status||"Menunggu Konfirmasi";
  itemRows=o.order_items||[];
  if(kind==="display"){
@@ -427,8 +444,15 @@ async function loadOrder(){
    $("items").appendChild(d);
   });
  }else{
-  const d=customDetail||{};
-  addCustomItem({name:d.product_name,category:d.category,qty:d.quantity,price:Number(o.total_amount||0)/(Number(d.quantity)||1),description:d.design_description,fabric:d.custom_fabric_type||d.fabric_type,color:d.fabric_color,modelImage:d.model_image_url,motif:d.product_name,motifImage:d.store_motif_image_url,colors:[[d.fabric_color||"Belum diisi",0,0,0,0]]});
+  $("items").innerHTML="";
+  (customDetails.length?customDetails:[{}]).forEach(d=>addCustomItem({
+   id:d.id,name:d.product_name,category:d.category,qty:d.quantity,price:0,
+   description:String(d.design_description||"").split(/\\r?\\n/).filter(line=>!line.startsWith("Motif dari toko:")).join("\\n"),fabric:d.custom_fabric_type||d.fabric_type,
+   color:d.fabric_color,motif:(String(d.design_description||"").split(/\\r?\\n/).find(line=>line.startsWith("Motif dari toko:"))||"").replace("Motif dari toko:","").trim(),modelImage:d.model_image_url,motif:d.product_name,
+   motifImage:d.store_motif_image_url,customMotifImage:d.custom_motif_image_url,
+   sizeBreakdown:d.size_breakdown,storeMotifId:d.store_motif_id,fabricColorId:d.fabric_color_id,
+   colors:[[d.fabric_color||"Belum diisi",0,0,0,0]]
+  }));
  }
  setupKind();updateTable();
 }
@@ -445,31 +469,48 @@ $("editForm").addEventListener("submit",async e=>{
    customer_name:$("customer").value.trim(),customer_type:$("type").value==="Instansi"?"institution":"individual",
    institution_name:$("type").value==="Instansi"?$("institution").value.trim():null,
    customer_phone:$("phone").value.trim(),deadline,notes:$("note").value.trim()||null,
-   process_status:status,total_amount:total,updated_at:new Date().toISOString()
+   process_status:status,total_amount:total,quoted_price:kind==="custom"?total:order.quoted_price,updated_at:new Date().toISOString()
   };
   if(kind==="custom"){
    if(status==="Dibatalkan")orderUpdate.cancelled_at=new Date().toISOString();
   }
   const {error:oe}=await sb.from("orders").update(orderUpdate).eq("id",id);if(oe)throw oe;
-  if(kind==="custom"&&customDetail){
-   const el=document.querySelector(".edit-item");
-   const dUpdate={
-    product_name:el.querySelector(".item-name-input").value.trim()||customDetail.product_name,
-    category:el.querySelector(".item-category").value.trim()||customDetail.category,
-    quantity:Math.max(1,Number(el.querySelector(".item-qty").value||customDetail.quantity||1)),
-    design_description:el.querySelector(".item-description").value.trim()||null,
-    custom_fabric_type:el.querySelector(".item-fabric").value.trim()||null
+  if(kind==="custom"){
+   const cards=[...document.querySelectorAll("#items .edit-item")];
+   if(!cards.length)throw new Error("Minimal harus ada satu rincian produk custom.");
+   const cfg=window.NOUVA_CONFIG||window.NouvaConfig||window.nouvaConfig||{};
+   const uploadImage=async(file)=>{
+    if(!file)return null;
+    if(!cfg.CLOUDINARY_CLOUD_NAME||!cfg.CLOUDINARY_UPLOAD_PRESET)throw new Error("Konfigurasi Cloudinary belum tersedia.");
+    const fd=new FormData();fd.append("file",file);fd.append("upload_preset",cfg.CLOUDINARY_UPLOAD_PRESET);
+    const res=await fetch(`https://api.cloudinary.com/v1_1/${cfg.CLOUDINARY_CLOUD_NAME}/image/upload`,{method:"POST",body:fd});
+    const json=await res.json();if(!res.ok||!json.secure_url)throw new Error(json.error?.message||"Upload gambar gagal.");return json.secure_url;
    };
-   const {error:de}=await sb.from("custom_order_details").update(dUpdate).eq("order_id",id);if(de)throw de;
-  }
-  if(payment){
-   const remain=Math.max(0,total-dp);
-   const payUpdate={total_amount:total,dp_amount:dp,remaining_amount:remain,payment_status:$("dpStatus").value,updated_at:new Date().toISOString()};
-   const {error:pe}=await sb.from("payments").update(payUpdate).eq("order_id",id);if(pe)throw pe;
-  }else if(kind==="custom"){
-   // Pembayaran dibuat admin hanya jika tabel belum memiliki baris; grant/RLS tetap harus mengizinkan.
-   const {error:pe}=await sb.from("payments").insert({order_id:id,total_amount:total,dp_amount:dp,remaining_amount:Math.max(0,total-dp),payment_status:$("dpStatus").value});
-   if(pe)console.warn("Baris pembayaran belum dibuat:",pe.message);
+   const existingIds=[];
+   for(const el of cards){
+    const name=el.querySelector(".item-name-input").value.trim(),category=el.querySelector(".item-category").value.trim();
+    if(!name||!category)throw new Error("Nama produk dan kategori wajib diisi pada setiap rincian.");
+    const breakdown=Object.fromEntries([...el.querySelectorAll(".size-breakdown-input")].map(x=>[x.dataset.size,Math.max(0,Math.floor(Number(x.value||0)))]));
+    const quantity=Object.values(breakdown).reduce((a,b)=>a+b,0)||Math.max(1,Math.floor(Number(el.querySelector(".item-qty").value||1)));
+    const modelFile=el.querySelector(".custom-model-upload").files?.[0]||el.querySelector(".model-upload").files?.[0];
+    const motifFile=el.querySelector(".motif-upload").files?.[0],customMotifFile=el.querySelector(".custom-motif-upload").files?.[0];
+    const modelUrl=await uploadImage(modelFile)||el.dataset.modelImageUrl||null;
+    const motifUrl=await uploadImage(motifFile)||el.dataset.storeMotifImageUrl||null;
+    const customMotifUrl=await uploadImage(customMotifFile)||el.dataset.customMotifImageUrl||null;
+    const fabric=el.querySelector(".item-fabric").value.trim()||null;
+    const fabricColor=el.querySelector(".item-fabric-color").value.trim()||null;
+    const motifName=el.querySelector(".motif-name").value.trim();
+    const description=el.querySelector(".item-description").value.trim();
+    const combinedDescription=[motifName?`Motif dari toko: ${motifName}`:"",description.replace(/^Motif dari toko:.*(?:\\r?\\n|$)/m,"").trim()].filter(Boolean).join("\\n")||null;
+    const payload={order_id:id,product_name:name,category,quantity,size:Object.keys(breakdown).find(k=>breakdown[k]>0)||"M",size_breakdown:breakdown,
+     design_description:combinedDescription,model_image_url:modelUrl,
+     store_motif_image_url:motifUrl,custom_motif_image_url:customMotifUrl,fabric_color:fabricColor,
+     fabric_type:fabric,custom_fabric_type:fabric,store_motif_id:el.dataset.storeMotifId||null,fabric_color_id:el.dataset.fabricColorId||null};
+    if(el.dataset.detailId){const {error:de}=await sb.from("custom_order_details").update(payload).eq("id",el.dataset.detailId);if(de)throw de;existingIds.push(el.dataset.detailId);}
+    else{const {data:created,error:de}=await sb.from("custom_order_details").insert(payload).select("id").single();if(de)throw de;if(created?.id)existingIds.push(created.id);}
+   }
+   const stale=customDetails.filter(d=>d.id&&!existingIds.includes(d.id)).map(d=>d.id);
+   if(stale.length){const {error:de}=await sb.from("custom_order_details").delete().in("id",stale);if(de)throw de;}
   }
   alert("Perubahan pesanan berhasil disimpan.");
   location.href=`detail_pesanan.html?id=${encodeURIComponent(id)}`;

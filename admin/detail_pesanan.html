@@ -240,18 +240,19 @@
     $("productReference").textContent = "—";
     $("detailCustomerName").textContent=o.customer_name||"Pelanggan"; $("detailCustomerType").textContent=o.customer_type==="institution"?"Instansi":"Individu";
     $("detailInstitution").textContent=o.institution_name||"Tidak ada"; $("detailPhone").textContent=o.customer_phone||"—"; $("orderNote").textContent=o.notes||"Belum ada catatan.";
-    $("totalPayment").textContent=money(pay?.total_amount ?? o.quoted_price ?? o.total_amount);
+    const orderTotal=Number(o.quoted_price ?? o.total_amount ?? 0);
+     $("totalPayment").textContent=money(orderTotal);
     if (isDisplay) {
       $("dpPaymentRow").style.display="none";
       $("dpDivider").style.display="none";
       $("dpStatus").textContent="Tidak diperlukan";
-      $("remainingPayment").textContent=money(pay?.remaining_amount ?? o.total_amount);
+      $("remainingPayment").textContent=money(orderTotal);
       $("remainingStatus").textContent=pay?(pay.payment_status||"Belum Lunas"):"Belum ada data pembayaran";
     } else {
       $("dpPaymentRow").style.display="";
       $("dpDivider").style.display="";
       $("dpPayment").textContent=money(pay?.dp_amount||0);
-      $("remainingPayment").textContent=money(pay?.remaining_amount ?? Math.max(0,Number(o.total_amount||0)-Number(pay?.dp_amount||0)));
+      $("remainingPayment").textContent=money(Math.max(0,orderTotal-Number(pay?.dp_amount||0)));
       $("dpStatus").textContent=pay?(pay.payment_status||"Belum Lunas"):"Belum ada data pembayaran";
       $("remainingStatus").textContent=pay?(Number(pay.remaining_amount||0)<=0?"Lunas":"Belum Lunas"):"Belum ada data pembayaran";
     }

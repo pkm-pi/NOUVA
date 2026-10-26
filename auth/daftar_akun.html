@@ -42,7 +42,7 @@ form.addEventListener('submit',async e=>{e.preventDefault();showMessage('');
   if(data.user&&!data.session){showMessage('Pendaftaran berhasil dikirim. Periksa email untuk konfirmasi, lalu masuk menggunakan email atau username dan kata sandi.','success');form.reset();}
   else if(data.user){showMessage('Akun berhasil dibuat. Silakan masuk.','success');form.reset();}
   else showMessage('Pendaftaran diproses. Periksa email kamu.','success');
- }catch(err){showMessage(err.message||'Pendaftaran gagal. Periksa kembali data kamu.');}
+ }catch(err){const raw=(err.message||'').toLowerCase();if(raw.includes('email rate limit exceeded')||raw.includes('rate limit')){showMessage('Supabase membatasi pengiriman email sementara (email rate limit exceeded). Ini bukan kesalahan formulir. Tunggu sampai batas kirim pulih, lalu coba lagi. Untuk penggunaan normal, atur SMTP khusus di Supabase Authentication > SMTP Settings.');}else if(raw.includes('user already registered')||raw.includes('already registered')){showMessage('Email ini sudah terdaftar. Silakan masuk atau gunakan fitur Lupa Kata Sandi.');}else{showMessage(err.message||'Pendaftaran gagal. Periksa kembali data kamu.');}}
  finally{btn.disabled=false;btn.textContent='Daftar';}
 });
 </script></body></html>

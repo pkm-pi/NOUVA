@@ -6,6 +6,8 @@
   <title>Dashboard Pelanggan - NOUVA</title>
   <link rel="stylesheet" href="../globals.css">
   <link rel="stylesheet" href="../css/dashboard_pelanggan.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/nouva-config.js"></script><script src="../js/nouva-supabase.js"></script><script src="../js/nouva-workflow.js"></script>
 </head>
 <body>
   <div class="dashboard-pelanggan">
@@ -47,7 +49,7 @@
       <header class="header">
         <div class="welcome">
           <h1>Dashboard</h1>
-          <p>Selamat datang di UtiKarawo.</p>
+          <p id="customerWelcome">Selamat datang di NOUVA.</p>
         </div>
 
         <div class="header-actions">
@@ -68,7 +70,7 @@
           </div>
           <div class="card-copy">
             <h2>Pesanan Saya</h2>
-            <strong>2</strong>
+            <strong id="customerOrderCount">0</strong>
             <a href="pesanan_saya.html">Lihat Pesanan <span>→</span></a>
           </div>
         </article>
@@ -92,47 +94,14 @@
             <a href="katalog.html">Lihat Semua <span>→</span></a>
           </div>
 
-          <div class="product-list">
-            <article class="product-card">
-              <div class="product-image product-image-1"><span>Karawo</span></div>
-              <h3>Produk 1</h3>
-              <strong>Rp 250.000</strong>
-              <a href="katalog.html">LIHAT DETAIL</a>
-            </article>
-            <article class="product-card">
-              <div class="product-image product-image-2"><span>Karawo</span></div>
-              <h3>Produk 2</h3>
-              <strong>Rp 175.000</strong>
-              <a href="katalog.html">LIHAT DETAIL</a>
-            </article>
-            <article class="product-card">
-              <div class="product-image product-image-3"><span>Karawo</span></div>
-              <h3>Produk 3</h3>
-              <strong>Rp 225.000</strong>
-              <a href="katalog.html">LIHAT DETAIL</a>
-            </article>
-          </div>
+          <div class="product-list" id="featuredProducts"><p>Memuat produk...</p></div>
         </article>
-
         <aside class="card status-panel">
           <div class="panel-heading">
             <h2>Status Pesanan</h2>
           </div>
 
-          <div class="status-list">
-            <article class="status-card">
-              <strong>INV-2507-001</strong>
-              <span>Produk 1</span>
-              <small>16 Juli 2026</small>
-              <div class="status-badge waiting">Menunggu Dijahit</div>
-            </article>
-            <article class="status-card">
-              <strong>INV-2507-001</strong>
-              <span>Produk 2</span>
-              <small>14 Juli 2026</small>
-              <div class="status-badge working">Sedang Dijahit </div>
-            </article>
-          </div>
+          <div class="status-list" id="customerRecentOrders"><p>Memuat pesanan...</p></div>
 
           <a class="see-all-status" href="pesanan_saya.html">Lihat Selengkapnya <span>→</span></a>
         </aside>
@@ -147,5 +116,41 @@
       </section>
     </main>
   </div>
+<script>
+(async function(){
+ const sb=window.nouvaSupabase, esc=NouvaWorkflow.escape, money=NouvaWorkflow.money;
+ const productsEl=document.getElementById("featuredProducts"),ordersEl=document.getElementById("customerRecentOrders");
+ function statusClass(s){if(s==="Selesai")return "completed";if(s==="Siap Diambil")return "ready";if(s==="Dibatalkan")return "cancelled";if(s==="Sedang Disulam"||s==="Sedang Dijahit")return "working";return "waiting"}
+ try{
+   const {session,profile}=await NouvaWorkflow.requireRole("customer","../auth/login_pelanggan.html");
+   document.getElementById("customerWelcome").textContent="Selamat datang, "+(profile.full_name||session.user.email||"Pelanggan")+"!";
+   const [orderRes,productRes]=await Promise.all([
+     sb.from("orders").select("id,reference_no,order_type,customer_name,ordered_at,deadline,process_status,total_amount,order_items(product_name_snapshot,quantity),custom_order_details(product_name,quantity)").eq("customer_id",session.user.id).order("created_at",{ascending:false}),
+     sb.from("products").select("id,name,category,price,description,product_images(image_url,sort_order)").eq("is_active",true).order("created_at",{ascending:false}).limit(3)
+   ]);
+   if(orderRes.error)throw orderRes.error;
+   const orders=orderRes.data||[];
+   document.getElementById("customerOrderCount").textContent=String(orders.filter(o=>o.process_status!=="Dibatalkan").length);
+   const recent=orders.slice(0,4);
+   ordersEl.innerHTML=recent.length?recent.map(o=>{
+     const items=o.order_type==="custom"?(o.custom_order_details||[]):(o.order_items||[]);
+     const name=items.map(i=>i.product_name||i.product_name_snapshot).filter(Boolean).join(", ")||(o.order_type==="custom"?"Pesanan Custom":"Produk Display");
+     const date=o.ordered_at?NouvaWorkflow.date(o.ordered_at.slice(0,10)):"";
+     return `<article class="status-card"><strong>${esc(o.reference_no||"Pesanan")}</strong><span>${esc(name)}</span><small>${esc(date)}</small><div class="status-badge ${statusClass(o.process_status)}">${esc(o.process_status||"Menunggu Konfirmasi")}</div></article>`;
+   }).join(""):'<p>Belum ada pesanan. Silakan pilih produk dari katalog NOUVA.</p>';
+   if(productRes.error)throw productRes.error;
+   const products=productRes.data||[];
+   productsEl.innerHTML=products.length?products.map((p,i)=>{
+     const img=(p.product_images||[]).slice().sort((a,b)=>(a.sort_order||1)-(b.sort_order||1))[0]?.image_url;
+     const bg=img?`style="background-image:url('${esc(img).replace(/'/g,"%27")}');background-size:cover;background-position:center"`:"";
+     return `<article class="product-card"><div class="product-image product-image-${(i%3)+1}" ${bg}><span>${img?"": "Karawo"}</span></div><h3>${esc(p.name)}</h3><strong>${money(p.price)}</strong><a href="detail_produk.html?id=${encodeURIComponent(p.id)}">LIHAT DETAIL</a></article>`;
+   }).join(""):'<p>Belum ada produk yang tersedia.</p>';
+ }catch(e){
+   console.error("[NOUVA dashboard pelanggan]",e);
+   productsEl.innerHTML=`<p>Produk gagal dimuat: ${esc(e.message||e)}</p>`;
+   ordersEl.innerHTML=`<p>Pesanan gagal dimuat: ${esc(e.message||e)}</p>`;
+ }
+})();
+</script>
 </body>
 </html>

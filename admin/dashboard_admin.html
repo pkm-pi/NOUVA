@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="../globals.css">
   <link rel="stylesheet" href="../css/dashboard_admin.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/nouva-config.js"></script><script src="../js/nouva-supabase.js"></script><script src="../js/nouva-workflow.js"></script>
 </head>
 <body>
 
@@ -54,17 +56,17 @@
       <div class="stat-card">
         <div class="stat-icon"><img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/icon-1.svg" alt=""></div>
         <div class="stat-title">Total Pesanan</div>
-        <div class="stat-value">18</div>
+        <div class="stat-value" id="statTotalOrders">0</div>
       </div>
       <div class="stat-card">
         <div class="stat-icon"><img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/icon.svg" alt=""></div>
         <div class="stat-title">Sedang Dikerjakan</div>
-        <div class="stat-value">7</div>
+        <div class="stat-value" id="statInProgress">0</div>
       </div>
       <div class="stat-card">
         <div class="stat-icon"><img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/icon-3.svg" alt=""></div>
         <div class="stat-title">Pesanan Selesai</div>
-        <div class="stat-value">9</div>
+        <div class="stat-value" id="statCompleted">0</div>
       </div>
       <div class="stat-card revenue">
         <div class="stat-icon">
@@ -75,14 +77,14 @@
           </svg>
         </div>
         <div class="stat-title">Pendapatan Bulan Ini</div>
-        <div class="stat-value">Rp 12.450.000</div>
+        <div class="stat-value" id="statRevenue">Rp 0</div>
       </div>
     </section>
 
     <section class="chart-grid">
       <div class="panel chart-panel">
         <div class="panel-title-row">
-          <h2 class="panel-title">Ringkasan Penjualan</h2>
+          <h2 class="panel-title">Ringkasan Penjualan (Jumlah Barang)</h2>
           <div class="filter-hari">
             <select id="filterHari" aria-label="Pilih periode">
               <option value="10">10 hari</option>
@@ -111,12 +113,7 @@
           <table>
             <thead><tr><th>
                No. Referensi</th><th>Nama Pelanggan</th><th>Total</th><th>Status</th></tr></thead>
-            <tbody>
-              <tr><td>-</td><td>-</td><td>-</td><td>-</td></tr>
-              <tr><td>-</td><td>-</td><td>-</td><td>-</td></tr>
-              <tr><td>-</td><td>-</td><td>-</td><td>-</td></tr>
-              <tr><td>-</td><td>-</td><td>-</td><td>-</td></tr>
-            </tbody>
+            <tbody id="recentOrders"><tr><td colspan="4">Memuat pesanan...</td></tr></tbody>
           </table>
         </div>
       </div>
@@ -129,12 +126,7 @@
         <div class="table-scroll">
           <table>
             <thead><tr><th>Aktivitas</th><th>Waktu</th></tr></thead>
-            <tbody>
-              <tr><td>-</td><td>-</td></tr>
-              <tr><td>-</td><td>-</td></tr>
-              <tr><td>-</td><td>-</td></tr>
-              <tr><td>-</td><td>-</td></tr>
-            </tbody>
+            <tbody id="recentActivity"><tr><td colspan="2">Memuat aktivitas...</td></tr></tbody>
           </table>
         </div>
       </div>
@@ -153,70 +145,129 @@
 
 
 <script>
-const filter = document.getElementById("filterHari");
-const ctx = document.getElementById("salesChart");
-
-const salesChart = new Chart(ctx, {
-  type:"line",
-  data:{
-    labels:["01","07","14","21","30"],
-    datasets:[{
-      label:"Penjualan",
-      data:[50,20,90,70,90],
-      borderColor:"#7b61ff",
-      backgroundColor:"transparent",
-      tension:.4,
-      pointRadius:2.5,
-      borderWidth:1.5
-    }]
-  },
-  options:{
-    responsive:true,
-    maintainAspectRatio:false,
-    plugins:{legend:{display:false}},
-    scales:{
-      y:{beginAtZero:true,max:100,ticks:{font:{size:7}}},
-      x:{ticks:{font:{size:7}}}
-    }
-  }
-});
-
-filter.addEventListener("change",()=>{
-  const data = {
-    10:{labels:["Hari 1","Hari 2","Hari 3","Hari 4","Hari 5"], values:[20,40,30,70,50]},
-    15:{labels:["Hari 1","Hari 3","Hari 6","Hari 9","Hari 15"], values:[30,60,45,80,70]},
-    30:{labels:["01","07","14","21","30"], values:[50,20,90,70,90]},
-    45:{labels:["1","10","20","30","45"], values:[20,80,40,90,60]}
-  }[filter.value];
-  salesChart.data.labels=data.labels;
-  salesChart.data.datasets[0].data=data.values;
-  salesChart.update();
-});
-
-new Chart(document.getElementById("statusChart"),{
-  type:"doughnut",
-  data:{
-    labels:["Sedang Disulam","Sedang Dijahit","Siap Diambil","Selesai"],
-    datasets:[{
-      data:[32,18,33,17],
-      backgroundColor:["#8b6cff","#35c4dd","#ff8f8f","#ffb347"],
-      borderWidth:0
-    }]
-  },
-  options:{
-    responsive:true,
-    maintainAspectRatio:false,
-    cutout:"45%",
-    plugins:{
-      legend:{
-        display:true,
-        position:"bottom",
-        labels:{boxWidth:7,padding:5,font:{size:7}}
-      }
-    }
-  }
-});
-
+(async function(){
+ const sb=window.nouvaSupabase, esc=NouvaWorkflow.escape, money=NouvaWorkflow.money;
+ const filter=document.getElementById("filterHari");
+ let salesChart,statusChart,orders=[],orderItems=[];
+ const statusNames=["Menunggu Konfirmasi","Sedang Disulam","Sedang Dijahit","Siap Diambil","Selesai","Dibatalkan"];
+ function setText(id,value){const el=document.getElementById(id);if(el)el.textContent=value}
+ function dateLabel(d){return new Date(d+"T00:00:00").toLocaleDateString("id-ID",{day:"2-digit",month:"short"})}
+ function localDateKey(date){
+   const d = date instanceof Date ? date : new Date(date);
+   if(Number.isNaN(d.getTime())) return "";
+   const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,"0"), day=String(d.getDate()).padStart(2,"0");
+   return `${y}-${m}-${day}`;
+ }
+ function renderSales(){
+   const days=Number(filter.value||30), now=new Date(), labels=[],keys=[],values=[];
+   const dailyCounts={};
+   const orderById=new Map(orders.map(o=>[o.id,o]));
+   orderItems.forEach(item=>{
+     const order=orderById.get(item.order_id);
+     if(!order || order.process_status==="Dibatalkan") return;
+     const key=localDateKey(order.ordered_at||order.created_at);
+     if(key) dailyCounts[key]=(dailyCounts[key]||0)+Number(item.quantity||0);
+   });
+   for(let i=days-1;i>=0;i--){
+     const d=new Date(now.getFullYear(),now.getMonth(),now.getDate()-i);
+     const key=localDateKey(d);
+     keys.push(key);
+     labels.push(dateLabel(key));
+     values.push(dailyCounts[key]||0);
+   }
+   const maxValue=Math.max(1,...values);
+   const yStep=maxValue<=5?1:Math.max(1,Math.ceil(maxValue/5));
+   const config={
+     type:"line",
+     data:{labels,datasets:[{
+       label:"Jumlah Barang",
+       data:values,
+       borderColor:"#7b61ff",
+       backgroundColor:"rgba(123,97,255,.10)",
+       fill:true,
+       tension:0,
+       pointRadius:3,
+       pointHoverRadius:5,
+       borderWidth:2
+     }]},
+     options:{
+       responsive:true,
+       maintainAspectRatio:false,
+       interaction:{mode:"index",intersect:false},
+       plugins:{
+         legend:{display:false},
+         tooltip:{callbacks:{
+           title:(items)=>items.length?`Tanggal ${items[0].label}`:"",
+           label:(item)=>`${item.parsed.y} barang`
+         }}
+       },
+       scales:{
+         y:{
+           beginAtZero:true,
+           min:0,
+           title:{display:true,text:"Jumlah Barang"},
+           ticks:{precision:0,stepSize:yStep,callback:v=>Number.isInteger(v)?v:""},
+           grid:{color:"rgba(80,70,90,.12)"}
+         },
+         x:{
+           title:{display:true,text:"Tanggal"},
+           ticks:{maxTicksLimit:10,autoSkip:true,maxRotation:0}
+         }
+       }
+     }
+   };
+   if(salesChart){
+     salesChart.data=config.data;
+     salesChart.options=config.options;
+     salesChart.update();
+     return;
+   }
+   salesChart=new Chart(document.getElementById("salesChart"),config);
+ }
+ function renderStatus(){
+   const counts=statusNames.slice(0,5).map(s=>orders.filter(o=>o.process_status===s).length);
+   const labels=statusNames.slice(0,5);
+   if(statusChart){statusChart.data.labels=labels;statusChart.data.datasets[0].data=counts;statusChart.update();return}
+   statusChart=new Chart(document.getElementById("statusChart"),{type:"doughnut",data:{labels,datasets:[{data:counts,backgroundColor:["#8b6cff","#35c4dd","#ff8f8f","#ffb347","#70c99b"],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:"45%",plugins:{legend:{display:true,position:"bottom",labels:{boxWidth:9,padding:8,font:{size:10}}}}}});
+ }
+ function renderOrders(){
+   const body=document.getElementById("recentOrders");
+   const latest=orders.slice(0,5);
+   body.innerHTML=latest.length?latest.map(o=>`<tr><td><a href="detail_pesanan.html?id=${encodeURIComponent(o.id)}">${esc(o.reference_no||"—")}</a></td><td>${esc(o.institution_name||o.customer_name||"Pelanggan")}</td><td>${money(o.total_amount)}</td><td>${esc(o.process_status||"Menunggu Konfirmasi")}</td></tr>`).join(""):'<tr><td colspan="4">Belum ada pesanan.</td></tr>';
+   const activity=document.getElementById("recentActivity");
+   activity.innerHTML=latest.length?latest.map(o=>`<tr><td>${esc((o.reference_no||"Pesanan")+" · "+(o.process_status||"Menunggu Konfirmasi"))}</td><td>${esc(NouvaWorkflow.date((o.updated_at||o.ordered_at||"").slice(0,10)))}</td></tr>`).join(""):'<tr><td colspan="2">Belum ada aktivitas.</td></tr>';
+ }
+ try{
+   await NouvaWorkflow.requireRole("admin","../auth/login_admin.html");
+   const [or,itemsResult]=await Promise.all([
+     sb.from("orders").select("id,reference_no,customer_name,institution_name,ordered_at,created_at,updated_at,process_status,total_amount").order("created_at",{ascending:false}),
+     sb.from("order_items").select("order_id,quantity")
+   ]);
+   if(or.error)throw or.error;
+   if(itemsResult.error)throw itemsResult.error;
+   orders=or.data||[];
+   orderItems=itemsResult.data||[];
+   setText("statTotalOrders",orders.filter(o=>o.process_status!=="Dibatalkan").length);
+   setText("statInProgress",orders.filter(o=>["Menunggu Konfirmasi","Sedang Disulam","Sedang Dijahit"].includes(o.process_status)).length);
+   setText("statCompleted",orders.filter(o=>o.process_status==="Selesai").length);
+   const month=localDateKey(new Date()).slice(0,7);
+   // Kartu pendapatan tetap memakai catatan pemasukan, terpisah dari grafik jumlah barang.
+   const nextMonthDate=new Date(new Date().getFullYear(),new Date().getMonth()+1,1);
+   const nextMonth=localDateKey(nextMonthDate);
+   const {data:monthIncome,error:monthIncomeError}=await sb.from("income_records").select("transaction_date,amount").gte("transaction_date",`${month}-01`).lt("transaction_date",nextMonth);
+   if(monthIncomeError) console.warn("[NOUVA dashboard] Pendapatan bulan ini gagal dimuat:",monthIncomeError);
+   setText("statRevenue",money((monthIncome||[]).reduce((s,x)=>s+Number(x.amount||0),0)));
+   renderOrders();renderSales();renderStatus();
+ }catch(e){
+   console.error("[NOUVA dashboard admin]",e);
+   ["statTotalOrders","statInProgress","statCompleted"].forEach(id=>setText(id,"—"));setText("statRevenue","Gagal dimuat");
+   document.getElementById("recentOrders").innerHTML=`<tr><td colspan="4">${esc(e.message||"Data dashboard gagal dimuat")}</td></tr>`;
+   document.getElementById("recentActivity").innerHTML='<tr><td colspan="2">Aktivitas tidak tersedia.</td></tr>';
+   if(!salesChart)salesChart=new Chart(document.getElementById("salesChart"),{type:"line",data:{labels:[],datasets:[{data:[],borderColor:"#7b61ff"}]},options:{responsive:true,maintainAspectRatio:false}});
+   if(!statusChart)statusChart=new Chart(document.getElementById("statusChart"),{type:"doughnut",data:{labels:[],datasets:[{data:[]}]},options:{responsive:true,maintainAspectRatio:false}});
+ }
+ filter.addEventListener("change",renderSales);
+})();
 </script>
 
 </body>

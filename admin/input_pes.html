@@ -519,12 +519,12 @@
         for(const p of products) p.customMotifImage=await uploadAdminImage(p.item.querySelector(".motif-custom-image").files[0]);
         for(const p of products) p.modelImage=await uploadAdminImage(p.item.querySelector(".model-custom-image").files[0]);
         const total=products.reduce((s,p)=>s+p.quantity*p.price,0);
-        const {data:order,error:orderError}=await sb.from("orders").insert({customer_id:null,source:"walk_in",order_type:"custom",customer_name:customerName,customer_type:kind,institution_name:kind==="institution"?institution:null,customer_phone:phone,deadline:form.elements.deadline.value||null,notes:clean(form.elements.note.value)||null,total_amount:total,quote_status:"quoted"}).select("id,reference_no").single();
+        const {data:order,error:orderError}=await sb.from("orders").insert({customer_id:null,source:"walk_in",order_type:"custom",customer_name:customerName,customer_type:kind,institution_name:kind==="institution"?institution:null,customer_phone:phone,deadline:form.elements.deadline.value||null,notes:clean(form.elements.note.value)||null,total_amount:total,quote_status:"accepted"}).select("id,reference_no").single();
         if(orderError) throw orderError;
         const rows=products.map(p=>({order_id:order.id,product_name:p.name,category:p.category,model_image_url:p.modelImage,store_motif_image_url:null,custom_motif_image_url:p.customMotifImage,store_motif_id:p.motifId||null,fabric_color_id:p.colorId||null,size_breakdown:p.sizeBreakdown,design_description:[p.motif?`Motif dari toko: ${p.motif}`:"",p.description].filter(Boolean).join("\n")||null,size:Object.entries(p.sizeBreakdown).find(([,q])=>q>0)?.[0]||"M",quantity:p.quantity,fabric_color:p.color||null,fabric_image_url:null,fabric_type:p.fabricRaw==="custom"?"custom":(p.fabric||null),custom_fabric_type:p.fabricRaw==="custom"?(p.fabric||null):null}));
         const {error:detailError}=await sb.from("custom_order_details").insert(rows);
         if(detailError) throw new Error(`Pesanan ${order.reference_no} dibuat tetapi detail produk gagal disimpan: ${detailError.message}`);
-        alert(`Pesanan custom berhasil dicatat!\nNomor referensi: ${order.reference_no}`); location.href="pesanan.html";
+        alert(`Pesanan custom berhasil dicatat!\\nNomor referensi: ${order.reference_no}`); location.href="pesanan.html";
       }catch(error){console.error(error);alert("Pesanan gagal disimpan: "+(error.message||error));}
       finally{if(submit){submit.disabled=false;if(submit.dataset.originalText)submit.textContent=submit.dataset.originalText;}}
     });
