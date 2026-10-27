@@ -10,6 +10,56 @@
   <script src="../js/nouva-supabase.js"></script>
   <script src="../js/nouva-workflow.js"></script>
 <style>.size-breakdown-field{margin:16px 0;padding:14px;border:1px solid #ddd;border-radius:12px}.size-breakdown-grid{display:grid;grid-template-columns:repeat(7,minmax(50px,1fr));gap:8px;margin-top:10px}@media(max-width:700px){.size-breakdown-grid{grid-template-columns:repeat(4,minmax(50px,1fr))}}</style>
+
+<style>
+/* Rincian edit mengikuti struktur visual Detail Pesanan, tetapi tetap editable. */
+#items .product-top{display:grid;grid-template-columns:minmax(220px,0.85fr) minmax(0,2fr);gap:14px;align-items:stretch}
+#items .product-top .image-card{min-width:0}
+#items .product-top .image-preview{height:190px;background:#f4eff7;border-radius:10px;overflow:hidden}
+#items .product-top .image-preview img{width:100%;height:100%;object-fit:contain}
+#items .mini-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+#items .mini-fields .field{padding:12px;border:1px solid #e5d8eb;border-radius:12px;background:#fff;min-width:0}
+#items .mini-fields .field>span{display:block;color:#88769a;font-size:12px;margin-bottom:7px}
+#items .mini-fields input{width:100%;min-width:0}
+#items .mini-fields .calculated strong{display:block;padding:8px 0;color:#391e46}
+#items .media-edit-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
+#items .media-edit-grid .image-card{border:1px solid #e5d8eb;border-radius:12px;padding:11px;min-width:0;background:#fff}
+#items .media-edit-grid .image-preview,#items .media-edit-grid .custom-preview{height:126px;border-radius:9px;overflow:hidden;background:#f4eff7;margin:8px 0}
+#items .media-edit-grid .image-preview img,#items .media-edit-grid .custom-preview img{width:100%;height:100%;object-fit:contain}
+#items .fabric-color-swatch{height:126px;border-radius:9px;background:#f21b12;margin:8px 0}
+#items .fabric-color-preview img{width:100%;height:126px;object-fit:cover;border-radius:9px;margin:8px 0}
+#items .description-field{margin-top:14px}
+#items .description-field textarea{min-height:88px}
+#items .size-breakdown-field{display:none!important}
+#items .size-section{margin-top:14px;border:1px solid #e5d8eb;border-radius:14px;padding:14px;background:#fff}
+#items .size-table-wrap{overflow-x:auto}
+#items .size-table{min-width:760px;width:100%;border-collapse:collapse}
+#items .size-table th{background:#eee5f1;color:#391e46}
+#items .size-table th,#items .size-table td{padding:8px;border:1px solid #ded2e5;text-align:center}
+#items .size-table input{width:100%;min-width:44px;box-sizing:border-box;text-align:center}
+#items .size-table .color-name{text-align:left}
+#items .item-qty[readonly]{background:#f7f3f9;color:#391e46;font-weight:700}
+@media(max-width:850px){#items .product-top{grid-template-columns:1fr}#items .mini-fields{grid-template-columns:repeat(2,minmax(0,1fr))}#items .media-edit-grid{grid-template-columns:1fr}}
+
+/* Display: struktur mengikuti Detail Pesanan, tanpa komponen custom. */
+#items .display-product-layout{display:grid;grid-template-columns:minmax(220px,.75fr) minmax(0,2fr);gap:14px;padding:14px;background:#fcfbfd}
+#items .display-model-card{border:1px solid #e5d8eb;border-radius:12px;padding:10px;background:#fff;min-width:0}
+#items .display-model-card>span,#items .display-spec-label{display:block;color:#88769a;font-size:12px;margin-bottom:7px}
+#items .display-model-card img{display:block;width:100%;height:180px;object-fit:contain;border-radius:9px;background:#f4eff7}
+#items .display-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+#items .display-summary .display-info{border:1px solid #e5d8eb;border-radius:12px;padding:12px;background:#fff;min-width:0}
+#items .display-info strong{display:block;overflow-wrap:anywhere;color:#391e46}
+#items .display-info input{width:100%;min-width:0;box-sizing:border-box}
+#items .display-specs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;padding:0 14px 14px;background:#fcfbfd}
+#items .display-spec{border:1px solid #e5d8eb;border-radius:10px;padding:12px;background:#fff;min-width:0}
+#items .display-spec.full{grid-column:1/-1}
+#items .display-spec strong{display:block;white-space:pre-wrap;overflow-wrap:anywhere;color:#391e46}
+#items .display-color-image{display:block;width:100%;height:72px;object-fit:cover;border-radius:8px;margin:8px 0}
+#items .display-price{color:#6f35bd!important}
+@media(max-width:850px){#items .display-product-layout{grid-template-columns:1fr}#items .display-summary{grid-template-columns:repeat(2,minmax(0,1fr))}#items .display-specs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){#items .display-summary,#items .display-specs{grid-template-columns:1fr}}
+</style>
+
 </head>
 <body>
 <div class="app">
@@ -112,7 +162,7 @@
           </label>
           <label class="field">
             <span>Tanggal Pesan</span>
-            <input id="orderDate" type="date" value="2026-09-25">
+            <input id="orderDate" type="date" value="2026-09-25" readonly title="Tanggal pemesanan tercatat otomatis dan tidak dapat diubah.">
           </label>
           <label class="field">
             <span>Deadline</span>
@@ -183,26 +233,6 @@
         </div>
       </section>
 
-      <section class="card">
-        <div class="section-heading">
-          <div>
-            <h2>Progres Pesanan</h2>
-            <p>Pilih tahapan progres pesanan secara sederhana</p>
-          </div>
-        </div>
-        <div class="form-grid">
-          <label class="field">
-            <span>Tahapan Progres</span>
-            <select id="progressStage">
-              <option>Pesanan Diterima</option>
-              <option>Pembayaran DP</option>
-              <option>Proses</option>
-              <option>Siap Diambil</option>
-              <option>Selesai</option>
-            </select>
-          </label>
-        </div>
-      </section>
 
       <section class="card">
         <div class="section-heading">
@@ -243,7 +273,7 @@
         <div class="image-card">
           <span>Model pakaian dari toko</span>
           <div class="image-preview">
-            <img class="model-image" src="https://c.animaapp.com/XYqZOEOx/img/jumper-2@2x.png" alt="">
+            <img class="model-image" src="https://c.animaapp.com/XYqZOEOx/img/jumper-2@2x.png" alt="Model pakaian">
           </div>
           <label class="upload-btn">
             Pilih gambar
@@ -254,34 +284,24 @@
         <div class="mini-fields">
           <label class="field"><span>Nama Produk</span><input class="item-name-input" type="text"></label>
           <label class="field"><span>Kategori</span><input class="item-category" type="text"></label>
-          <label class="field"><span>Jumlah</span><input class="item-qty" type="number" min="1"></label>
+          <label class="field"><span>Jumlah (otomatis dari ukuran)</span><input class="item-qty" type="number" min="0" readonly></label>
           <label class="field"><span>Jenis Kain</span><input class="item-fabric" type="text"></label>
-          <label class="field"><span>Warna Kain</span><input class="item-fabric-color" type="text"></label>
-          <label class="field"><span>Harga Produk</span><input class="item-price-input" type="number" min="0"></label>
-          <div class="field calculated"><span>Subtotal</span><strong class="item-subtotal">Rp 0</strong></div>
+          <div class="field calculated"><span>Harga Produk</span><strong>Menunggu penawaran</strong><input class="item-price-input" type="hidden" value="0"></div>
+          <div class="field calculated"><span>Subtotal</span><strong class="item-subtotal">Menunggu penawaran</strong></div>
         </div>
       </div>
 
       <div class="media-edit-grid">
         <div class="image-card">
-          <span>Model custom pelanggan</span>
-          <div class="custom-preview empty"><em>Opsional • belum ada</em></div>
-          <label class="upload-btn">
-            Pilih gambar
-            <input class="custom-model-upload" type="file" accept="image/*" hidden>
-          </label>
-        </div>
-
-        <div class="image-card">
           <span>Motif sulaman dari toko</span>
           <div class="image-preview motif-preview">
-            <img class="motif-image" src="../img/motif_karawo_bunga.svg" alt="">
+            <img class="motif-image" src="../img/motif_karawo_bunga.svg" alt="Motif sulaman">
           </div>
           <label class="upload-btn">
             Pilih gambar
             <input class="motif-upload" type="file" accept="image/*" hidden>
           </label>
-          <input class="motif-name" type="text" placeholder="Nama motif, contoh: Motif Bunga">
+          <input class="motif-name" type="text" placeholder="Nama motif, contoh: Motif Pinang">
         </div>
 
         <div class="image-card">
@@ -291,6 +311,19 @@
             Pilih gambar
             <input class="custom-motif-upload" type="file" accept="image/*" hidden>
           </label>
+        </div>
+
+        <div class="image-card">
+          <span>Warna kain</span>
+          <div class="fabric-color-preview">
+            <div class="fabric-color-swatch"></div>
+            <img class="fabric-color-image" alt="Foto warna kain" style="display:none">
+          </div>
+          <label class="upload-btn">
+            Pilih gambar warna
+            <input class="fabric-color-upload" type="file" accept="image/*" hidden>
+          </label>
+          <input class="item-fabric-color" type="text" placeholder="Nama warna kain, contoh: Merah">
         </div>
       </div>
 
@@ -313,20 +346,14 @@
       </div>
       <div class="size-section">
         <div class="sub-heading">
-          <strong>Ukuran & Warna</strong>
+          <strong>Ukuran &amp; Warna</strong>
           <button type="button" class="add-color-btn">＋ Tambah Warna</button>
         </div>
         <div class="size-table-wrap">
           <table class="size-table">
-            <thead>
-              <tr><th>Warna</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>Total</th><th></th></tr>
-            </thead>
+            <thead><tr><th>Warna</th><th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>XXL</th><th>XXXL</th><th>Total</th><th></th></tr></thead>
             <tbody class="color-rows"></tbody>
-            <tfoot>
-              <tr class="totals-row">
-                <th>Total</th><th class="t-s">0</th><th class="t-m">0</th><th class="t-l">0</th><th class="t-xl">0</th><th class="t-all">0</th><th></th>
-              </tr>
-            </tfoot>
+            <tfoot><tr class="totals-row"><th>Total</th><th class="t-xs">0</th><th class="t-s">0</th><th class="t-m">0</th><th class="t-l">0</th><th class="t-xl">0</th><th class="t-xxl">0</th><th class="t-xxxl">0</th><th class="t-all">0</th><th></th></tr></tfoot>
           </table>
         </div>
       </div>
@@ -351,14 +378,13 @@ function setupKind(){
   :"PESANAN CUSTOM — admin menentukan harga terlebih dahulu. Setelah pelanggan menyetujui penawaran, pesanan masuk ke proses sulam dan jahit.";
  $("typeNotice").className="type-notice "+kind;
  show($("dpField"),!display); show($("dpStatusField"),true);
- show($("progressStage").closest(".card"),!display);
  show($("addItemBtn"),!display);
  // Display product details are catalog-based; do not present custom garment uploads/size tables.
  document.querySelectorAll("#items .edit-item").forEach(el=>{
    show(el.querySelector(".media-edit-grid"),!display);
    show(el.querySelector(".description-field"),!display);
    show(el.querySelector(".size-section"),!display);
-   show(el.querySelector(".product-top"),display);
+   show(el.querySelector(".product-top"),true);
    show(el.querySelector(".remove-item"),!display);
  });
  $("status").innerHTML=(display
@@ -366,25 +392,27 @@ function setupKind(){
    : ["Menunggu Konfirmasi","Sedang Disulam","Sedang Dijahit","Siap Diambil","Selesai","Dibatalkan"])
    .map(x=>`<option>${x}</option>`).join("");
 }
-function addColorRow(tbody,data=["Warna",0,0,0,0]){
+function addColorRow(tbody,data=["Warna",0,0,0,0,0,0,0]){
+ const sizes=["XS","S","M","L","XL","XXL","XXXL"];
  const tr=document.createElement("tr");
- tr.innerHTML=`<td><input class="color-name" value="${esc(data[0])}"></td>${["s","m","l","xl"].map((s,i)=>`<td><input class="size ${s}" type="number" min="0" value="${Number(data[i+1]||0)}"></td>`).join("")}<td class="row-total">0</td><td><button type="button" class="delete-row">×</button></td>`;
+ tr.innerHTML=`<td><input class="color-name" value="${esc(data[0])}"></td>${sizes.map((s,i)=>`<td><input class="size size-${s.toLowerCase()}" data-size="${s}" type="number" min="0" value="${Number(data[i+1]||0)}"></td>`).join("")}<td class="row-total">0</td><td><button type="button" class="delete-row">×</button></td>`;
  tbody.appendChild(tr);
  tr.querySelectorAll("input").forEach(x=>x.addEventListener("input",updateTable));
  tr.querySelector(".delete-row").addEventListener("click",()=>{tr.remove();updateTable()});
 }
 function updateTable(){
  document.querySelectorAll(".edit-item").forEach(item=>{
-   const totals=[0,0,0,0,0];
+   const sizes=["XS","S","M","L","XL","XXL","XXXL"],totals=Object.fromEntries(sizes.map(s=>[s,0]));
+   let grand=0;
    item.querySelectorAll(".color-rows tr").forEach(tr=>{
-     const vals=["s","m","l","xl"].map(c=>Number(tr.querySelector("."+c)?.value||0));
-     const sum=vals.reduce((a,b)=>a+b,0);tr.querySelector(".row-total").textContent=sum;
-     vals.forEach((v,i)=>totals[i+1]+=v);totals[0]+=sum;
+     let rowTotal=0;
+     sizes.forEach(s=>{const v=Math.max(0,Math.floor(Number(tr.querySelector(`[data-size="${s}"]`)?.value||0)));totals[s]+=v;rowTotal+=v;});
+     const sum=tr.querySelector(".row-total");if(sum)sum.textContent=rowTotal;grand+=rowTotal;
    });
-   ["s","m","l","xl"].forEach((s,i)=>{const n=item.querySelector(".t-"+s);if(n)n.textContent=totals[i+1]});
-   const all=item.querySelector(".t-all");if(all)all.textContent=totals[0];
-   const qty=Number(item.querySelector(".item-qty")?.value||0),price=Number(item.querySelector(".item-price-input")?.value||0);
-   const sub=item.querySelector(".item-subtotal");if(sub)sub.textContent=money(qty*price);
+   sizes.forEach(s=>{const n=item.querySelector(".t-"+s.toLowerCase());if(n)n.textContent=totals[s];const input=item.querySelector(`.size-breakdown-input[data-size="${s}"]`);if(input)input.value=totals[s];});
+   const all=item.querySelector(".t-all");if(all)all.textContent=grand;
+   const qty=item.querySelector(".item-qty");if(qty)qty.value=grand;
+   const sub=item.querySelector(".item-subtotal");if(sub)sub.textContent="Menunggu penawaran";
  });
  updateRemaining();
 }
@@ -394,6 +422,15 @@ function updateRemaining(){
 }
 function addCustomItem(d){
  const node=$("itemTemplate").content.cloneNode(true),el=node.querySelector(".edit-item");
+ // Pertahankan identitas rincian dan URL yang sudah tersimpan saat mengedit.
+ el.dataset.detailId=d.id||"";
+ el.dataset.modelImageUrl=d.modelImage||"";
+ el.dataset.storeMotifImageUrl=d.motifImage||"";
+ el.dataset.customMotifImageUrl=d.customMotifImage||"";
+ el.dataset.fabricImageUrl=d.fabricImage||"";
+ el.dataset.fabricColorHex=d.colorHex||"";
+ el.dataset.storeMotifId=d.storeMotifId||"";
+ el.dataset.fabricColorId=d.fabricColorId||"";
  el.querySelector(".item-name-input").value=d.name||"";
  el.querySelector(".item-category").value=d.category||"";
  el.querySelector(".item-qty").value=d.qty||1;
@@ -401,34 +438,40 @@ function addCustomItem(d){
  el.querySelector(".item-price-input").value=d.price||0;
  el.querySelector(".item-description").value=d.description||"";
  el.querySelector(".motif-name").value=d.motif||"";
+ el.querySelector(".item-fabric-color").value=d.color||"";
  if(d.modelImage)el.querySelector(".model-image").src=d.modelImage;
  if(d.motifImage)el.querySelector(".motif-image").src=d.motifImage;
+ if(d.customMotifImage){const preview=el.querySelector(".custom-preview");preview.classList.remove("empty");preview.innerHTML=`<img alt="Motif custom pelanggan" src="${esc(d.customMotifImage)}">`;}
+ if(d.fabricImage){const img=el.querySelector(".fabric-color-image");img.src=d.fabricImage;img.style.display="block";el.querySelector(".fabric-color-swatch").style.display="none";}
+ else if(d.colorHex){el.querySelector(".fabric-color-swatch").style.background=d.colorHex;}
+ const breakdown=d.sizeBreakdown&&typeof d.sizeBreakdown==="object"?d.sizeBreakdown:{};
+ el.querySelectorAll(".size-breakdown-input").forEach(input=>{input.value=Math.max(0,Number(breakdown[input.dataset.size]||0));});
+ if(Object.values(breakdown).some(v=>Number(v)>0))el.querySelector(".item-qty").value=Object.values(breakdown).reduce((sum,v)=>sum+Number(v||0),0);
  const tbody=el.querySelector(".color-rows");
- (d.colors?.length?d.colors:[[d.color||"Belum diisi",0,0,0,0]]).forEach(c=>addColorRow(tbody,c));
- el.querySelector(".add-color-btn").addEventListener("click",()=>addColorRow(tbody,["Warna baru",0,0,0,0]));
+ (d.colors?.length?d.colors:[[d.color||"Belum diisi",0,0,0,0,0,0,0]]).forEach(c=>addColorRow(tbody,c));
+ el.querySelector(".add-color-btn").addEventListener("click",()=>addColorRow(tbody,["Warna baru",0,0,0,0,0,0,0]));
  el.querySelector(".remove-item").addEventListener("click",()=>{if(document.querySelectorAll(".edit-item").length<=1)return alert("Minimal harus ada satu rincian.");el.remove();updateTable()});
  el.querySelectorAll(".item-qty,.item-price-input").forEach(x=>x.addEventListener("input",updateTable));
  // Upload preview only; persistent URL upload is not faked.
  for(const [sel,targetSel] of [[".model-upload",".model-image"],[".motif-upload",".motif-image"]]){
   el.querySelector(sel).addEventListener("change",e=>{const f=e.target.files?.[0];if(f)el.querySelector(targetSel).src=URL.createObjectURL(f)});
  }
- for(const [sel,idx] of [[".custom-model-upload",0],[".custom-motif-upload",1]]){
-  el.querySelector(sel).addEventListener("change",e=>{const f=e.target.files?.[0];if(!f)return;const target=el.querySelectorAll(".custom-preview")[idx];target.classList.remove("empty");target.innerHTML=`<img alt="Pratinjau gambar" src="${URL.createObjectURL(f)}">`});
- }
+ el.querySelector(".custom-motif-upload").addEventListener("change",e=>{const f=e.target.files?.[0];if(!f)return;const target=el.querySelector(".custom-preview");target.classList.remove("empty");target.innerHTML=`<img alt="Pratinjau motif custom" src="${URL.createObjectURL(f)}">`;});
+ el.querySelector(".fabric-color-upload").addEventListener("change",e=>{const f=e.target.files?.[0];if(!f)return;const img=el.querySelector(".fabric-color-image");img.src=URL.createObjectURL(f);img.style.display="block";el.querySelector(".fabric-color-swatch").style.display="none";});
  $("items").appendChild(el);setupKind();updateTable();
 }
 async function loadOrder(){
  if(!sb||!window.nouvaSupabaseReady)throw new Error("Supabase belum siap. Periksa konfigurasi.");
  await window.NouvaWorkflow.requireRole("admin","../auth/login_admin.html");
  if(!id)throw new Error("ID pesanan tidak ditemukan pada URL.");
- const {data:o,error}=await sb.from("orders").select("*,order_items(*,product_variants(size,color_name,products(reference_no,name,category,description,fabric_type,motif_name,motif_description,motif_image_url,product_images(image_url,sort_order)))),custom_order_details(*),payments(*)").eq("id",id).single();
+ const {data:o,error}=await sb.from("orders").select("*,order_items(*,product_variants(size,color_name,color_image_url,products(reference_no,name,category,description,fabric_type,motif_name,motif_description,motif_image_url,product_images(image_url,sort_order)))),custom_order_details(*,custom_embroidery_motifs(name,image_url),custom_fabric_colors(name,image_url)),payments(*)").eq("id",id).single();
  if(error)throw error;order=o;kind=o.order_type;
  customDetails=Array.isArray(o.custom_order_details)?o.custom_order_details:(o.custom_order_details?[o.custom_order_details]:[]);
  payment=Array.isArray(o.payments)?o.payments[0]:o.payments;
  $("customer").value=o.customer_name||"";$("type").value=o.customer_type==="institution"?"Instansi":"Individu";
  $("institution").value=o.institution_name||"";$("phone").value=o.customer_phone||"";
  $("invoice").value=o.reference_no||"";$("orderDate").value=String(o.ordered_at||"").slice(0,10);$("deadline").value=o.deadline||"";
- $("note").value=o.notes||"";$("total").value=payment?.total_amount??o.quoted_price??o.total_amount??0;
+ $("note").value=o.notes||"";$("total").value=kind==="custom"?(o.quoted_price??o.total_amount??0):(o.total_amount??0);
  $("dp").value=payment?.dp_amount||0;$("dpStatus").value=payment?.payment_status||"Belum Lunas";
  $("dp").disabled=true;$("dpStatus").disabled=true;
  $("dp").title="Data pembayaran dikelola terpisah; perubahan detail pesanan tidak mengubah pembayaran.";
@@ -439,22 +482,57 @@ async function loadOrder(){
   $("items").innerHTML="";
   itemRows.forEach((it,i)=>{
    const v=it.product_variants||{},p=v.products||{};
-   const d=document.createElement("div");d.className="edit-item display-item";
-   d.innerHTML=`<div class="item-head"><div class="item-title"><span class="item-number">${i+1}</span><div><strong>${esc(it.product_name_snapshot||p.name||"Produk")}</strong><small>${esc(p.reference_no||"—")} · ${esc(v.size||it.size_snapshot||"—")} · ${esc(v.color_name||it.color_snapshot||"—")}</small></div></div></div><div class="item-body"><div class="mini-fields"><label class="field"><span>Nama Produk</span><input readonly value="${esc(it.product_name_snapshot||p.name||"")}"></label><label class="field"><span>Ukuran</span><input readonly value="${esc(v.size||it.size_snapshot||"")}"></label><label class="field"><span>Warna</span><input readonly value="${esc(v.color_name||it.color_snapshot||"")}"></label><label class="field"><span>Jumlah</span><input readonly value="${Number(it.quantity||0)}"></label><label class="field"><span>Harga Satuan</span><input readonly value="${Number(it.unit_price||0)}"></label></div></div>`;
+   const imgs=(p.product_images||[]).slice().sort((a,b)=>(a.sort_order||0)-(b.sort_order||0));
+   const productName=it.product_name_snapshot||p.name||"Produk";
+   const size=v.size||it.size_snapshot||"—", color=v.color_name||it.color_snapshot||"—";
+   const qty=Math.max(1,Number(it.quantity||1)), price=Number(it.unit_price||0);
+   const description=p.motif_description||p.description||"Belum ada deskripsi produk.";
+   const imageUrl=imgs[0]?.image_url||"";
+   const d=document.createElement("div");d.className="edit-item display-item";d.dataset.orderItemId=it.id;
+   d.innerHTML=`<div class="item-head"><div class="item-title"><span class="item-number">${i+1}</span><div><strong>${esc(productName)}</strong><small>${esc(p.category||"Produk")} · ${qty} pcs</small></div></div><span class="display-order-subtotal">${money(qty*price)}</span></div>
+    <div class="display-product-layout">
+     <div class="display-model-card"><span>Model pakaian dari toko</span>${imageUrl?`<img src="${esc(imageUrl)}" alt="${esc(productName)}" loading="lazy" onerror="this.style.display='none'">`:`<div class="empty-media-placeholder">Foto produk belum tersedia</div>`}</div>
+     <div class="display-summary">
+      <div class="display-info"><span class="display-spec-label">Nama Produk</span><strong>${esc(productName)}</strong></div>
+      <div class="display-info"><span class="display-spec-label">Kategori</span><strong>${esc(p.category||"Belum diisi")}</strong></div>
+      <div class="display-info"><label class="display-spec-label" for="qty-${i}">Jumlah (pcs)</label><input id="qty-${i}" class="display-quantity" type="number" min="1" step="1" value="${qty}"></div>
+      <div class="display-info"><span class="display-spec-label">Jenis Kain</span><strong>${esc(p.fabric_type||"Belum diisi")}</strong></div>
+      <div class="display-info"><span class="display-spec-label">Harga Produk</span><strong>${money(price)}</strong></div>
+      <div class="display-info"><span class="display-spec-label">Subtotal</span><strong class="display-price display-subtotal">${money(qty*price)}</strong></div>
+     </div>
+    </div>
+    <div class="display-specs">
+     <div class="display-spec"><span class="display-spec-label">Ukuran</span><strong>${esc(size)}</strong></div>
+     <div class="display-spec"><span class="display-spec-label">Warna</span>${v.color_image_url?`<img class="display-color-image" src="${esc(v.color_image_url)}" alt="${esc(color)}" loading="lazy">`:``}<strong>${esc(color)}</strong></div>
+     <div class="display-spec"><span class="display-spec-label">No. Referensi Produk</span><strong>${esc(p.reference_no||"—")}</strong></div>
+     <div class="display-spec full"><span class="display-spec-label">Deskripsi Produk</span><strong>${esc(description)}</strong></div>
+    </div>`;
+   const qtyInput=d.querySelector('.display-quantity');
+   qtyInput.addEventListener('input',()=>{const n=Math.max(1,Math.floor(Number(qtyInput.value||1)));d.querySelector('.display-subtotal').textContent=money(n*price);d.querySelector('.display-order-subtotal').textContent=money(n*price);});
    $("items").appendChild(d);
   });
  }else{
   $("items").innerHTML="";
-  (customDetails.length?customDetails:[{}]).forEach(d=>addCustomItem({
-   id:d.id,name:d.product_name,category:d.category,qty:d.quantity,price:0,
-   description:String(d.design_description||"").split(/\\r?\\n/).filter(line=>!line.startsWith("Motif dari toko:")).join("\\n"),fabric:d.custom_fabric_type||d.fabric_type,
-   color:d.fabric_color,motif:(String(d.design_description||"").split(/\\r?\\n/).find(line=>line.startsWith("Motif dari toko:"))||"").replace("Motif dari toko:","").trim(),modelImage:d.model_image_url,motif:d.product_name,
-   motifImage:d.store_motif_image_url,customMotifImage:d.custom_motif_image_url,
-   sizeBreakdown:d.size_breakdown,storeMotifId:d.store_motif_id,fabricColorId:d.fabric_color_id,
-   colors:[[d.fabric_color||"Belum diisi",0,0,0,0]]
-  }));
+  (customDetails.length?customDetails:[{}]).forEach(d=>{
+   const motifRecord=Array.isArray(d.custom_embroidery_motifs)?d.custom_embroidery_motifs[0]:d.custom_embroidery_motifs;
+   const colorRecord=Array.isArray(d.custom_fabric_colors)?d.custom_fabric_colors[0]:d.custom_fabric_colors;
+   const breakdown=d.size_breakdown&&typeof d.size_breakdown==="object"?d.size_breakdown:{};
+   const lines=String(d.design_description||"").split(/\r?\n/).filter(Boolean);
+   const motifLine=lines.find(line=>line.startsWith("Motif dari toko:"));
+   const motifName=motifLine?motifLine.replace("Motif dari toko:","").trim():(motifRecord?.name||"");
+   const description=lines.filter(line=>!line.startsWith("Motif dari toko:")).join("\n");
+   const color=d.fabric_color||colorRecord?.name||"";
+   addCustomItem({
+    id:d.id,name:d.product_name,category:d.category,qty:d.quantity,price:0,
+    description,fabric:d.custom_fabric_type||d.fabric_type,color,motif:motifName,
+    modelImage:d.model_image_url,motifImage:d.store_motif_image_url||motifRecord?.image_url||"",
+    customMotifImage:d.custom_motif_image_url,fabricImage:d.fabric_image_url||colorRecord?.image_url||"",
+    sizeBreakdown:breakdown,storeMotifId:d.store_motif_id,fabricColorId:d.fabric_color_id,
+    colors:[[color||"Belum diisi",Number(breakdown.XS||0),Number(breakdown.S||0),Number(breakdown.M||0),Number(breakdown.L||0),Number(breakdown.XL||0),Number(breakdown.XXL||0),Number(breakdown.XXXL||0)]]
+   });
+  });
  }
- setupKind();updateTable();
+ setupKind();$("status").value=o.process_status||"Menunggu Konfirmasi";updateTable();
 }
 $("total").addEventListener("input",updateRemaining);$("dp").addEventListener("input",updateRemaining);
 $("addItemBtn").addEventListener("click",()=>{if(kind==="custom")addCustomItem({qty:1})});
@@ -469,12 +547,22 @@ $("editForm").addEventListener("submit",async e=>{
    customer_name:$("customer").value.trim(),customer_type:$("type").value==="Instansi"?"institution":"individual",
    institution_name:$("type").value==="Instansi"?$("institution").value.trim():null,
    customer_phone:$("phone").value.trim(),deadline,notes:$("note").value.trim()||null,
-   process_status:status,total_amount:total,quoted_price:kind==="custom"?total:order.quoted_price,updated_at:new Date().toISOString()
+   process_status:status,total_amount:total,quoted_price:kind==="custom"?total:order.quoted_price
   };
   if(kind==="custom"){
    if(status==="Dibatalkan")orderUpdate.cancelled_at=new Date().toISOString();
   }
   const {error:oe}=await sb.from("orders").update(orderUpdate).eq("id",id);if(oe)throw oe;
+  if(kind==="display"){
+   const cards=[...document.querySelectorAll("#items .display-item")];
+   for(const card of cards){
+    const itemId=card.dataset.orderItemId;
+    const quantity=Math.max(1,Math.floor(Number(card.querySelector(".display-quantity")?.value||1)));
+    if(!itemId)throw new Error("ID rincian produk display tidak ditemukan.");
+    const {error:itemError}=await sb.from("order_items").update({quantity}).eq("id",itemId).eq("order_id",id);
+    if(itemError)throw itemError;
+   }
+  }
   if(kind==="custom"){
    const cards=[...document.querySelectorAll("#items .edit-item")];
    if(!cards.length)throw new Error("Minimal harus ada satu rincian produk custom.");
@@ -492,19 +580,20 @@ $("editForm").addEventListener("submit",async e=>{
     if(!name||!category)throw new Error("Nama produk dan kategori wajib diisi pada setiap rincian.");
     const breakdown=Object.fromEntries([...el.querySelectorAll(".size-breakdown-input")].map(x=>[x.dataset.size,Math.max(0,Math.floor(Number(x.value||0)))]));
     const quantity=Object.values(breakdown).reduce((a,b)=>a+b,0)||Math.max(1,Math.floor(Number(el.querySelector(".item-qty").value||1)));
-    const modelFile=el.querySelector(".custom-model-upload").files?.[0]||el.querySelector(".model-upload").files?.[0];
-    const motifFile=el.querySelector(".motif-upload").files?.[0],customMotifFile=el.querySelector(".custom-motif-upload").files?.[0];
+    const modelFile=el.querySelector(".model-upload").files?.[0];
+    const motifFile=el.querySelector(".motif-upload").files?.[0],customMotifFile=el.querySelector(".custom-motif-upload").files?.[0],fabricImageFile=el.querySelector(".fabric-color-upload").files?.[0];
     const modelUrl=await uploadImage(modelFile)||el.dataset.modelImageUrl||null;
     const motifUrl=await uploadImage(motifFile)||el.dataset.storeMotifImageUrl||null;
     const customMotifUrl=await uploadImage(customMotifFile)||el.dataset.customMotifImageUrl||null;
+    const fabricImageUrl=await uploadImage(fabricImageFile)||el.dataset.fabricImageUrl||null;
     const fabric=el.querySelector(".item-fabric").value.trim()||null;
     const fabricColor=el.querySelector(".item-fabric-color").value.trim()||null;
     const motifName=el.querySelector(".motif-name").value.trim();
     const description=el.querySelector(".item-description").value.trim();
-    const combinedDescription=[motifName?`Motif dari toko: ${motifName}`:"",description.replace(/^Motif dari toko:.*(?:\\r?\\n|$)/m,"").trim()].filter(Boolean).join("\\n")||null;
+    const combinedDescription=[motifName?`Motif dari toko: ${motifName}`:"",description.replace(/^Motif dari toko:.*(?:\r?\n|$)/m,"").trim()].filter(Boolean).join("\n")||null;
     const payload={order_id:id,product_name:name,category,quantity,size:Object.keys(breakdown).find(k=>breakdown[k]>0)||"M",size_breakdown:breakdown,
      design_description:combinedDescription,model_image_url:modelUrl,
-     store_motif_image_url:motifUrl,custom_motif_image_url:customMotifUrl,fabric_color:fabricColor,
+     store_motif_image_url:motifUrl,custom_motif_image_url:customMotifUrl,fabric_image_url:fabricImageUrl,fabric_color:fabricColor,
      fabric_type:fabric,custom_fabric_type:fabric,store_motif_id:el.dataset.storeMotifId||null,fabric_color_id:el.dataset.fabricColorId||null};
     if(el.dataset.detailId){const {error:de}=await sb.from("custom_order_details").update(payload).eq("id",el.dataset.detailId);if(de)throw de;existingIds.push(el.dataset.detailId);}
     else{const {data:created,error:de}=await sb.from("custom_order_details").insert(payload).select("id").single();if(de)throw de;if(created?.id)existingIds.push(created.id);}

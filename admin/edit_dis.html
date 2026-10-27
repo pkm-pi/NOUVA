@@ -6,6 +6,10 @@
   <title>Edit Produk - Uti Karawo</title>
   <link rel="stylesheet" href="../globals.css">
   <link rel="stylesheet" href="../css/edit_dis.css">
+  <style>
+    /* Pastikan aturan CSS grid form tidak mengalahkan atribut hidden. */
+    #editLayout[hidden], #editLoading[hidden] { display: none !important; }
+  </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../js/nouva-config.js"></script>
   <script src="../js/nouva-supabase.js"></script>
@@ -72,7 +76,10 @@
         </div>
       </section>
 
-      <div class="edit-layout">
+      <div id="editLoading" role="status" aria-live="polite" style="margin:18px 0;padding:28px 20px;border:1px solid #e8dcef;border-radius:14px;background:#fff;text-align:center;color:#6f3a80;font-weight:600;">
+        Memuat data produk...
+      </div>
+      <div class="edit-layout" id="editLayout" hidden>
       <section class="edit-panel">
         <div class="form-main">
 
@@ -220,7 +227,16 @@
   if(data.motif_image_url){const p=$("motifImage").parentElement;p.style.backgroundImage=`url("${data.motif_image_url}")`;p.style.backgroundSize="cover"}
   if(variants[0]?.color_image_url){const p=$("fabricColorImage").parentElement;p.style.backgroundImage=`url("${variants[0].color_image_url}")`;p.style.backgroundSize="cover"}
   $("lastUpdated").textContent=data.updated_at?new Date(data.updated_at).toLocaleString("id-ID"):"—";
- }catch(e){msg(e.message||String(e));return}
+  // Tampilkan form hanya setelah data produk selesai dimuat dan semua input terisi.
+  $("editLoading").hidden=true;
+  $("editLayout").hidden=false;
+ }catch(e){
+  console.error("Gagal memuat data produk:",e);
+  const loading=$("editLoading");
+  loading.textContent="Data produk gagal dimuat: "+(e.message||String(e))+". Periksa koneksi dan akses admin, lalu muat ulang halaman.";
+  loading.style.color="#a12626";
+  return
+ }
  function preview(input){const file=input.files?.[0];if(!file)return;const url=URL.createObjectURL(file);if(input.dataset.photo==="main"||input.dataset.photo==="main-thumb")$("mainProductImage").src=url;const im=input.closest(".thumb")?.querySelector("img");if(im)im.src=url;else if(input.id==="motifImage"||input.id==="fabricColorImage"){input.parentElement.style.backgroundImage=`url("${url}")`;input.parentElement.style.backgroundSize="cover"}}
  document.querySelectorAll("[data-photo],.upload-color input").forEach(i=>i.addEventListener("change",()=>preview(i)));
  document.querySelectorAll(".thumb").forEach(b=>b.addEventListener("click",e=>{if(e.target.closest("input"))return;document.querySelectorAll(".thumb").forEach(x=>x.classList.toggle("active",x===b));const im=b.querySelector("img");if(im?.src)$("mainProductImage").src=im.src}));
@@ -242,21 +258,31 @@
    const motifInput=$("motifImage");
    let motifUrl=product.motif_image_url||null;
    if(motifInput?.files?.[0])motifUrl=(await window.nouvaUploadImage(motifInput.files[0],"nouva/motifs")).url;
-   const {error:upErr}=await sb.from("products").update({name,price,category,description:$("description").value.trim(),fabric_type:$("jenisKain").value.trim()||null,motif_name:$("motifName").value.trim()||null,motif_image_url:motifUrl,updated_at:new Date().toISOString()}).eq("id",product.id);
+   const productPayload={name,price,category,description:$("description").value.trim(),fabric_type:$("jenisKain").value.trim()||null,motif_name:$("motifName").value.trim()||null,motif_image_url:motifUrl,updated_at:new Date().toISOString()};
+   // Supabase dapat mengembalikan tanpa error tetapi 0 baris berubah bila RLS menolak update.
+   const {data:updatedProduct,error:upErr}=await sb.from("products").update(productPayload).eq("id",product.id).select("id,name,price,updated_at").maybeSingle();
    if(upErr)throw upErr;
+   if(!updatedProduct)throw new Error("Data produk tidak berubah. Periksa akun admin dan policy RLS tabel products di Supabase, lalu jalankan fix_produk_admin.sql.");
    const colorImageInput=$("fabricColorImage");let colorUrl=variants.find(v=>v.color_name===color)?.color_image_url||null;
    if(colorImageInput?.files?.[0])colorUrl=(await window.nouvaUploadImage(colorImageInput.files[0],"nouva/fabrics")).url;
    if(mainUrl){
      const {error:delErr}=await sb.from("product_images").delete().eq("product_id",product.id);if(delErr)throw delErr;
-     const {error:imgErr}=await sb.from("product_images").insert([{product_id:product.id,image_url:mainUrl,sort_order:1},...oldImages.slice(1).map((im,i)=>({product_id:product.id,image_url:im.image_url,sort_order:i+2}))]);
+     const imageRows=[{product_id:product.id,image_url:mainUrl,sort_order:1},...oldImages.slice(1).map((im,i)=>({product_id:product.id,image_url:im.image_url,sort_order:i+2}))];
+     const {data:insertedImages,error:imgErr}=await sb.from("product_images").insert(imageRows).select("id");
      if(imgErr)throw imgErr;
+     if(!insertedImages||insertedImages.length!==imageRows.length)throw new Error("Foto produk belum terverifikasi tersimpan.");
    }
    for(const size of sizes){
     const existing=variants.find(v=>v.size===size&&v.color_name===color);
     if(existing){const {error}=await sb.from("product_variants").update({stock,color_image_url:colorUrl,updated_at:new Date().toISOString()}).eq("id",existing.id);if(error)throw error}
     else {const {error}=await sb.from("product_variants").insert({product_id:product.id,size,color_name:color,color_image_url:colorUrl,stock});if(error)throw error}
    }
-   alert("Perubahan produk berhasil disimpan ke Supabase.");location.href="produk.html";
+   // Baca ulang dari database sebelum menyatakan sukses agar perubahan yang tidak tersimpan tidak disamarkan.
+   const {data:verified,error:verifyErr}=await sb.from("products").select("id,name,price,category,description,fabric_type,motif_name,motif_image_url,updated_at").eq("id",product.id).single();
+   if(verifyErr)throw verifyErr;
+   if(verified.name!==name || Number(verified.price)!==price || verified.category!==category)throw new Error("Data tersimpan tidak sama dengan isian terbaru. Coba lagi dan periksa policy RLS.");
+   alert("Perubahan produk berhasil diverifikasi tersimpan. Halaman daftar produk akan dimuat ulang.");
+   location.replace("produk.html?updated="+Date.now());
   }catch(err){console.error(err);msg("Gagal menyimpan: "+(err.message||err));if(submit)submit.disabled=false}
  });
 })();
