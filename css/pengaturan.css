@@ -9,8 +9,9 @@ body{overflow-x:hidden}
 .dashboard-admin{width:100%;min-height:100vh;background:var(--bg);color:var(--text);display:flex;position:relative}
 /* SIDEBAR */
 .sidebar{
-  width:155px;
+  width:175px;
   min-width:175px;
+  flex: 0 0 175px;
   min-height:100vh;
   background:#3e1e4b;
   color:#fff;
@@ -117,7 +118,16 @@ body{overflow-x:hidden}
 .pengaturan-content {
   flex: 1;
   min-width: 0;
-  padding: 28px clamp(18px, 2.2vw, 34px) 34px;
+  padding: 30px clamp(20px, 3vw, 44px) 40px;
+}
+
+.pengaturan-header,
+#accountMessage,
+.settings-list,
+.settings-actions {
+  width: min(100%, 980px);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .pengaturan-header {
@@ -154,10 +164,10 @@ body{overflow-x:hidden}
 }
 
 .settings-list {
-  width: min(100%, 860px);
+  width: min(100%, 980px);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .setting-card {
@@ -261,14 +271,14 @@ body{overflow-x:hidden}
 }
 
 .settings-actions {
-  width: min(100%, 860px);
+  width: min(100%, 980px);
   display: flex;
-  justify-content: center;
-  margin-top: 20px;
+  justify-content: flex-end;
+  margin-top: 22px;
 }
 
 .logout-btn {
-  min-width: 100px;
+  min-width: 112px;
   height: 38px;
   padding: 0 15px;
   display: inline-flex;
@@ -295,6 +305,12 @@ body{overflow-x:hidden}
 .logout-btn:hover {
   background: #eee5f1;
   transform: translateY(-1px);
+}
+
+.logout-btn:disabled {
+  opacity: .7;
+  cursor: wait;
+  transform: none;
 }
 
 /* Responsif seperti produk.css: sidebar tetap kiri. */

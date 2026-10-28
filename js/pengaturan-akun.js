@@ -11,34 +11,37 @@
   }
 
   window.initNouvaAccountSettings = async function ({ expectedRole, loginUrl }) {
-    const sb = window.nouvaSupabase;
-    if (!window.nouvaSupabaseReady || !sb) {
-      showMessage("Koneksi Supabase belum siap. Periksa js/nouva-config.js.", "error");
-      return;
-    }
-
-    // Pasang handler Keluar seawal mungkin agar tombol tetap berfungsi
-    // meskipun pemuatan profil mengalami error.
+    // Pasang handler Keluar sejak awal, supaya tetap aktif meskipun profil gagal dimuat.
     const logoutButton = $("logoutButton");
     if (logoutButton && !logoutButton.dataset.logoutBound) {
       logoutButton.dataset.logoutBound = "true";
       logoutButton.addEventListener("click", async () => {
-        logoutButton.disabled = true;
+        const sbClient = window.nouvaSupabase;
         const oldContent = logoutButton.innerHTML;
-        logoutButton.innerHTML = "<span>Keluar...</span>";
-
+        logoutButton.disabled = true;
+        logoutButton.setAttribute("aria-busy", "true");
+        logoutButton.innerHTML = "Keluar...";
         try {
-          if (window.nouvaSupabaseReady && window.nouvaSupabase) {
-            const { error } = await window.nouvaSupabase.auth.signOut();
-            if (error) console.error("Logout Supabase:", error);
+          if (sbClient && window.nouvaSupabaseReady) {
+            const { error } = await sbClient.auth.signOut();
+            if (error) throw error;
           }
+          // Kembali ke halaman utama NOUVA setelah sesi diakhiri.
+          window.location.replace("../index.html");
         } catch (error) {
           console.error("Logout NOUVA:", error);
-        } finally {
-          // Halaman index berada satu tingkat di atas folder admin.
-          window.location.replace("../index.html");
+          showMessage("Gagal keluar dari akun. Periksa koneksi internet lalu coba lagi.", "error");
+          logoutButton.disabled = false;
+          logoutButton.removeAttribute("aria-busy");
+          logoutButton.innerHTML = oldContent;
         }
       });
+    }
+
+    const sb = window.nouvaSupabase;
+    if (!window.nouvaSupabaseReady || !sb) {
+      showMessage("Koneksi Supabase belum siap. Periksa js/nouva-config.js.", "error");
+      return;
     }
 
     let session;
