@@ -108,7 +108,7 @@
       </section>
 
       <div class="settings-actions">
-        <button class="logout-btn" type="button" id="logoutButton">
+        <button class="logout-btn" type="button" id="logoutButton" onclick="window.nouvaLogoutAdmin(event)">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M10 17v2H5V5h5v2H7v10h3Zm8-5-4-4v3H10v2h4v3l4-4Z"/>
           </svg>
@@ -123,8 +123,37 @@
   <script src="../js/nouva-supabase.js"></script>
   <script src="../js/pengaturan-akun.js"></script>
   <script>
+    // Handler mandiri agar tombol Keluar tetap bekerja meskipun inisialisasi
+    // halaman pengaturan gagal atau script akun mengalami kendala.
+    window.nouvaLogoutAdmin = async function (event) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      const button = document.getElementById("logoutButton");
+      if (button) {
+        button.disabled = true;
+        button.setAttribute("aria-busy", "true");
+        button.innerHTML = "Keluar...";
+      }
+      try {
+        const client = window.nouvaSupabase;
+        if (client && client.auth && typeof client.auth.signOut === "function") {
+          const { error } = await client.auth.signOut();
+          if (error) console.error("Supabase signOut:", error);
+        }
+      } catch (error) {
+        console.error("Logout NOUVA:", error);
+      } finally {
+        // Dari /NOUVA/admin/pengaturan.html menuju /NOUVA/index.html.
+        window.location.href = "../index.html";
+      }
+    };
+
     document.addEventListener("DOMContentLoaded", () => {
-      window.initNouvaAccountSettings({ expectedRole: "admin", loginUrl: "../auth/login_admin.html" });
+      if (typeof window.initNouvaAccountSettings === "function") {
+        window.initNouvaAccountSettings({ expectedRole: "admin", loginUrl: "../auth/login_admin.html" });
+      }
     });
   </script>
 </body>

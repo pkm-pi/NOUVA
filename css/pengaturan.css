@@ -645,3 +645,8 @@ body{overflow-x:hidden}
     font-size: 7.5px !important;
   }
 }
+
+
+/* Pastikan tombol Keluar selalu menerima klik dan berada di atas dekorasi. */
+.settings-actions { position: relative; z-index: 30; }
+.logout-btn { position: relative; z-index: 31; pointer-events: auto; }
