@@ -273,7 +273,7 @@ body{overflow-x:hidden}
 .settings-actions {
   width: min(100%, 980px);
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   margin-top: 22px;
 }
 
