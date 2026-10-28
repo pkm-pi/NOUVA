@@ -17,6 +17,30 @@
       return;
     }
 
+    // Pasang handler Keluar seawal mungkin agar tombol tetap berfungsi
+    // meskipun pemuatan profil mengalami error.
+    const logoutButton = $("logoutButton");
+    if (logoutButton && !logoutButton.dataset.logoutBound) {
+      logoutButton.dataset.logoutBound = "true";
+      logoutButton.addEventListener("click", async () => {
+        logoutButton.disabled = true;
+        const oldContent = logoutButton.innerHTML;
+        logoutButton.innerHTML = "<span>Keluar...</span>";
+
+        try {
+          if (window.nouvaSupabaseReady && window.nouvaSupabase) {
+            const { error } = await window.nouvaSupabase.auth.signOut();
+            if (error) console.error("Logout Supabase:", error);
+          }
+        } catch (error) {
+          console.error("Logout NOUVA:", error);
+        } finally {
+          // Halaman index berada satu tingkat di atas folder admin.
+          window.location.replace("../index.html");
+        }
+      });
+    }
+
     let session;
     try {
       const result = await sb.auth.getSession();
