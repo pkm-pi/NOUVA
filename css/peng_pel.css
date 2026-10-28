@@ -727,3 +727,7 @@ body{overflow-x:hidden}
     font-size: 7.5px !important;
   }
 }
+
+/* Bantuan untuk data akun yang disinkronkan dengan pendaftaran */
+.setting-help{display:block;margin-top:6px;color:#81738b;font-size:10px;line-height:1.5}
+.setting-row input[readonly]{background:#f1eef3;color:#786b80;cursor:not-allowed}

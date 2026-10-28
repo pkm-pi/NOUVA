@@ -1000,3 +1000,118 @@ body{overflow-x:hidden}
 }
 .stock-link-btn:hover{background:#eadff0;transform:translateY(-1px)}
 @media(max-width:420px){.stock-link-btn{flex:1 1 auto}}
+
+
+/* NOUVA: input stok terpisah untuk setiap ukuran XS–XXL */
+.size-stock-hint{
+  margin:7px 0 6px;
+  color:#8b7b91;
+  font-size:8px;
+  line-height:1.5;
+}
+.size-stock-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:7px;
+}
+.size-stock-item{
+  display:flex!important;
+  flex-direction:column;
+  gap:5px;
+  padding:8px;
+  border:1px solid #e7dced;
+  border-radius:8px;
+  background:#fcf9fd;
+  color:#4b3158!important;
+  font-size:8px!important;
+}
+.size-stock-item > span{margin:0!important}
+.size-stock-item strong{color:#794691}
+.size-stock-item .input-suffix input{
+  width:100%;
+  min-width:0;
+  height:30px;
+  padding:0 32px 0 8px;
+  font-size:10px;
+}
+.size-stock-empty{
+  grid-column:1/-1;
+  padding:9px;
+  color:#9a8ba1;
+  border:1px dashed #e1d5e8;
+  border-radius:7px;
+  font-size:8px;
+}
+@media(max-width:760px){
+  .size-stock-hint{font-size:11px}
+  .size-stock-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .size-stock-item{font-size:11px!important}
+  .size-stock-item .input-suffix input{font-size:14px!important;min-height:40px}
+  .size-stock-empty{font-size:11px}
+}
+
+/* Perbaikan galeri tambah produk: empat slot saja, slot pertama adalah foto utama */
+.main-photo{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  aspect-ratio:1.22/1;
+  overflow:hidden;
+  border:1px solid #e5d9ed;
+  border-radius:10px;
+  background:#f0e9f6;
+}
+.main-photo > img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.main-photo-empty{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:16px;
+  color:#80549a;
+  text-align:center;
+}
+.main-photo-empty span{font-size:38px;line-height:1}
+.main-photo-empty small{font-size:11px}
+.thumbnail-list{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:7px;
+  margin-top:8px;
+}
+.thumb.upload-thumb{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-width:0;
+  aspect-ratio:1/1;
+  padding:0;
+  overflow:hidden;
+  border:1px dashed #d7c4e3;
+  border-radius:8px;
+  background:#faf7fc;
+  cursor:pointer;
+  background-position:center;
+  background-size:cover;
+}
+.thumb.upload-thumb.has-image{border-style:solid;border-color:#8b59c5}
+.thumb.upload-thumb > span{font-size:27px;line-height:1;color:#8a5bc0}
+.thumb.upload-thumb > small{margin-top:4px;font-size:9px;font-weight:600;color:#794691}
+.thumb.upload-thumb.has-image > span,.thumb.upload-thumb.has-image > small{display:none}
+.thumb.upload-thumb.main-thumb{border:2px solid #8b59c5;background-color:#f5eff9}
+.photo-help{margin:7px 0 0;color:#8d7a98;font-size:10px;line-height:1.5}
+@media(max-width:600px){
+ .photo-help{font-size:11px}
+ .main-photo-empty small{font-size:12px}
+ .thumb.upload-thumb > small{font-size:10px}
+}

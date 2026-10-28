@@ -133,7 +133,7 @@ body{overflow-x:hidden}
 .header-actions{
   display:flex;
   align-items:center;
-  gap:12px;
+  gap:8px;
   flex:none;
 }
 .search-box{
@@ -248,6 +248,7 @@ body{overflow-x:hidden}
   font-weight:500;
   line-height:1.2;
 }
+
 .order-card .card-copy strong{
   display:block;
   color:#10100d;
@@ -260,7 +261,7 @@ body{overflow-x:hidden}
   margin-top:7px;
   color:var(--purple-2);
   text-decoration:none;
-  font-size:9px;
+  font-size:10px;
   font-weight:700;
 }
 .card-copy p{
@@ -291,6 +292,8 @@ body{overflow-x:hidden}
   gap:9px;
 }
 .products-panel{
+  position:relative;
+  padding-bottom:42px;
   min-height:260px;
   padding:10px;
 }
@@ -314,10 +317,16 @@ body{overflow-x:hidden}
   font-weight:700;
   white-space:nowrap;
 }
+.panel-heading a,.see-all-status a{
+  font-size:10px;
+  margin-left:2px;
+}
+
 .panel-heading a span,.see-all-status span{
   font-size:14px;
   margin-left:2px;
 }
+
 .product-list{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
@@ -389,6 +398,8 @@ body{overflow-x:hidden}
 
 /* STATUS */
 .status-panel{
+  position:relative;
+  padding-bottom:42px;
   min-height:260px;
   padding:10px 11px;
   position:relative;
@@ -443,11 +454,23 @@ body{overflow-x:hidden}
 .status-badge.waiting{color:#ef737c;background:#fdf1f2}
 .status-badge.working{color:#5285f7;background:#edf2fe}
 .see-all-status{
+  position:absolute;
+  right:16px;
+  bottom:14px;
   display:block;
-  margin-top:6px;
+  margin:0;
   color:var(--purple-2);
   text-decoration:none;
   text-align:right;
+  font-size:10px;
+  font-weight:700;
+}
+.see-all-products{
+  position:absolute;
+  right:16px;
+  bottom:14px;
+  color:var(--purple-2);
+  text-decoration:none;
   font-size:7.5px;
   font-weight:700;
 }
@@ -468,13 +491,13 @@ body{overflow-x:hidden}
 .guide-copy h2{
   margin:0;
   color:var(--purple);
-  font-size:11px;
+  font-size:13px;
   font-weight:800;
 }
 .guide-copy p{
   margin:2px 0 0;
   color:var(--purple);
-  font-size:9px;
+  font-size:10px;
   line-height:1.25;
 }
 .guide-btn{
@@ -489,7 +512,7 @@ body{overflow-x:hidden}
   border:1px solid #d7d7d0;
   color:var(--purple);
   text-decoration:none;
-  font-size:8px;
+  font-size:11px;
   font-weight:600;
   cursor:pointer;
   flex:none;
@@ -1057,5 +1080,48 @@ body{overflow-x:hidden}
   .see-all-status {
     margin-top: 10px !important;
     padding-right: 2px !important;
+  }
+}
+
+/* Revisi ukuran tombol Keluar di dashboard pelanggan */
+.dashboard-logout-btn {
+  min-width: 0 !important;
+  min-height: 0 !important;
+  width: auto !important;
+  height: 44px !important;
+  padding: 8px 16px !important;
+  gap: 8px !important;
+  border-radius: 16px !important;
+  font-size: 14px !important;
+  line-height: 1.2 !important;
+}
+
+.dashboard-logout-btn svg {
+  width: 18px !important;
+  height: 18px !important;
+  flex: 0 0 18px !important;
+}
+
+.dashboard-logout-btn .logout-label {
+  font-size: 14px !important;
+}
+
+@media screen and (max-width: 760px) {
+  .dashboard-logout-btn {
+    height: 40px !important;
+    padding: 7px 12px !important;
+    gap: 6px !important;
+    border-radius: 14px !important;
+    font-size: 12px !important;
+  }
+
+  .dashboard-logout-btn svg {
+    width: 16px !important;
+    height: 16px !important;
+    flex-basis: 16px !important;
+  }
+
+  .dashboard-logout-btn .logout-label {
+    font-size: 12px !important;
   }
 }

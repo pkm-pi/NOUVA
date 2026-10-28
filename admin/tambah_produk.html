@@ -73,17 +73,20 @@
 
           <div class="product-media">
             <div class="photo-label">Foto Utama</div>
-            <label class="main-photo upload-placeholder">
-              <input type="file" accept="image/*" class="hidden-file" data-photo="main">
-              <div>＋</div><small>Tambah Foto Utama</small>
-            </label>
-
-            <div class="thumbnail-list" aria-label="Foto tambahan produk">
-              <label class="thumb upload-thumb"><input type="file" accept="image/*" class="hidden-file" data-photo="extra"><span>＋</span></label>
-              <label class="thumb upload-thumb"><input type="file" accept="image/*" class="hidden-file" data-photo="extra"><span>＋</span></label>
-              <label class="thumb upload-thumb"><input type="file" accept="image/*" class="hidden-file" data-photo="extra"><span>＋</span></label>
-              <label class="thumb upload-thumb"><input type="file" accept="image/*" class="hidden-file" data-photo="extra"><span>＋</span></label>
+            <div class="main-photo" id="mainPhotoPreview" aria-label="Pratinjau foto utama">
+              <div class="main-photo-empty"><span>＋</span><small>Foto dari kotak pertama akan tampil di sini</small></div>
             </div>
+
+            <div class="thumbnail-list" aria-label="Empat slot foto produk">
+              <label class="thumb upload-thumb main-thumb" title="Slot pertama adalah foto utama">
+                <input type="file" accept="image/*" class="hidden-file" data-photo="main" aria-label="Pilih foto utama">
+                <span>＋</span><small>Utama</small>
+              </label>
+              <label class="thumb upload-thumb"><input type="file" accept="image/*" class="hidden-file" data-photo="extra" aria-label="Foto tambahan 1"><span>＋</span></label>
+              <label class="thumb upload-thumb"><input type="file" accept="image/*" class="hidden-file" data-photo="extra" aria-label="Foto tambahan 2"><span>＋</span></label>
+              <label class="thumb upload-thumb"><input type="file" accept="image/*" class="hidden-file" data-photo="extra" aria-label="Foto tambahan 3"><span>＋</span></label>
+            </div>
+            <p class="photo-help">Kotak pertama = foto utama. Tiga kotak berikutnya opsional.</p>
           </div>
 
           <form class="product-form" id="editProductForm">
@@ -108,18 +111,9 @@
               </div>
             </div>
 
-            <div class="field-grid two">
-              <div class="field">
-                <label for="price">Harga</label>
-                <input id="price" name="price" value="" type="text">
-              </div>
-              <div class="field">
-                <label for="stock">Stok</label>
-                <div class="input-suffix">
-                  <input id="stock" name="stock" value="" type="number" min="0">
-                  <span>pcs</span>
-                </div>
-              </div>
+            <div class="field">
+              <label for="price">Harga</label>
+              <input id="price" name="price" value="" type="text" inputmode="numeric" placeholder="Contoh: 2000000">
             </div>
 
             <div class="field">
@@ -133,11 +127,17 @@
             <div class="field-grid two size-fabric-row">
               <div class="field">
                 <label>Ukuran Tersedia</label>
-                <div class="size-row">
-                  <button class="size-btn" type="button">S</button>
-                  <button class="size-btn" type="button">M</button>
-                  <button class="size-btn" type="button">L</button>
-                  <button class="size-btn" type="button">XL</button>
+                <div class="size-row" id="sizeOptions">
+                  <button class="size-btn" type="button" data-size="XS">XS</button>
+                  <button class="size-btn" type="button" data-size="S">S</button>
+                  <button class="size-btn" type="button" data-size="M">M</button>
+                  <button class="size-btn" type="button" data-size="L">L</button>
+                  <button class="size-btn" type="button" data-size="XL">XL</button>
+                  <button class="size-btn" type="button" data-size="XXL">XXL</button>
+                </div>
+                <p class="size-stock-hint">Pilih ukuran, lalu isi stok masing-masing ukuran.</p>
+                <div class="size-stock-grid" id="sizeStockFields" aria-live="polite">
+                  <span class="size-stock-empty">Belum ada ukuran dipilih.</span>
                 </div>
               </div>
 
@@ -179,20 +179,60 @@
 const form=document.getElementById("editProductForm"), photoInputs=[...document.querySelectorAll('[data-photo]')];
 let busy=false;
 const selectedFiles={main:null,extra:[]};
+const sizeStocks={};
+const sizeStockFields=document.getElementById("sizeStockFields");
 function client(){if(!window.nouvaSupabaseReady||!window.nouvaSupabase)throw Error("Koneksi Supabase belum siap. Periksa js/nouva-config.js.");return window.nouvaSupabase;}
 async function checkAdmin(){const sb=client(),{data:{session}}=await sb.auth.getSession();if(!session){alert("Silakan login sebagai admin.");location.href="../auth/login_admin.html";throw Error("Belum login");}const {data:p,error}=await sb.from("profiles").select("role,full_name").eq("id",session.user.id).single();if(error||p?.role!=="admin"){await sb.auth.signOut();alert("Halaman ini khusus admin.");location.href="../auth/login_admin.html";throw Error("Bukan admin");}if(p.full_name)document.querySelector(".admin-name").textContent=p.full_name;}
-function previewFile(input,target){const file=input.files?.[0];if(!file)return;if(input.dataset.photo==="main")selectedFiles.main=file;else if(input.dataset.photo==="extra"){const index=photoInputs.filter(x=>x.dataset.photo==="extra").indexOf(input);selectedFiles.extra[index]=file;}else if(input.closest(".motif-box"))selectedFiles.motif=file;else selectedFiles.fabric=file;const url=URL.createObjectURL(file);target.style.backgroundImage=`url("${url}")`;target.style.backgroundSize="cover";target.style.backgroundPosition="center";target.querySelectorAll(":scope > div,:scope > small,:scope > span").forEach(el=>el.style.display="none");}
+function previewFile(input,target){
+ const file=input.files?.[0];if(!file)return;
+ const url=URL.createObjectURL(file);
+ if(input.dataset.photo==="main"){
+  selectedFiles.main=file;
+  const preview=document.getElementById("mainPhotoPreview");
+  preview.innerHTML=`<img src="${url}" alt="Pratinjau foto utama">`;
+  target.style.backgroundImage=`url("${url}")`;
+  target.classList.add("has-image");
+  target.querySelectorAll(":scope > span,:scope > small").forEach(el=>el.style.display="none");
+ }else if(input.dataset.photo==="extra"){
+  const index=photoInputs.filter(x=>x.dataset.photo==="extra").indexOf(input);
+  selectedFiles.extra[index]=file;
+  target.style.backgroundImage=`url("${url}")`;
+  target.classList.add("has-image");
+  target.querySelectorAll(":scope > span,:scope > small").forEach(el=>el.style.display="none");
+ }else if(input.closest(".motif-box"))selectedFiles.motif=file;
+ else selectedFiles.fabric=file;
+ if(!input.dataset.photo){target.style.backgroundImage=`url("${url}")`;target.style.backgroundSize="cover";target.style.backgroundPosition="center";target.querySelectorAll(":scope > div,:scope > small,:scope > span").forEach(el=>el.style.display="none");}
+}
 document.querySelectorAll("[data-photo]").forEach(input=>input.addEventListener("change",()=>previewFile(input,input.parentElement)));
 document.querySelectorAll(".upload-color input").forEach(input=>input.addEventListener("change",()=>previewFile(input,input.parentElement)));
-document.querySelectorAll(".size-btn").forEach(button=>button.addEventListener("click",()=>button.classList.toggle("selected")));
+function renderSizeStockFields(){
+ const selected=[...document.querySelectorAll(".size-btn.selected")].map(button=>button.dataset.size);
+ sizeStockFields.innerHTML="";
+ if(!selected.length){sizeStockFields.innerHTML='<span class="size-stock-empty">Belum ada ukuran dipilih.</span>';return;}
+ selected.forEach(size=>{
+  const field=document.createElement("label");
+  field.className="size-stock-item";
+  field.innerHTML=`<span>Stok ukuran <strong>${size}</strong></span><div class="input-suffix"><input type="number" min="0" step="1" inputmode="numeric" data-stock-size="${size}" aria-label="Stok ukuran ${size}" value="${sizeStocks[size] ?? 0}"><span>pcs</span></div>`;
+  const input=field.querySelector("input");
+  input.addEventListener("input",()=>{sizeStocks[size]=input.value;});
+  sizeStockFields.appendChild(field);
+ });
+}
+document.querySelectorAll(".size-btn").forEach(button=>button.addEventListener("click",()=>{
+ const size=button.dataset.size;
+ button.classList.toggle("selected");
+ if(!button.classList.contains("selected"))delete sizeStocks[size];
+ else if(sizeStocks[size]===undefined)sizeStocks[size]=0;
+ renderSizeStockFields();
+}));
 document.querySelector(".cancel-btn").addEventListener("click",()=>location.href="produk.html");
 const description=document.getElementById("description");description.addEventListener("input",()=>document.querySelector(".label-row span").textContent=`${description.value.length}/500`);
 function priceNumber(value){const n=Number(String(value).replace(/[^\d]/g,""));return Number.isFinite(n)?n:0;}
 async function upload(file,folder){return file?await window.nouvaUploadImage(file,folder):null;}
 form.addEventListener("submit",async event=>{
  event.preventDefault();if(busy)return;
- const name=document.getElementById("productName").value.trim(),category=document.getElementById("category").value,price=priceNumber(document.getElementById("price").value),stock=Number(document.getElementById("stock").value),fabricColor=document.getElementById("fabricColor").value.trim(),motifName=document.getElementById("motifName").value.trim(),sizes=[...document.querySelectorAll(".size-btn.selected")].map(b=>b.textContent.trim()),fabricType=document.getElementById("jenisKain").value.trim(),desc=description.value.trim();
- if(!name){alert("Nama produk wajib diisi.");return;}if(!category||category==="Pilih Kategori"){alert("Pilih kategori produk.");return;}if(!price||price<0){alert("Masukkan harga produk yang valid.");return;}if(!Number.isInteger(stock)||stock<0){alert("Stok harus berupa bilangan bulat nol atau lebih.");return;}if(!fabricColor){alert("Nama warna kain wajib diisi.");return;}if(!sizes.length){alert("Pilih minimal satu ukuran.");return;}
+ const name=document.getElementById("productName").value.trim(),category=document.getElementById("category").value,price=priceNumber(document.getElementById("price").value),fabricColor=document.getElementById("fabricColor").value.trim(),motifName=document.getElementById("motifName").value.trim(),sizes=[...document.querySelectorAll(".size-btn.selected")].map(b=>b.dataset.size),fabricType=document.getElementById("jenisKain").value.trim(),desc=description.value.trim();
+ if(!name){alert("Nama produk wajib diisi.");return;}if(!category||category==="Pilih Kategori"){alert("Pilih kategori produk.");return;}if(!price||price<0){alert("Masukkan harga produk yang valid.");return;}for(const size of sizes){const stock=Number(sizeStocks[size]);if(sizeStocks[size]===undefined||sizeStocks[size]===""||!Number.isInteger(stock)||stock<0){alert(`Stok ukuran ${size} harus diisi dengan bilangan bulat nol atau lebih.`);return;}}if(!fabricColor){alert("Nama warna kain wajib diisi.");return;}if(!sizes.length){alert("Pilih minimal satu ukuran.");return;}
  busy=true;const saveButton=document.querySelector(".save-btn");saveButton.disabled=true;saveButton.textContent="Menyimpan...";
  try{
   const sb=client();await checkAdmin();
@@ -204,11 +244,15 @@ form.addEventListener("submit",async event=>{
   if(pe)throw pe;
   const imageUrls=[main,...extra].filter(Boolean);
   if(imageUrls.length){const rows=imageUrls.map((im,i)=>({product_id:product.id,image_url:im.url,sort_order:i+1}));const {error}=await sb.from("product_images").insert(rows);if(error)throw error;}
-  const variants=sizes.map(size=>({product_id:product.id,size,color_name:fabricColor,color_image_url:fabric?.url||null,stock}));
+  const variants=sizes.map(size=>({product_id:product.id,size,color_name:fabricColor,color_image_url:fabric?.url||null,stock:Number(sizeStocks[size])}));
   const {error:ve}=await sb.from("product_variants").insert(variants);if(ve)throw ve;
-  alert(`Produk berhasil disimpan!\nKode produk: ${product.reference_no||"-"}\nStok yang dimasukkan berlaku untuk setiap ukuran yang dipilih.`);
+  alert(`Produk berhasil disimpan!\nKode produk: ${product.reference_no||"-"}\nStok tersimpan sesuai setiap ukuran yang dipilih.`);
   location.href="produk.html";
- }catch(e){alert("Produk belum berhasil disimpan.\n"+(e.message||"Periksa koneksi, role admin, dan pengaturan Cloudinary."));}
+ }catch(e){
+  console.error("NOUVA tambah produk:",e);
+  const message=e?.message||String(e)||"Kesalahan tidak diketahui.";
+  alert("Produk belum berhasil disimpan.\n\nDetail: "+message+"\n\nJika tertulis 'Failed to fetch', biasanya permintaan jaringan ke Cloudinary atau Supabase gagal. Periksa koneksi internet dan tab Console/Network untuk melihat layanan yang gagal.");
+ }
  finally{busy=false;saveButton.disabled=false;saveButton.innerHTML='<span aria-hidden="true">＋</span> Tambah Produk';}
 });
 checkAdmin().catch(()=>{});

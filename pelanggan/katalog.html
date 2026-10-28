@@ -10,6 +10,7 @@
   <script src="../js/nouva-config.js"></script>
   <script src="../js/nouva-supabase.js"></script>
   <script src="../js/nouva-workflow.js"></script>
+<link rel="stylesheet" href="../css/nouva-partner-contact.css">
 </head>
 
 <body>
@@ -118,6 +119,8 @@
         </div>
       </section>
 
+      <section class="partner-contact-card" data-nouva-partner-contact></section>
+
     </main>
   </div>
 
@@ -157,7 +160,7 @@
         <div class="product-image"><img src="${esc(imageOf(p))}" alt="${esc(p.name)}" loading="lazy" onerror="this.closest('.product-image').classList.add('fallback');this.remove()"></div>
         <div class="product-info"><h2>${esc(p.name)}</h2><div class="price">${money(p.price)}</div>
         <div class="availability ${stockOf(p)<=0?'out-of-stock':''}"><span></span>${stockOf(p)>0?'Stok: '+stockOf(p)+' pcs':'Stok habis'}</div>
-        <a class="buy-button" href="detail_produk.html" data-buy="${i}"><span class="cart-icon">🛒</span><span>Lihat Detail</span></a></div></article>`).join(""):'';
+        <a class="buy-button" href="detail_produk.html" data-buy="${i}"><span>Lihat Detail</span></a></div></article>`).join(""):'';
       grid.querySelectorAll("[data-index]").forEach(card=>{
         const p=shown[Number(card.dataset.index)];
         card.addEventListener("click",e=>{if(!e.target.closest("a,button"))choose(p)});
@@ -176,5 +179,6 @@
     load();
   })();
   </script>
+<script src="../js/nouva-partner-contact.js"></script>
 </body>
 </html>

@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="../css/dashboard_pelanggan.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../js/nouva-config.js"></script><script src="../js/nouva-supabase.js"></script><script src="../js/nouva-workflow.js"></script>
+<link rel="stylesheet" href="../css/nouva-partner-contact.css">
 </head>
 <body>
   <div class="dashboard-pelanggan">
@@ -53,9 +54,10 @@
         </div>
 
         <div class="header-actions">
-          <div class="profile-button" aria-label="Profil pelanggan">
-            <img src="https://c.animaapp.com/p1sQDTEtDvvv6RPK6LBx5w/img/image-removebg-preview--11--1.png" alt="Profil">
-          </div>
+          <button class="dashboard-logout-btn" id="dashboardLogoutButton" type="button" aria-label="Keluar dari akun">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 17v2H5V5h5v2H7v10h3Zm8-5-4-4v3H10v2h4v3l4-4Z"/></svg>
+            <span class="logout-label">Keluar</span>
+          </button>
         </div>
       </header>
 
@@ -91,7 +93,7 @@
         <article class="card products-panel">
           <div class="panel-heading">
             <h2>Produk Unggulan</h2>
-            <a href="katalog.html">Lihat Semua <span>→</span></a>
+            <a class="see-all-products" href="katalog.html">Lihat Semua <span>→</span></a>
           </div>
 
           <div class="product-list" id="featuredProducts"><p>Memuat produk...</p></div>
@@ -106,6 +108,8 @@
           <a class="see-all-status" href="pesanan_saya.html">Lihat Selengkapnya <span>→</span></a>
         </aside>
       </section>
+
+      <section class="partner-contact-card" data-nouva-partner-contact></section>
 
       <section class="guide">
         <div class="guide-copy">
@@ -124,6 +128,13 @@
  try{
    const {session,profile}=await NouvaWorkflow.requireRole("customer","../auth/login_pelanggan.html");
    document.getElementById("customerWelcome").textContent="Selamat datang, "+(profile.full_name||session.user.email||"Pelanggan")+"!";
+   document.getElementById("dashboardLogoutButton")?.addEventListener("click",async()=>{
+     if(!confirm("Yakin ingin keluar dari akun?"))return;
+     const btn=document.getElementById("dashboardLogoutButton"); btn.disabled=true; btn.querySelector(".logout-label").textContent="Keluar...";
+     const {error}=await sb.auth.signOut();
+     if(error){alert("Gagal keluar: "+error.message);btn.disabled=false;btn.querySelector(".logout-label").textContent="Keluar";return;}
+     location.href="../auth/login_pelanggan.html";
+   });
    const [orderRes,productRes]=await Promise.all([
      sb.from("orders").select("id,reference_no,order_type,customer_name,ordered_at,deadline,process_status,total_amount,order_items(product_name_snapshot,quantity),custom_order_details(product_name,quantity)").eq("customer_id",session.user.id).order("created_at",{ascending:false}),
      sb.from("products").select("id,name,category,price,description,product_images(image_url,sort_order)").eq("is_active",true).order("created_at",{ascending:false}).limit(3)
@@ -152,5 +163,6 @@
  }
 })();
 </script>
+<script src="../js/nouva-partner-contact.js"></script>
 </body>
 </html>

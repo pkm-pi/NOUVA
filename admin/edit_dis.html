@@ -90,22 +90,29 @@
               <img id="mainProductImage" src="https://images.unsplash.com/photo-1596755389378-c31d21fd1273?auto=format&fit=crop&w=900&q=85" alt="Foto utama produk">
             </label>
 
-            <div class="thumbnail-list" aria-label="Foto produk">
-              <label class="thumb active edit-thumb">
-                <input type="file" accept="image/*" class="hidden-file" data-photo="main-thumb">
-                <img class="thumb-image" data-thumb-index="0" src="https://images.unsplash.com/photo-1596755389378-c31d21fd1273?auto=format&fit=crop&w=300&q=80" alt="Foto utama">
+            <div class="thumbnail-list" aria-label="Foto produk tambahan">
+              <label class="thumb active edit-thumb" data-slot="0" title="Klik untuk mengganti foto utama">
+                <input type="file" accept="image/*" class="hidden-file" data-photo="main-thumb" aria-label="Ganti foto utama">
+                <img class="thumb-image" data-thumb-index="0" src="" alt="Foto utama">
+                <span class="thumb-edit-hint"><b>↻</b><small>Ganti utama</small></span>
               </label>
-              <label class="thumb edit-thumb">
-                <input type="file" accept="image/*" class="hidden-file" data-photo="extra">
-                <img class="thumb-image" data-thumb-index="1" src="https://images.unsplash.com/photo-1603252110481-7ba873bf42ab?auto=format&fit=crop&w=300&q=80" alt="Foto tambahan">
+              <label class="thumb edit-thumb is-empty" data-slot="1" title="Klik untuk menambah atau mengganti foto 2">
+                <input type="file" accept="image/*" class="hidden-file" data-photo="extra" data-slot="1" aria-label="Tambah atau ganti foto 2">
+                <img class="thumb-image" data-thumb-index="1" src="" alt="Foto tambahan 2">
+                <span class="thumb-edit-hint"><b>＋</b><small>Tambah / ganti foto</small></span>
+                <button class="delete-photo-btn" type="button" data-delete-slot="1" aria-label="Hapus foto tambahan 1" title="Hapus foto ini" hidden>×</button>
               </label>
-              <label class="thumb edit-thumb">
-                <input type="file" accept="image/*" class="hidden-file" data-photo="extra">
-                <img class="thumb-image" data-thumb-index="2" src="https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&w=300&q=80" alt="Foto tambahan">
+              <label class="thumb edit-thumb is-empty" data-slot="2" title="Klik untuk menambah atau mengganti foto 3">
+                <input type="file" accept="image/*" class="hidden-file" data-photo="extra" data-slot="2" aria-label="Tambah atau ganti foto 3">
+                <img class="thumb-image" data-thumb-index="2" src="" alt="Foto tambahan 3">
+                <span class="thumb-edit-hint"><b>＋</b><small>Tambah / ganti foto</small></span>
+                <button class="delete-photo-btn" type="button" data-delete-slot="2" aria-label="Hapus foto tambahan 2" title="Hapus foto ini" hidden>×</button>
               </label>
-              <label class="thumb edit-thumb">
-                <input type="file" accept="image/*" class="hidden-file" data-photo="extra">
-                <img class="thumb-image" data-thumb-index="3" src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=300&q=80" alt="Foto tambahan">
+              <label class="thumb edit-thumb is-empty" data-slot="3" title="Klik untuk menambah atau mengganti foto 4">
+                <input type="file" accept="image/*" class="hidden-file" data-photo="extra" data-slot="3" aria-label="Tambah atau ganti foto 4">
+                <img class="thumb-image" data-thumb-index="3" src="" alt="Foto tambahan 4">
+                <span class="thumb-edit-hint"><b>＋</b><small>Tambah / ganti foto</small></span>
+                <button class="delete-photo-btn" type="button" data-delete-slot="3" aria-label="Hapus foto tambahan 3" title="Hapus foto ini" hidden>×</button>
               </label>
             </div>
           </div>
@@ -137,13 +144,6 @@
                 <label for="price">Harga</label>
                 <input id="price" name="price" value="" type="text">
               </div>
-              <div class="field">
-                <label for="stock">Stok</label>
-                <div class="input-suffix">
-                  <input id="stock" name="stock" value="" type="number" min="0">
-                  <span>pcs</span>
-                </div>
-              </div>
             </div>
 
             <div class="field">
@@ -157,11 +157,17 @@
             <div class="field-grid two size-fabric-row">
               <div class="field">
                 <label>Ukuran Tersedia</label>
-                <div class="size-row">
-                  <button class="size-btn" type="button">S</button>
-                  <button class="size-btn" type="button">M</button>
-                  <button class="size-btn" type="button">L</button>
-                  <button class="size-btn" type="button">XL</button>
+                <div class="size-row" id="sizeOptions">
+                  <button class="size-btn" type="button" data-size="XS">XS</button>
+                  <button class="size-btn" type="button" data-size="S">S</button>
+                  <button class="size-btn" type="button" data-size="M">M</button>
+                  <button class="size-btn" type="button" data-size="L">L</button>
+                  <button class="size-btn" type="button" data-size="XL">XL</button>
+                  <button class="size-btn" type="button" data-size="XXL">XXL</button>
+                </div>
+                <p class="size-stock-hint">Pilih ukuran, lalu isi stok masing-masing ukuran.</p>
+                <div class="size-stock-grid" id="sizeStockFields" aria-live="polite">
+                  <span class="size-stock-empty">Memuat stok ukuran...</span>
                 </div>
               </div>
 
@@ -206,6 +212,10 @@
 (async function(){
  const $=id=>document.getElementById(id), sb=window.nouvaSupabase, esc=NouvaWorkflow.escape;
  let auth, product, variants=[], oldImages=[];
+ // State stok ukuran harus tersedia sebelum data produk dimuat.
+ const sizeStocks = Object.create(null);
+ const sizeStockFields = $("sizeStockFields");
+ const deletedPhotoSlots = new Set();
  const params=new URLSearchParams(location.search);
  const productId=params.get("id")||localStorage.getItem("editProductId");
  function msg(text){let el=$("editStatus");if(!el){el=document.createElement("p");el.id="editStatus";el.style.cssText="padding:10px;border-radius:8px;background:#f8f1fa;color:#391e46;font-size:13px";$("editProductForm").prepend(el)}el.textContent=text}
@@ -215,15 +225,26 @@
   const {data,error}=await sb.from("products").select("*,product_images(id,image_url,sort_order),product_variants(id,size,color_name,color_image_url,stock)").eq("id",productId).single();
   if(error)throw error;product=data;variants=data.product_variants||[];oldImages=(data.product_images||[]).sort((a,b)=>a.sort_order-b.sort_order);
   $("productName").value=data.name||"";$("price").value=Number(data.price||0);
-  $("stock").value=variants.length?Math.max(...variants.map(v=>Number(v.stock)||0)):0;
   $("motifName").value=data.motif_name||"";$("fabricColorName").value=variants[0]?.color_name||"";
   $("jenisKain").value=data.fabric_type||"";$("description").value=data.description||"";
   if(data.category){const opt=[...$("category").options].find(o=>o.value===data.category||o.textContent.trim()===data.category);if(opt)$("category").value=opt.value;}
   const selectedSizes=variants.map(v=>v.size);
-  document.querySelectorAll(".size-btn").forEach(b=>b.classList.toggle("selected",selectedSizes.includes(b.textContent.trim())));
+  variants.forEach(v=>{sizeStocks[v.size]=Number(v.stock)||0;});
+  document.querySelectorAll(".size-btn").forEach(b=>b.classList.toggle("selected",selectedSizes.includes(b.dataset.size||b.textContent.trim())));
+  renderSizeStockFields();
   const main=oldImages[0]?.image_url||data.motif_image_url;
   if(main)$("mainProductImage").src=main;
-  oldImages.forEach((im,i)=>{const el=document.querySelector(`.thumb-image[data-thumb-index="${i}"]`);if(el)el.src=im.image_url});
+  document.querySelectorAll(".edit-thumb").forEach((thumb,i)=>{
+    const image=oldImages[i];
+    thumb.hidden=false;
+    thumb.style.display="";
+    const el=thumb.querySelector(".thumb-image");
+    if(image && el){el.src=image.image_url;thumb.classList.remove("is-empty");}
+    else if(el){el.removeAttribute("src");thumb.classList.add("is-empty");}
+    const deleteButton=thumb.querySelector("[data-delete-slot]");
+    if(deleteButton) deleteButton.hidden = !(i>0 && !!image);
+    thumb.classList.toggle("active",i===0);
+  });
   if(data.motif_image_url){const p=$("motifImage").parentElement;p.style.backgroundImage=`url("${data.motif_image_url}")`;p.style.backgroundSize="cover"}
   if(variants[0]?.color_image_url){const p=$("fabricColorImage").parentElement;p.style.backgroundImage=`url("${variants[0].color_image_url}")`;p.style.backgroundSize="cover"}
   $("lastUpdated").textContent=data.updated_at?new Date(data.updated_at).toLocaleString("id-ID"):"—";
@@ -237,10 +258,47 @@
   loading.style.color="#a12626";
   return
  }
- function preview(input){const file=input.files?.[0];if(!file)return;const url=URL.createObjectURL(file);if(input.dataset.photo==="main"||input.dataset.photo==="main-thumb")$("mainProductImage").src=url;const im=input.closest(".thumb")?.querySelector("img");if(im)im.src=url;else if(input.id==="motifImage"||input.id==="fabricColorImage"){input.parentElement.style.backgroundImage=`url("${url}")`;input.parentElement.style.backgroundSize="cover"}}
+ function preview(input){
+  const file=input.files?.[0];if(!file)return;
+  const url=URL.createObjectURL(file);
+  const thumb=input.closest(".edit-thumb");
+  if(input.dataset.photo==="main"||input.dataset.photo==="main-thumb"){ $("mainProductImage").src=url; const mainThumb=document.querySelector('.edit-thumb[data-slot="0"]'); const mainThumbImg=mainThumb?.querySelector(".thumb-image"); if(mainThumbImg)mainThumbImg.src=url; if(mainThumb)mainThumb.classList.remove("is-empty"); }
+  if(thumb){const slot=Number(thumb.dataset.slot);deletedPhotoSlots.delete(slot);const im=thumb.querySelector(".thumb-image");if(im)im.src=url;thumb.classList.remove("is-empty");const del=thumb.querySelector("[data-delete-slot]");if(del)del.hidden=!(slot>0);document.querySelectorAll(".edit-thumb").forEach(x=>x.classList.toggle("active",x===thumb));if(input.dataset.photo==="extra")$("mainProductImage").src=url;}
+  else if(input.id==="motifImage"||input.id==="fabricColorImage"){input.parentElement.style.backgroundImage=`url("${url}")`;input.parentElement.style.backgroundSize="cover"}
+ }
  document.querySelectorAll("[data-photo],.upload-color input").forEach(i=>i.addEventListener("change",()=>preview(i)));
- document.querySelectorAll(".thumb").forEach(b=>b.addEventListener("click",e=>{if(e.target.closest("input"))return;document.querySelectorAll(".thumb").forEach(x=>x.classList.toggle("active",x===b));const im=b.querySelector("img");if(im?.src)$("mainProductImage").src=im.src}));
- document.querySelectorAll(".size-btn").forEach(b=>b.addEventListener("click",()=>b.classList.toggle("selected")));
+ document.querySelectorAll(".edit-thumb").forEach(b=>b.addEventListener("click",e=>{
+   if(e.target.closest("input"))return;
+   const im=b.querySelector(".thumb-image");
+   if(im?.getAttribute("src"))$("mainProductImage").src=im.src;
+   document.querySelectorAll(".edit-thumb").forEach(x=>x.classList.toggle("active",x===b));
+ }));
+ document.querySelectorAll("[data-delete-slot]").forEach(button=>button.addEventListener("click",e=>{
+   e.preventDefault(); e.stopPropagation();
+   const slot=Number(button.dataset.deleteSlot), thumb=document.querySelector(`.edit-thumb[data-slot="${slot}"]`);
+   if(!thumb || slot<1) return; // Foto utama tidak boleh dihapus.
+   const image=thumb.querySelector(".thumb-image"), fileInput=thumb.querySelector('input[type="file"]');
+   if(!image?.getAttribute("src") && !fileInput?.files?.length) return;
+   if(!confirm("Hapus foto tambahan ini? Foto akan dihapus setelah menekan Simpan Perubahan.")) return;
+   deletedPhotoSlots.add(slot); if(fileInput)fileInput.value=""; if(image)image.removeAttribute("src");
+   thumb.classList.add("is-empty"); button.hidden=true;
+   const hint=thumb.querySelector(".thumb-edit-hint"); if(hint){hint.querySelector("b").textContent="＋";hint.querySelector("small").textContent="Tambah foto";}
+ }));
+ function renderSizeStockFields(){
+  const selected=[...document.querySelectorAll(".size-btn.selected")].map(b=>b.dataset.size||b.textContent.trim());
+  sizeStockFields.innerHTML="";
+  if(!selected.length){sizeStockFields.innerHTML='<span class="size-stock-empty">Belum ada ukuran dipilih.</span>';return;}
+  selected.forEach(size=>{
+   const field=document.createElement("label");field.className="size-stock-item";
+   field.innerHTML=`<span>Stok ukuran <strong>${size}</strong></span><div class="input-suffix"><input type="number" min="0" step="1" inputmode="numeric" data-stock-size="${size}" aria-label="Stok ukuran ${size}" value="${sizeStocks[size] ?? 0}"><span>pcs</span></div>`;
+   const input=field.querySelector("input");input.addEventListener("input",()=>{sizeStocks[size]=input.value;});sizeStockFields.appendChild(field);
+  });
+ }
+ document.querySelectorAll(".size-btn").forEach(b=>b.addEventListener("click",()=>{
+  const size=b.dataset.size||b.textContent.trim();b.classList.toggle("selected");
+  if(!b.classList.contains("selected"))delete sizeStocks[size];else if(sizeStocks[size]===undefined)sizeStocks[size]=0;
+  renderSizeStockFields();
+ }));
  $("description").addEventListener("input",()=>$("descriptionCount").textContent=`${$("description").value.length}/500`);
  $("cancelEditBtn")?.addEventListener("click",()=>location.href="produk.html");
  document.querySelector(".cancel-btn")?.addEventListener("click",e=>{e.preventDefault();location.href="produk.html"});
@@ -248,13 +306,26 @@
   e.preventDefault();const submit=$("editProductForm").querySelector('[type="submit"]');if(submit)submit.disabled=true;
   try{
    const name=$("productName").value.trim(),price=Number($("price").value),category=$("category").value;
-   const color=$("fabricColorName").value.trim()||"Warna utama",stock=Math.max(0,parseInt($("stock").value,10)||0);
-   const sizes=[...document.querySelectorAll(".size-btn.selected")].map(b=>b.textContent.trim());
+   const color=$("fabricColorName").value.trim()||"Warna utama";
+   const sizes=[...document.querySelectorAll(".size-btn.selected")].map(b=>b.dataset.size||b.textContent.trim());
    if(!name||!category||!Number.isFinite(price)||price<0||!sizes.length)throw new Error("Nama, kategori, harga valid, dan minimal satu ukuran wajib diisi.");
+   for(const size of sizes){const stock=Number(sizeStocks[size]);if(sizeStocks[size]===undefined||sizeStocks[size]===""||!Number.isInteger(stock)||stock<0)throw new Error(`Stok ukuran ${size} harus diisi dengan bilangan bulat nol atau lebih.`);}
    msg("Menyimpan perubahan...");
-   let mainUrl=oldImages[0]?.image_url||product.motif_image_url||null;
+   // Pertahankan foto lama pada slot masing-masing. Slot kosong tetap bisa ditambah kapan saja.
+   const imageSlots=[null,null,null,null];
+   oldImages.slice(0,4).forEach((im,i)=>{imageSlots[i]=im.image_url;});
+   // Penghapusan baru disimpan ke Supabase saat tombol Simpan Perubahan ditekan.
+   deletedPhotoSlots.forEach(slot=>{if(slot>0 && slot<4) imageSlots[slot]=null;});
    const mainInput=document.querySelector('[data-photo="main"]');
-   if(mainInput?.files?.[0])mainUrl=(await window.nouvaUploadImage(mainInput.files[0],"nouva/products")).url;
+   const mainThumbInput=document.querySelector('[data-photo="main-thumb"]');
+   const chosenMain=mainInput?.files?.[0]||mainThumbInput?.files?.[0];
+   if(chosenMain) imageSlots[0]=(await window.nouvaUploadImage(chosenMain,"nouva/products")).url;
+   for(const input of document.querySelectorAll('[data-photo="extra"][data-slot]')){
+     const slot=Number(input.dataset.slot),file=input.files?.[0];
+     if(file && slot>=1 && slot<=3) imageSlots[slot]=(await window.nouvaUploadImage(file,"nouva/products")).url;
+   }
+   const imageUrls=imageSlots.filter(Boolean);
+   const mainUrl=imageSlots[0]||product.motif_image_url||null;
    const motifInput=$("motifImage");
    let motifUrl=product.motif_image_url||null;
    if(motifInput?.files?.[0])motifUrl=(await window.nouvaUploadImage(motifInput.files[0],"nouva/motifs")).url;
@@ -265,14 +336,20 @@
    if(!updatedProduct)throw new Error("Data produk tidak berubah. Periksa akun admin dan policy RLS tabel products di Supabase, lalu jalankan fix_produk_admin.sql.");
    const colorImageInput=$("fabricColorImage");let colorUrl=variants.find(v=>v.color_name===color)?.color_image_url||null;
    if(colorImageInput?.files?.[0])colorUrl=(await window.nouvaUploadImage(colorImageInput.files[0],"nouva/fabrics")).url;
-   if(mainUrl){
+   {
      const {error:delErr}=await sb.from("product_images").delete().eq("product_id",product.id);if(delErr)throw delErr;
-     const imageRows=[{product_id:product.id,image_url:mainUrl,sort_order:1},...oldImages.slice(1).map((im,i)=>({product_id:product.id,image_url:im.image_url,sort_order:i+2}))];
-     const {data:insertedImages,error:imgErr}=await sb.from("product_images").insert(imageRows).select("id");
-     if(imgErr)throw imgErr;
-     if(!insertedImages||insertedImages.length!==imageRows.length)throw new Error("Foto produk belum terverifikasi tersimpan.");
+     const imageRows=imageUrls.map((url,i)=>({product_id:product.id,image_url:url,sort_order:i+1}));
+     if(imageRows.length){
+       const {data:insertedImages,error:imgErr}=await sb.from("product_images").insert(imageRows).select("id");
+       if(imgErr)throw imgErr;
+       if(!insertedImages||insertedImages.length!==imageRows.length)throw new Error("Foto produk belum terverifikasi tersimpan.");
+     }
    }
+   // Hapus varian ukuran yang dilepas dari pilihan untuk warna yang sedang diedit.
+   const removedVariants=variants.filter(v=>v.color_name===color&&!sizes.includes(v.size));
+   for(const variant of removedVariants){const {error}=await sb.from("product_variants").delete().eq("id",variant.id);if(error)throw error;}
    for(const size of sizes){
+    const stock=Number(sizeStocks[size]);
     const existing=variants.find(v=>v.size===size&&v.color_name===color);
     if(existing){const {error}=await sb.from("product_variants").update({stock,color_image_url:colorUrl,updated_at:new Date().toISOString()}).eq("id",existing.id);if(error)throw error}
     else {const {error}=await sb.from("product_variants").insert({product_id:product.id,size,color_name:color,color_image_url:colorUrl,stock});if(error)throw error}

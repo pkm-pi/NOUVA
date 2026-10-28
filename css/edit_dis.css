@@ -1005,3 +1005,39 @@ body{overflow-x:hidden}
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+
+
+/* ===== EDIT PRODUK: slot foto selalu tersedia dan jelas bisa diedit ===== */
+.thumbnail-list{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}
+.edit-thumb{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;aspect-ratio:1/1;border:1px solid #e3d9eb;border-radius:9px;background:#f7f1fb;overflow:hidden;isolation:isolate;transition:border-color .18s ease,transform .18s ease,box-shadow .18s ease}
+.edit-thumb:hover{border-color:#9a68bd;transform:translateY(-2px);box-shadow:0 5px 14px rgba(62,36,75,.12)}
+.edit-thumb .thumb-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1}
+.edit-thumb.is-empty .thumb-image{display:none}
+.thumb-edit-hint{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:linear-gradient(180deg,rgba(62,36,75,.06),rgba(62,36,75,.62));color:#fff;text-align:center;opacity:0;transition:opacity .18s ease;padding:4px}
+.edit-thumb.is-empty .thumb-edit-hint{opacity:1;background:linear-gradient(145deg,#fbf7ff,#efe3f8);color:#8050a5}
+.edit-thumb:hover .thumb-edit-hint,.edit-thumb:focus-within .thumb-edit-hint{opacity:1}
+.thumb-edit-hint b{font-size:22px;line-height:1;font-weight:500}
+.thumb-edit-hint small{font:600 8px Poppins,sans-serif;line-height:1.2}
+.edit-thumb.active{border:2px solid #8b59c5;box-shadow:0 0 0 2px rgba(139,89,197,.12)}
+.edit-thumb.active .thumb-edit-hint{opacity:1}
+.edit-thumb.active:not(.is-empty) .thumb-edit-hint{background:linear-gradient(180deg,rgba(62,36,75,.08),rgba(62,36,75,.7))}
+.edit-main-photo{position:relative;cursor:pointer}
+.edit-main-photo::after{content:'Klik foto untuk mengganti';position:absolute;right:10px;bottom:10px;padding:7px 10px;border:1px solid rgba(255,255,255,.55);border-radius:8px;background:rgba(62,36,75,.78);color:#fff;font:600 10px Poppins,sans-serif;opacity:0;transition:opacity .18s ease;pointer-events:none}
+.edit-main-photo:hover::after,.edit-main-photo:focus-within::after{opacity:1}
+@media(max-width:760px){.thumbnail-list{gap:7px}.thumb-edit-hint small{font-size:9px}.edit-main-photo::after{font-size:9px;opacity:1}}
+
+
+/* Tombol hapus khusus foto tambahan; foto utama tidak bisa dihapus. */
+.edit-thumb .delete-photo-btn{position:absolute;z-index:5;top:5px;right:5px;width:25px;height:25px;display:grid;place-items:center;padding:0;border:1px solid rgba(255,255,255,.9);border-radius:50%;background:#fff;color:#a52d54;font:700 20px/1 Poppins,sans-serif;box-shadow:0 2px 7px rgba(30,10,40,.22);cursor:pointer;opacity:.98}
+.edit-thumb .delete-photo-btn:hover{background:#a52d54;color:#fff;transform:scale(1.06)}
+.edit-thumb .delete-photo-btn[hidden]{display:none!important}
+
+/* Ukuran dan stok per ukuran: samakan perilaku dengan halaman Tambah Produk */
+.size-stock-hint{margin:7px 0 6px;color:#8b7b91;font-size:8px;line-height:1.5}
+.size-stock-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.size-stock-item{display:flex!important;flex-direction:column;gap:5px;padding:8px;border:1px solid #e7dced;border-radius:8px;background:#fcf9fd;color:#4b3158!important;font-size:8px!important}
+.size-stock-item>span{margin:0!important}
+.size-stock-item strong{color:#794691}
+.size-stock-item .input-suffix input{width:100%;min-width:0;height:30px;padding:0 32px 0 8px;font-size:10px}
+.size-stock-empty{grid-column:1/-1;padding:9px;color:#9a8ba1;border:1px dashed #e1d5e8;border-radius:7px;font-size:8px}
+@media(max-width:760px){.size-stock-hint{font-size:11px}.size-stock-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.size-stock-item{font-size:11px!important}.size-stock-item .input-suffix input{font-size:14px!important;min-height:40px}.size-stock-empty{font-size:11px}}

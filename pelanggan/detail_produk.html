@@ -169,7 +169,10 @@
 
   <script>
   (async()=>{
-    const sb=window.nouvaSupabase, selected=JSON.parse(sessionStorage.getItem("selectedProduct")||"null");
+    const sb=window.nouvaSupabase;
+    const queryId=new URLSearchParams(location.search).get("id");
+    let selected=JSON.parse(sessionStorage.getItem("selectedProduct")||"null");
+    if(queryId) selected={...(selected||{}),id:queryId};
     const $=id=>document.getElementById(id), esc=NouvaWorkflow.escape, money=NouvaWorkflow.money;
     const nameEl=$("productName"),descEl=$("productDescription"),priceEl=$("price"),stockEl=$("stock"),pill=$("stockPill"),main=$("mainImage"),gallery=$("galleryList"),thumbs=$("thumbs"),qtyEl=$("quantity");
     let product=null, variants=[], availability={}, currentVariant=null;

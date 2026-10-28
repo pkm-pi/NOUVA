@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="../css/pesanan_saya.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../js/nouva-config.js"></script><script src="../js/nouva-supabase.js"></script><script src="../js/nouva-workflow.js"></script>
+<link rel="stylesheet" href="../css/nouva-partner-contact.css">
 </head>
 <body>
   <div class="orders-page">    
@@ -51,7 +52,8 @@
 <button class="tab" data-status="Selesai">Selesai <b>1</b></button>
 <button class="tab" data-status="Dibatalkan">Dibatalkan <b>1</b></button>
 </nav>
-<section class="orders-table"><div class="table-head"><span>No. Referensi</span><span>Produk</span><span>Total</span><span>Status</span><span>Detail</span></div><div id="orderRows" class="order-rows"><p>Memuat pesanan dari Supabase...</p></div><p id="emptyState" class="empty-state" hidden>Tidak ada pesanan yang sesuai.</p></section></main></div>
+<section class="orders-table"><div class="table-head"><span>No. Referensi</span><span>Produk</span><span>Total</span><span>Status</span><span>Detail</span></div><div id="orderRows" class="order-rows"><p>Memuat pesanan dari Supabase...</p></div><p id="emptyState" class="empty-state" hidden>Tidak ada pesanan yang sesuai.</p></section>
+<section class="partner-contact-card" data-nouva-partner-contact></section></main></div>
 <script>
 (async()=>{
  const sb=window.nouvaSupabase, wrap=document.getElementById("orderRows"), search=document.getElementById("searchOrders"), empty=document.getElementById("emptyState");
@@ -80,4 +82,5 @@
  document.querySelectorAll(".tab").forEach(tab=>tab.addEventListener("click",()=>{activeStatus=tab.dataset.status;document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===tab));render()}));
  search?.addEventListener("input",render);
 })();
-</script></body></html>
+</script><script src="../js/nouva-partner-contact.js"></script>
+</body></html>

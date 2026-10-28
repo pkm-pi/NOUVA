@@ -29,7 +29,7 @@
       }
 
       const profileResult = await sb.from("profiles")
-        .select("id, full_name, phone, role")
+        .select("id, full_name, phone, username, role")
         .eq("id", session.user.id)
         .single();
       if (profileResult.error) throw profileResult.error;
@@ -44,6 +44,8 @@
 
       $("namaKamu").value = profile.full_name || "";
       $("nomorHp").value = profile.phone || "";
+      if ($("emailAkun")) $("emailAkun").value = session.user.email || "";
+      if ($("usernameAkun")) $("usernameAkun").value = profile.username || "";
       const nameLabel = document.querySelector(".admin-name");
       if (nameLabel && expectedRole === "admin") nameLabel.textContent = profile.full_name || "Admin";
 
@@ -57,11 +59,39 @@
             input.focus();
             return;
           }
+          if (target === "usernameAkun") {
+            const username = value.toLowerCase();
+            if (!/^[a-z0-9_]{3,24}$/.test(username)) {
+              showMessage("Username harus 3–24 karakter dan hanya berisi huruf, angka, atau garis bawah (_).", "error");
+              input.focus();
+              return;
+            }
+            if (username === (profile.username || "").toLowerCase()) {
+              showMessage("Username tidak berubah.", "info");
+              return;
+            }
+            const { data: available, error: availabilityError } = await sb.rpc("nouva_username_available", { p_username: username });
+            if (availabilityError) {
+              showMessage("Tidak dapat memeriksa username. Pastikan fungsi nouva_username_available tersedia di Supabase.", "error");
+              return;
+            }
+            if (!available) {
+              showMessage("Username sudah digunakan. Pilih username lain.", "error");
+              input.focus();
+              return;
+            }
+          }
           button.disabled = true;
           const oldText = button.textContent;
           button.textContent = "Menyimpan...";
-          const patch = target === "namaKamu" ? { full_name: value } : { phone: value || null };
+          let patch;
+          if (target === "namaKamu") patch = { full_name: value };
+          else if (target === "usernameAkun") patch = { username: value.toLowerCase() };
+          else patch = { phone: value || null };
           const { error } = await sb.from("profiles").update(patch).eq("id", session.user.id);
+          if (!error && target === "usernameAkun") profile.username = value.toLowerCase();
+          if (!error && target === "namaKamu") profile.full_name = value; 
+          if (!error && target === "nomorHp") profile.phone = value || null;
           button.disabled = false;
           button.textContent = oldText;
           if (error) {
@@ -97,17 +127,7 @@
         showMessage("Kata sandi berhasil diganti.", "success");
       });
 
-      $("logoutButton").addEventListener("click", async () => {
-        if (!confirm("Yakin ingin keluar dari akun?")) return;
-        const { error } = await sb.auth.signOut();
-        if (error) {
-          showMessage("Gagal keluar: " + error.message, "error");
-          return;
-        }
-        location.href = loginUrl;
-      });
 
-      showMessage("Data akun berhasil dimuat dari Supabase.", "success");
     } catch (error) {
       console.error("Pengaturan akun:", error);
       showMessage("Tidak dapat memuat akun: " + (error.message || "Terjadi kesalahan."), "error");
