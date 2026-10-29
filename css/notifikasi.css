@@ -271,7 +271,7 @@ h1{margin:0;color:var(--purple);font-size:clamp(23px,2.3vw,32px);line-height:1.2
     overflow-wrap: break-word !important;
   }
   .notification-app .page-header h1 {
-    font-size: clamp(22px, 6vw, 28px) !important;
+    font-size: clamp(22px, 6vw, 20px) !important;
     line-height: 1.2 !important;
   }
 
@@ -394,4 +394,119 @@ h1{margin:0;color:var(--purple);font-size:clamp(23px,2.3vw,32px);line-height:1.2
   .notification-app .search-box input,
   .notification-app .search-box input::placeholder,
   .notification-app .status-filter select { font-size: 9px !important; }
+}
+
+
+/* Header notifikasi: tombol kembali sejajar dengan judul, mengikuti halaman Edit Produk */
+.page-header { display: block; margin-bottom: 25px; }
+.page-heading-group { display: flex; align-items: flex-start; gap: 14px; min-width: 0; }
+.back-title-button {
+  width: 42px; height: 42px; min-width: 42px; margin-top: 1px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid #8a55a5; border-radius: 7px; background: #fff;
+  color: var(--purple2); text-decoration: none;
+  transition: background .18s ease, color .18s ease, transform .18s ease;
+}
+.back-title-button svg {
+  width: 23px; height: 23px; fill: none; stroke: currentColor;
+  stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+}
+.back-title-button:hover { background: #f3eaf7; color: var(--purple); }
+.back-title-button:focus-visible { outline: 3px solid rgba(121,70,145,.25); outline-offset: 2px; }
+.page-heading-text { min-width: 0; }
+.page-heading-text h1 { margin: 0; }
+.page-heading-text p { margin: 7px 0 0; color: #766b7e; font-size: 14px; }
+.bell-mark { display: none !important; }
+
+@media (max-width: 760px) {
+  .page-header { margin-bottom: 18px; }
+  .page-heading-group { gap: 10px; }
+  .back-title-button { width: 38px; height: 38px; min-width: 38px; }
+  .back-title-button svg { width: 21px; height: 21px; }
+  .page-heading-text h1 { font-size: clamp(20px, 5vw, 27px); }
+  .page-heading-text p { font-size: 12px; line-height: 1.5; max-width: none; }
+}
+
+
+/* PENYESUAIAN DESKTOP: ukuran sidebar dan judul mengikuti dashboard_admin.css */
+@media screen and (min-width: 761px) {
+  .notification-app > .sidebar {
+    width: 175px !important;
+    min-width: 175px !important;
+    padding: 28px 14px 24px !important;
+  }
+  .notification-app > .sidebar .logo-nouva-FIKS {
+    width: 68px !important;
+    height: 68px !important;
+    border-radius: 16px !important;
+  }
+  .notification-app > .sidebar .brand-name {
+    margin-top: 7px !important;
+    font-size: 22px !important;
+  }
+  .notification-app > .sidebar .brand-tagline {
+    margin-top: 4px !important;
+    font-size: 7.8px !important;
+  }
+  .notification-app > .sidebar .admin-profile {
+    margin: 28px 0 22px !important;
+    gap: 6px !important;
+  }
+  .notification-app > .sidebar .profile {
+    width: 50px !important;
+    height: 50px !important;
+  }
+  .notification-app > .sidebar .admin-name {
+    font-size: 15px !important;
+  }
+  .notification-app > .sidebar .menu {
+    gap: 7px !important;
+  }
+  .notification-app > .sidebar .menu-link {
+    min-height: 39px !important;
+    gap: 10px !important;
+    padding: 7px 8px !important;
+    border-radius: 9px !important;
+  }
+  .notification-app > .sidebar .menu-link img {
+    width: 28px !important;
+    height: 28px !important;
+  }
+  .notification-app > .sidebar .menu-link span {
+    font-size: 11px !important;
+    line-height: 1.15 !important;
+  }
+  .notification-app > .main-content {
+    padding: 28px clamp(18px, 2.2vw, 34px) 34px !important;
+    max-width: none !important;
+  }
+  .notification-app .page-header {
+    justify-content: flex-start !important;
+    margin-bottom: 16px !important;
+  }
+  .notification-app .page-heading-group {
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+  .notification-app .page-heading-text h1 {
+    font-size: clamp(18px, 1.35vw, 24px) !important;
+    line-height: 1.3 !important;
+    letter-spacing: -.35px !important;
+  }
+  .notification-app .page-heading-text p {
+    margin-top: 2px !important;
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+  }
+  .notification-app .back-title-button {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    margin-top: 0 !important;
+    border-radius: 7px !important;
+  }
+  .notification-app .back-title-button svg {
+    width: 21px !important;
+    height: 21px !important;
+  }
 }
