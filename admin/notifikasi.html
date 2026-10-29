@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notifikasi & Aktivitas - NOUVA</title>
+  <link rel="stylesheet" href="../globals.css">
+  <link rel="stylesheet" href="../css/notifikasi.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/nouva-config.js"></script>
+  <script src="../js/nouva-supabase.js"></script>
+  <script src="../js/nouva-workflow.js"></script>
+</head>
+<body>
+<div class="notification-app">
+  <aside class="sidebar">
+    <div class="brand">
+      <img class="logo-nouva-FIKS" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/logo-nouva-fiks-2.png" alt="Logo Nouva">
+      <div class="brand-name">NOUVA</div>
+      <div class="brand-tagline">NOU Menuju Inovasi</div>
+    </div>
+    <div class="admin-profile">
+      <img class="profile" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/profile.png" alt="">
+      <div class="admin-name">Admin</div>
+    </div>
+    <nav class="menu" aria-label="Menu aplikasi">
+      <a class="menu-link dashboard-menu-link" href="dashboard_admin.html"><img class="desktop-dashboard-icon" src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--3--1.png" alt=""><span>Dashboard</span></a>
+      <a class="menu-link" href="pesanan.html"><img src="https://c.animaapp.com/P7Ah09FQ/img/image-removebg-preview--12--3@2x.png" alt=""><span>Pesanan</span></a>
+      <a class="menu-link" href="produksi.html"><img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--13--1.png" alt=""><span>Produksi Jahit</span></a>
+      <a class="menu-link" href="produk.html"><img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--14--1.png" alt=""><span>Produk</span></a>
+      <a class="menu-link" href="pemasaran.html"><img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--17--1.png" alt=""><span>Pemasaran</span></a>
+      <a class="menu-link" href="pembukuan.html"><img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--18--1.png" alt=""><span>Pembukuan</span></a>
+      <a class="menu-link" href="pengaturan.html"><img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/image-removebg-preview--15--1.png" alt=""><span>Pengaturan</span></a>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <header class="page-header">
+      <div>
+        <a class="back-link" href="dashboard_admin.html">← Kembali ke Dashboard</a>
+        <h1>Notifikasi & Aktivitas</h1>
+        <p>Pesanan baru ditandai sebagai pesanan yang masih <strong>Menunggu Konfirmasi</strong>. Pilih “Semua status” untuk melihat riwayat lainnya.</p>
+      </div>
+      <div class="bell-mark" aria-hidden="true">♧</div>
+    </header>
+
+    <section class="summary-row" aria-label="Ringkasan aktivitas">
+      <article class="summary-card"><span class="summary-icon purple">✦</span><div><span class="summary-label">Total aktivitas</span><strong id="totalActivity">—</strong></div></article>
+      <article class="summary-card"><span class="summary-icon orange">◷</span><div><span class="summary-label">Pesanan baru</span><strong id="waitingCount">—</strong></div></article>
+      <article class="summary-card"><span class="summary-icon green">✓</span><div><span class="summary-label">Pesanan selesai</span><strong id="completedCount">—</strong></div></article>
+    </section>
+
+    <section class="activity-panel">
+      <div class="panel-heading">
+        <div><h2>Riwayat Aktivitas Pesanan</h2><p>Aktivitas dibuat dari status dan waktu pembaruan pesanan terakhir.</p></div>
+        <button id="refreshButton" class="refresh-btn" type="button">↻ Muat ulang</button>
+      </div>
+      <div class="filters">
+        <label class="search-box"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Cari nama atau nomor pesanan..." autocomplete="off"></label>
+        <label class="status-filter"><span>Status</span><select id="statusFilter"><option value="waiting" selected>Pesanan baru · Menunggu Konfirmasi</option><option value="all">Semua status</option><option>Menunggu Konfirmasi</option><option>Sedang Disulam</option><option>Sedang Dijahit</option><option>Siap Diambil</option><option>Selesai</option><option>Dibatalkan</option></select></label>
+      </div>
+      <div id="loadMessage" class="load-message" role="status">Memuat aktivitas pesanan...</div>
+      <div id="activityList" class="activity-list" aria-live="polite"></div>
+      <div class="list-footer"><span id="resultCount">0 aktivitas</span><a href="pesanan.html">Buka daftar pesanan →</a></div>
+    </section>
+  </main>
+</div>
+
+<script>
+(async function () {
+  const sb = window.nouvaSupabase;
+  const $ = (id) => document.getElementById(id);
+  const list = $('activityList');
+  const message = $('loadMessage');
+  const search = $('searchInput');
+  const statusFilter = $('statusFilter');
+  let allOrders = [];
+  const statusClass = {
+    'Menunggu Konfirmasi': 'waiting',
+    'Sedang Disulam': 'embroidery',
+    'Sedang Dijahit': 'sewing',
+    'Siap Diambil': 'pickup',
+    'Selesai': 'done',
+    'Dibatalkan': 'cancelled'
+  };
+  function esc(value) {
+    return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  }
+  function formatDate(value) {
+    if (!value) return 'Waktu belum tersedia';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return 'Waktu belum tersedia';
+    return new Intl.DateTimeFormat('id-ID', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' }).format(date);
+  }
+  function render() {
+    const query = search.value.trim().toLowerCase();
+    const selectedStatus = statusFilter.value;
+    const filtered = allOrders.filter(order => {
+      const status = order.process_status || 'Menunggu Konfirmasi';
+      const searchable = `${order.reference_no || ''} ${order.customer_name || ''} ${order.institution_name || ''} ${status}`.toLowerCase();
+      const statusMatches = selectedStatus === 'all'
+        || (selectedStatus === 'waiting' && status === 'Menunggu Konfirmasi')
+        || status === selectedStatus;
+      return statusMatches && searchable.includes(query);
+    });
+    $('resultCount').textContent = `${filtered.length} aktivitas`;
+    if (!filtered.length) {
+      list.innerHTML = '<div class="empty-state"><span>✓</span><strong>Tidak ada aktivitas yang cocok</strong><p>Coba ubah kata kunci atau filter status.</p></div>';
+      return;
+    }
+    list.innerHTML = filtered.map(order => {
+      const status = order.process_status || 'Menunggu Konfirmasi';
+      const name = order.institution_name || order.customer_name || 'Pelanggan';
+      const time = order.updated_at || order.ordered_at || order.created_at;
+      const type = order.order_type === 'custom' ? 'CUSTOM' : 'DISPLAY';
+      const detailUrl = `detail_pesanan.html?id=${encodeURIComponent(order.id)}`;
+      return `<article class="activity-item">
+        <div class="activity-symbol ${statusClass[status] || 'waiting'}">${status === 'Selesai' ? '✓' : status === 'Dibatalkan' ? '×' : '•'}</div>
+        <div class="activity-content">
+          <div class="activity-title-row"><h3>${esc(order.reference_no || 'Pesanan')}</h3><div class="activity-tags">${status === 'Menunggu Konfirmasi' ? '<span class="new-order-tag">BARU</span>' : ''}<span class="type-tag ${order.order_type === 'custom' ? 'custom' : 'display'}">${type}</span></div></div>
+          <p class="activity-description">Status pesanan <strong>${esc(name)}</strong> adalah <span class="status-pill ${statusClass[status] || 'waiting'}">${esc(status)}</span>.</p>
+          <span class="activity-time">◷ ${esc(formatDate(time))}</span>
+        </div>
+        <a class="detail-link" href="${detailUrl}">Lihat detail <span aria-hidden="true">→</span></a>
+      </article>`;
+    }).join('');
+  }
+  async function loadOrders() {
+    $('refreshButton').disabled = true;
+    $('refreshButton').textContent = 'Memuat...';
+    message.hidden = false;
+    message.textContent = 'Memuat aktivitas pesanan...';
+    list.innerHTML = '';
+    try {
+      if (!sb || !window.NouvaWorkflow) throw new Error('Koneksi Supabase belum siap. Muat ulang halaman beberapa saat lagi.');
+      await NouvaWorkflow.requireRole('admin', '../auth/login_admin.html');
+      const { data, error } = await sb.from('orders')
+        .select('id,reference_no,customer_name,institution_name,order_type,process_status,ordered_at,created_at,updated_at')
+        .order('created_at', { ascending: false })
+        .limit(100);
+      if (error) throw error;
+      allOrders = data || [];
+      $('totalActivity').textContent = allOrders.length;
+      $('waitingCount').textContent = allOrders.filter(o => o.process_status === 'Menunggu Konfirmasi').length;
+      $('completedCount').textContent = allOrders.filter(o => o.process_status === 'Selesai').length;
+      message.hidden = true;
+      render();
+    } catch (error) {
+      console.error('[NOUVA notifikasi]', error);
+      message.hidden = false;
+      message.textContent = `Aktivitas gagal dimuat: ${error.message || 'Terjadi kesalahan.'}`;
+      $('totalActivity').textContent = '—'; $('waitingCount').textContent = '—'; $('completedCount').textContent = '—';
+    } finally {
+      $('refreshButton').disabled = false;
+      $('refreshButton').textContent = '↻ Muat ulang';
+    }
+  }
+  search.addEventListener('input', render);
+  statusFilter.addEventListener('change', render);
+  $('refreshButton').addEventListener('click', loadOrders);
+  await loadOrders();
+})();
+</script>
+</body>
+</html>

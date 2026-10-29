@@ -1294,7 +1294,7 @@ textarea::placeholder {
 .store-choice small{font-size:10px;color:#766b79;line-height:1.35}
 .choice-note{display:block;margin-top:9px;padding:9px 11px;border-radius:8px;background:#f5eff7;color:#65566a;font-size:11px;line-height:1.55}
 .choice-empty,.choice-loading{grid-column:1/-1;margin:0;padding:12px;border:1px dashed #d9cadd;border-radius:8px;color:#766b79;font-size:12px}
-.custom-motif-upload{margin-top:12px;padding-top:10px;border-top:1px dashed #e3d8e7}
+.custom-motif-upload{margin-top:0;padding-top:0;border-top:none}
 .custom-motif-label{display:flex;flex-direction:column;gap:7px;font-size:12px;color:#391e46;font-weight:600}
 .custom-motif-label input{font-size:11px}
 @media(max-width:760px){.store-choice-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.store-choice img{height:105px}}
@@ -1339,10 +1339,61 @@ textarea::placeholder {
   .product-row-two .store-motif-options,
   .product-row-one .fabric-color-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .product-row-two .description-field textarea { min-height: 90px; }
-  .custom-motif-upload { margin-top: 10px; }
+  .custom-motif-upload { margin-top: 0; padding-top: 0; border-top: none; }
 }
 
 /* Harga admin berada pada baris data produk tanpa mengubah struktur halaman */
 .price-field{min-width:0}
 .product-row-one .price-field{grid-column:auto}
 @media(max-width:1100px){.product-row-one .price-field{grid-column:auto}}
+
+
+/* Perbaikan input pesanan custom: motif selebar kartu, tiga referensi sejajar. */
+@media (min-width: 1101px) {
+  .product-row-two { display:grid !important; grid-template-columns:minmax(0,1fr) !important; }
+  .product-row-two .motif-field { grid-column:1 / -1; }
+  .product-row-two .store-motif-options { grid-template-columns:repeat(auto-fill,minmax(125px,150px)); }
+  .product-row-three {
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) !important;
+    align-items:start; gap:14px;
+  }
+}
+@media (min-width: 761px) and (max-width: 1100px) {
+  .product-row-two { display:grid !important; grid-template-columns:minmax(0,1fr) !important; }
+  .product-row-two .motif-field { grid-column:1 / -1; }
+  .product-row-two .store-motif-options { grid-template-columns:repeat(auto-fill,minmax(125px,1fr)); }
+  .product-row-three { display:grid !important; grid-template-columns:repeat(2,minmax(0,1fr)) !important; gap:12px; }
+  .product-row-three .description-field { grid-column:1 / -1; }
+}
+@media (max-width: 760px) {
+  .product-row-two, .product-row-three { display:grid !important; grid-template-columns:minmax(0,1fr) !important; gap:13px !important; }
+  .product-row-two .motif-field, .product-row-three > .field { grid-column:1 / -1 !important; }
+}
+.payment-grid { grid-template-columns:repeat(5,minmax(0,1fr)); }
+.payment-help { margin:9px 0 0; color:#766b79; font-size:11px; line-height:1.5; }
+.payment-box select:disabled { opacity:.55; cursor:not-allowed; }
+@media (max-width: 900px) { .payment-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width: 480px) { .payment-grid { grid-template-columns:minmax(0,1fr); } }
+
+
+/* Final fix: hilangkan garis putus-putus dan sejajarkan tiga kolom referensi */
+.product-row-three {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  align-items: start !important;
+  gap: 14px !important;
+}
+.product-row-three .custom-motif-upload {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  border-top: none !important;
+}
+@media (max-width: 1100px) and (min-width: 761px) {
+  .product-row-three { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .product-row-three .description-field { grid-column: 1 / -1 !important; }
+}
+@media (max-width: 760px) {
+  .product-row-three { grid-template-columns: minmax(0, 1fr) !important; }
+  .product-row-three > .field { grid-column: 1 / -1 !important; }
+}

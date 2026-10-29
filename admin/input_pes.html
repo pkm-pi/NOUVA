@@ -201,13 +201,21 @@
 
           <div class="payment-grid">
             <div class="payment-box">
-              <span>Total Harga</span>
+              <span>Total Harga Produk</span>
               <strong id="totalPayment">Rp 0</strong>
             </div>
 
             <label class="payment-box editable">
-              <span>Nominal DP</span>
-              <input id="dpInput" name="dp" type="number" min="0" placeholder="Rp 0"/>
+              <span>Nominal DP (ditentukan admin)</span>
+              <input id="dpInput" name="dp" type="number" min="0" step="1000" value="0" placeholder="Rp 0"/>
+            </label>
+
+            <label class="payment-box status-box">
+              <span>Status DP</span>
+              <select id="dpStatus" name="dpStatus">
+                <option>Belum Lunas</option>
+                <option>Lunas</option>
+              </select>
             </label>
 
             <div class="payment-box">
@@ -216,13 +224,14 @@
             </div>
 
             <label class="payment-box status-box">
-              <span>Status Pembayaran</span>
-              <select id="paymentStatus" name="paymentStatus">
+              <span>Status Sisa Pembayaran</span>
+              <select id="remainingStatus" name="remainingStatus">
                 <option>Belum Lunas</option>
                 <option>Lunas</option>
               </select>
             </label>
           </div>
+          <p class="payment-help">Total harga dihitung otomatis dari harga per pcs × jumlah pesanan. Status sisa pembayaran hanya dapat diatur menjadi Lunas setelah DP berstatus Lunas.</p>
 
           <div class="payment-proof-row">
             <label class="field payment-proof-field">
@@ -291,7 +300,6 @@
           <div class="field color-field">
             <span>Warna Kain Tersedia di Toko</span>
             <div class="store-choice-grid fabric-color-options"><p class="choice-loading">Memuat pilihan warna kain...</p></div>
-            <small class="choice-note">Warna pada layar dapat berbeda dari warna kain asli karena pencahayaan dan pengaturan layar. Untuk menghindari kesalahpahaman, pelanggan disarankan melihat dan mencocokkan warna kain secara langsung di toko sebelum pesanan diproses.</small>
             <input class="fabric-color-name" type="hidden"/>
             <input class="fabric-color-id" type="hidden"/>
           </div>
@@ -317,13 +325,17 @@
             <div class="store-choice-grid store-motif-options"><p class="choice-loading">Memuat katalog motif toko...</p></div>
             <input class="motif-store-name" type="hidden"/>
             <input class="motif-store-id" type="hidden"/>
-            <div class="custom-motif-upload">
-              <label class="custom-motif-label">Atau unggah foto motif sulaman sendiri (opsional)
-                <input class="motif-custom-image" type="file" accept="image/*"/>
-              </label>
-              <div class="preview-box motif-custom-preview"></div>
-            </div>
-            <small class="choice-note">Pilih motif yang tersedia di katalog toko atau unggah referensi motif sendiri. Jika mengunggah motif sendiri, admin akan memeriksa kemungkinan pengerjaan dan kebutuhan biayanya terlebih dahulu.</small>
+          </div>
+        </div>
+
+        <div class="product-row product-row-three">
+          <div class="field media-field custom-motif-upload">
+            <span>Unggah Foto Motif Sulaman dari Pelanggan (Opsional)</span>
+            <label class="upload-box custom-motif-label">
+              <input class="motif-custom-image" type="file" accept="image/*"/>
+              <span class="upload-icon">+</span><span class="upload-text">Pilih foto motif sulaman</span>
+            </label>
+            <div class="preview-box motif-custom-preview"></div>
           </div>
 
           <div class="field media-field model-image-field">
@@ -335,8 +347,8 @@
             <div class="preview-box custom-model-preview"></div>
           </div>
           <label class="field description-field">
-            <span>Catatan tambahan Motif / Model / Pakaian Produk</span>
-            <textarea class="product-description" placeholder="Tulis detail motif, model, atau permintaan pakaian"></textarea>
+            <span>Catatan Tambahan Motif / Model / Pakaian</span>
+            <textarea class="product-description" placeholder="Catat permintaan dan detail yang disampaikan pelanggan"></textarea>
           </label>
         </div>
       </div>
@@ -359,7 +371,8 @@
     const dpInput = document.getElementById("dpInput");
     const totalPayment = document.getElementById("totalPayment");
     const remainingPayment = document.getElementById("remainingPayment");
-    const paymentStatus = document.getElementById("paymentStatus");
+    const dpStatus = document.getElementById("dpStatus");
+    const remainingStatus = document.getElementById("remainingStatus");
     const paymentProof = document.getElementById("paymentProof");
     const paymentProofName = document.getElementById("paymentProofName");
     const proofButton = document.getElementById("proofButton");
@@ -395,8 +408,17 @@
       totalQty.textContent = qty;
       totalPayment.textContent = rupiah(total);
       const dp = Math.max(0, Number(dpInput.value || 0));
-      remainingPayment.textContent = rupiah(Math.max(0,total-dp));
-      paymentStatus.value = total > 0 && dp >= total ? "Lunas" : "Belum Lunas";
+      const dpPaid = dpStatus.value === "Lunas";
+      const remaining = dpPaid ? Math.max(0, total - dp) : total;
+      remainingPayment.textContent = rupiah(remaining);
+      if (!dpPaid) remainingStatus.value = "Belum Lunas";
+      remainingStatus.disabled = !dpPaid || remaining <= 0;
+      if (remaining <= 0 && dpPaid && total > 0) remainingStatus.value = "Lunas";
+      if (total <= 0) {
+        dpStatus.value = "Belum Lunas";
+        remainingStatus.value = "Belum Lunas";
+        remainingStatus.disabled = true;
+      }
     }
 
     function previewFile(input, preview) {
@@ -467,6 +489,11 @@
 
     addProduct.addEventListener("click", addProductCard);
     dpInput.addEventListener("input", updateTotals);
+    dpStatus.addEventListener("change", updateTotals);
+    remainingStatus.addEventListener("change", () => {
+      if (dpStatus.value !== "Lunas") remainingStatus.value = "Belum Lunas";
+      updateTotals();
+    });
 
     proofButton.addEventListener("click", () => paymentProof.click());
     paymentProof.addEventListener("change", () => {
@@ -520,8 +547,10 @@
         for(const p of products) p.modelImage=await uploadAdminImage(p.item.querySelector(".model-custom-image").files[0]);
         const total=products.reduce((s,p)=>s+p.quantity*p.price,0);
         const dpEntered=Math.max(0,Number(dpInput.value||0));
-        const paidInFull=paymentStatus.value==="Lunas";
-        const dp=paidInFull?total:Math.min(dpEntered,total);
+        const dpPaid=dpStatus.value==="Lunas";
+        const remainingPaid=remainingStatus.value==="Lunas";
+        const paidInFull=dpPaid && remainingPaid;
+        const dp=dpEntered;
         if(dpEntered>total) throw new Error("Nominal DP tidak boleh melebihi total harga.");
         const proofFile=paymentProof.files[0];
         const proofUrl=proofFile?await uploadAdminImage(proofFile):null;
@@ -543,13 +572,20 @@
         });
         const {error:detailError}=await sb.from("custom_order_details").insert(rows);
         if(detailError) throw new Error(`Pesanan ${order.reference_no} dibuat tetapi detail produk gagal disimpan: ${detailError.message}`);
-        const {error:paymentError}=await sb.from("payments").upsert({
-          order_id:order.id,total_amount:total,dp_amount:dp,
-          remaining_amount:paidInFull?0:Math.max(0,total-dp),
-          payment_status:paidInFull?"Lunas":"Belum Lunas",proof_url:proofUrl,
-          updated_at:new Date().toISOString()
-        },{onConflict:"order_id"});
-        if(paymentError) throw new Error(`Pesanan tersimpan, tetapi data pembayaran gagal disimpan: ${paymentError.message}`);
+        if (remainingPaid && !dpPaid) throw new Error("DP harus berstatus Lunas sebelum sisa pembayaran dapat dilunasi.");
+        if (remainingPaid && total > 0 && dp >= total) {
+          // Tidak ada sisa pembayaran jika DP sudah sama dengan total harga.
+        }
+        const {error:paymentError}=await sb.rpc("admin_update_order_payment",{
+          p_order_id:order.id,p_total_amount:total,p_dp_amount:dp,
+          p_dp_status:dpPaid ? "Lunas" : "Belum Lunas",
+          p_remaining_status:remainingPaid ? "Lunas" : "Belum Lunas"
+        });
+        if(paymentError) throw new Error(`Pesanan tersimpan, tetapi pembayaran/pemasukan gagal disinkronkan: ${paymentError.message}`);
+        if(proofUrl){
+          const {error:proofError}=await sb.from("payments").update({proof_url:proofUrl}).eq("order_id",order.id);
+          if(proofError) throw new Error(`Pembayaran tersimpan, tetapi bukti pembayaran gagal disimpan: ${proofError.message}`);
+        }
         alert(`Pesanan custom berhasil dicatat!\\nNomor referensi: ${order.reference_no}`); location.href="pesanan.html";
       }catch(error){console.error(error);alert("Pesanan gagal disimpan: "+(error.message||error));}
       finally{if(submit){submit.disabled=false;if(submit.dataset.originalText)submit.textContent=submit.dataset.originalText;}}

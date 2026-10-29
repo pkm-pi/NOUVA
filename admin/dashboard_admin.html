@@ -47,8 +47,9 @@
         <h1>Selamat Datang!</h1>
         <p>Kelola usaha Uti Karawo dengan lebih teratur</p>
       </div>
-      <a class="notification-btn" href="notifikasi.html" aria-label="Buka notifikasi" title="Notifikasi">
+      <a class="notification-btn" href="notifikasi.html" aria-label="Buka notifikasi pesanan baru" title="Pesanan baru">
         <img src="https://c.animaapp.com/taWkMOk-lcagfB1Ij_oiSw/img/icon-2.svg" alt="Notifikasi">
+        <span class="notification-badge" id="notificationBadge" hidden>0</span>
       </a>
     </header>
 
@@ -84,7 +85,10 @@
     <section class="chart-grid">
       <div class="panel chart-panel">
         <div class="panel-title-row">
-          <h2 class="panel-title">Ringkasan Penjualan (Jumlah Barang)</h2>
+          <div class="chart-heading-copy">
+            <h2 class="panel-title">Jumlah Barang Dipesan</h2>
+            <p class="chart-note">Total pcs dari pesanan display dan custom, kecuali pesanan dibatalkan, berdasarkan tanggal pemesanan.</p>
+          </div>
           <div class="filter-hari">
             <select id="filterHari" aria-label="Pilih periode">
               <option value="10">10 hari</option>
@@ -94,7 +98,7 @@
             </select>
           </div>
         </div>
-        <div class="chart-wrap"><canvas id="salesChart"></canvas></div>
+        <div class="chart-wrap"><canvas id="salesChart" aria-label="Jumlah barang yang dipesan per tanggal, tidak termasuk pesanan dibatalkan"></canvas></div>
       </div>
 
       <div class="panel chart-panel status-panel">
@@ -148,7 +152,7 @@
 (async function(){
  const sb=window.nouvaSupabase, esc=NouvaWorkflow.escape, money=NouvaWorkflow.money;
  const filter=document.getElementById("filterHari");
- let salesChart,statusChart,orders=[],orderItems=[];
+ let salesChart,statusChart,orders=[],orderItems=[],customItems=[];
  const statusNames=["Menunggu Konfirmasi","Sedang Disulam","Sedang Dijahit","Siap Diambil","Selesai","Dibatalkan"];
  function setText(id,value){const el=document.getElementById(id);if(el)el.textContent=value}
  function dateLabel(d){return new Date(d+"T00:00:00").toLocaleDateString("id-ID",{day:"2-digit",month:"short"})}
@@ -162,11 +166,24 @@
    const days=Number(filter.value||30), now=new Date(), labels=[],keys=[],values=[];
    const dailyCounts={};
    const orderById=new Map(orders.map(o=>[o.id,o]));
-   orderItems.forEach(item=>{
-     const order=orderById.get(item.order_id);
-     if(!order || order.process_status==="Dibatalkan") return;
-     const key=localDateKey(order.ordered_at||order.created_at);
-     if(key) dailyCounts[key]=(dailyCounts[key]||0)+Number(item.quantity||0);
+   const quantitiesByOrder = new Map();
+   // Pesanan display dihitung dari order_items; pesanan custom dihitung dari
+   // custom_order_details agar seluruh jumlah pcs custom ikut masuk grafik.
+   orderItems.forEach(item => {
+     const order = orderById.get(item.order_id);
+     if (!order || order.order_type === "custom" || order.process_status === "Dibatalkan") return;
+     quantitiesByOrder.set(item.order_id, (quantitiesByOrder.get(item.order_id) || 0) + Number(item.quantity || 0));
+   });
+   customItems.forEach(item => {
+     const order = orderById.get(item.order_id);
+     if (!order || order.order_type !== "custom" || order.process_status === "Dibatalkan") return;
+     quantitiesByOrder.set(item.order_id, (quantitiesByOrder.get(item.order_id) || 0) + Number(item.quantity || 0));
+   });
+   orders.forEach(order => {
+     if (order.process_status === "Dibatalkan") return;
+     const key = localDateKey(order.ordered_at || order.created_at);
+     const quantity = quantitiesByOrder.get(order.id) || 0;
+     if (key) dailyCounts[key] = (dailyCounts[key] || 0) + quantity;
    });
    for(let i=days-1;i>=0;i--){
      const d=new Date(now.getFullYear(),now.getMonth(),now.getDate()-i);
@@ -237,6 +254,23 @@
       "#70c99b"  // Selesai
     ],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:"45%",plugins:{legend:{display:true,position:"bottom",labels:{boxWidth:9,padding:8,font:{size:10}}}}}});
  }
+ async function updateNotificationBadge(){
+   const badge=document.getElementById("notificationBadge");
+   if(!badge || !sb) return;
+   try{
+     const {count,error}=await sb.from("orders")
+       .select("id",{count:"exact",head:true})
+       .eq("process_status","Menunggu Konfirmasi");
+     if(error) throw error;
+     const total=Number(count||0);
+     badge.textContent=total>99?"99+":String(total);
+     badge.hidden=total<1;
+     const bell=document.querySelector(".notification-btn");
+     if(bell) bell.setAttribute("aria-label", total ? `${total} pesanan baru menunggu konfirmasi` : "Buka notifikasi pesanan baru");
+   }catch(error){
+     console.warn("[NOUVA dashboard] Jumlah notifikasi gagal diperbarui:",error);
+   }
+ }
  function renderOrders(){
    const body=document.getElementById("recentOrders");
    const latest=orders.slice(0,5);
@@ -246,14 +280,17 @@
  }
  try{
    await NouvaWorkflow.requireRole("admin","../auth/login_admin.html");
-   const [or,itemsResult]=await Promise.all([
-     sb.from("orders").select("id,reference_no,customer_name,institution_name,ordered_at,created_at,updated_at,process_status,total_amount").order("created_at",{ascending:false}),
-     sb.from("order_items").select("order_id,quantity")
+   const [or,itemsResult,customItemsResult]=await Promise.all([
+     sb.from("orders").select("id,reference_no,customer_name,institution_name,order_type,ordered_at,created_at,updated_at,process_status,total_amount").order("created_at",{ascending:false}),
+     sb.from("order_items").select("order_id,quantity"),
+     sb.from("custom_order_details").select("order_id,quantity")
    ]);
    if(or.error)throw or.error;
    if(itemsResult.error)throw itemsResult.error;
+   if(customItemsResult.error)throw customItemsResult.error;
    orders=or.data||[];
    orderItems=itemsResult.data||[];
+   customItems=customItemsResult.data||[];
    setText("statTotalOrders",orders.filter(o=>o.process_status!=="Dibatalkan").length);
    setText("statInProgress",orders.filter(o=>["Menunggu Konfirmasi","Sedang Disulam","Sedang Dijahit"].includes(o.process_status)).length);
    setText("statCompleted",orders.filter(o=>o.process_status==="Selesai").length);
@@ -265,6 +302,18 @@
    if(monthIncomeError) console.warn("[NOUVA dashboard] Pendapatan bulan ini gagal dimuat:",monthIncomeError);
    setText("statRevenue",money((monthIncome||[]).reduce((s,x)=>s+Number(x.amount||0),0)));
    renderOrders();renderSales();renderStatus();
+   updateNotificationBadge();
+   // Polling ringan supaya pesanan baru muncul tanpa admin harus reload dashboard.
+   window.setInterval(updateNotificationBadge, 30000);
+   if (sb && typeof sb.channel === "function") {
+     try {
+       sb.channel("nouva-dashboard-new-orders")
+         .on("postgres_changes", { event: "INSERT", schema: "public", table: "orders" }, updateNotificationBadge)
+         .subscribe();
+     } catch (realtimeError) {
+       console.warn("[NOUVA dashboard] Realtime notifikasi tidak tersedia; polling tetap aktif.", realtimeError);
+     }
+   }
  }catch(e){
    console.error("[NOUVA dashboard admin]",e);
    ["statTotalOrders","statInProgress","statCompleted"].forEach(id=>setText(id,"—"));setText("statRevenue","Gagal dimuat");
