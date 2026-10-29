@@ -8,7 +8,14 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../js/nouva-config.js"></script><script src="../js/nouva-supabase.js"></script><script src="../js/nouva-workflow.js"></script>
 <link rel="stylesheet" href="../css/nouva-partner-contact.css">
-</head>
+<style>
+.product-thumb{width:58px;height:70px;overflow:hidden;border-radius:12px;background:#eee6f1;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.product-thumb img{width:100%;height:100%;object-fit:cover}
+.custom-thumb-grid{display:grid;grid-template-columns:1fr 1fr;width:100%;height:100%;gap:1px}
+.custom-thumb-grid img{min-width:0;min-height:0}
+.detail-button{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;min-width:110px}
+.status.sewing{background:#e3edff;color:#2877e7}.status.embroidery{background:#f2e4f8;color:#8b4eaa}
+</style></head>
 <body>
   <div class="orders-page">    
     <aside class="sidebar">
@@ -61,17 +68,35 @@
  const esc=NouvaWorkflow.escape,money=NouvaWorkflow.money;
  try{
   const {session,profile}=await NouvaWorkflow.requireRole("customer","../auth/login_pelanggan.html");
-  const {data,error}=await sb.from("orders").select("id,reference_no,order_type,customer_name,ordered_at,deadline,process_status,total_amount,order_items(product_name_snapshot,size_snapshot,color_snapshot,quantity),custom_order_details(product_name,quantity)").eq("customer_id",session.user.id).order("created_at",{ascending:false});
+  const {data,error}=await sb.from("orders").select("id,reference_no,order_type,customer_name,ordered_at,deadline,process_status,total_amount,quoted_price,order_items(product_name_snapshot,size_snapshot,color_snapshot,quantity,unit_price,product_variants(products(name,product_images(image_url,sort_order)))),custom_order_details(product_name,quantity,model_image_url,store_motif_image_url,custom_motif_image_url,fabric_image_url,unit_price),payments(dp_amount,remaining_amount,payment_status)").eq("customer_id",session.user.id).order("created_at",{ascending:false});
   if(error)throw error;orders=data||[];render();
  }catch(e){console.error(e);wrap.innerHTML=`<p class="order-load-error">Pesanan gagal dimuat: ${esc(e.message||e)}</p>`;return}
  function render(){
   const q=(search?.value||"").trim().toLowerCase();
-  const shown=orders.filter(o=>(activeStatus==="Semua"||o.process_status===activeStatus)&&[o.reference_no,o.order_type,o.process_status,...(o.order_items||[]).map(i=>i.product_name_snapshot)].join(" ").toLowerCase().includes(q));
-  wrap.innerHTML=shown.map(o=>{const items=o.order_items||[],customItems=o.custom_order_details||[],activeItems=o.order_type==="custom"?customItems:items,qty=activeItems.reduce((n,i)=>n+Number(i.quantity||0),0),names=(o.order_type==="custom"?customItems.map(i=>i.product_name):items.map(i=>i.product_name_snapshot)).filter(Boolean).join(", ")||"Detail item belum tersedia";const st=o.process_status||"Menunggu Konfirmasi";const cls=st==="Selesai"?"completed":st==="Dibatalkan"?"cancelled":st==="Siap Diambil"?"ready":"";return `<article class="order-row" data-status="${esc(st)}" data-search="${esc(o.reference_no+" "+names+" "+st)}">
- <div class="order-number"><strong>${esc(o.reference_no||"Pesanan")}</strong></div>
- <div class="order-product"><div class="product-thumb thumb-one">Nouva</div><div><strong>${esc(names)}</strong><small>${qty} pcs · ${o.order_type==="custom"?"Custom":"Display"}</small></div></div>
- <div class="order-total">${money(o.total_amount)}</div><div><span class="status ${cls}"><i></i>${esc(st)}</span></div>
- <div><span class="detail-button" title="Nomor pesanan ${esc(o.reference_no)}">Tercatat ✓</span></div></article>`}).join("");
+  const shown=orders.filter(o=>(activeStatus==="Semua"||o.process_status===activeStatus)&&[o.reference_no,o.order_type,o.process_status,...(o.order_items||[]).map(i=>i.product_name_snapshot),...(o.custom_order_details||[]).map(i=>i.product_name)].join(" ").toLowerCase().includes(q));
+  wrap.innerHTML=shown.map(o=>{
+   const items=o.order_items||[], customItems=o.custom_order_details||[], activeItems=o.order_type==="custom"?customItems:items;
+   const qty=activeItems.reduce((n,i)=>n+Number(i.quantity||0),0);
+   const names=activeItems.map(i=>o.order_type==="custom"?i.product_name:i.product_name_snapshot).filter(Boolean).join(", ")||(o.order_type==="custom"?"Pesanan Custom":"Produk display");
+   const st=o.process_status||"Menunggu Konfirmasi";
+   const cls=st==="Selesai"?"completed":st==="Dibatalkan"?"cancelled":st==="Siap Diambil"?"ready":st==="Sedang Dijahit"?"sewing":st==="Sedang Disulam"?"embroidery":"";
+   const total=Number(o.quoted_price??o.total_amount??0);
+   let thumb="";
+   if(o.order_type==="display"){
+    const first=items[0], imgs=first?.product_variants?.products?.product_images||[];
+    const img=imgs.slice().sort((a,b)=>(a.sort_order||0)-(b.sort_order||0))[0]?.image_url;
+    thumb=img?`<img src="${esc(img)}" alt="" loading="lazy">`:`<span>DIS</span>`;
+   }else{
+    const urls=[...new Set(customItems.flatMap(i=>[i.model_image_url,i.store_motif_image_url,i.custom_motif_image_url,i.fabric_image_url]).filter(Boolean))].slice(0,4);
+    thumb=urls.length?`<div class="custom-thumb-grid">${urls.map(u=>`<img src="${esc(u)}" alt="" loading="lazy">`).join("")}</div>`:`<span>CUS</span>`;
+   }
+   const detailUrl=o.order_type==="custom"?"lihat_detail_cus.html":"lihat_detail_dis.html";
+   return `<article class="order-row" data-status="${esc(st)}" data-search="${esc(o.reference_no+" "+names+" "+st)}">
+    <div class="order-number"><strong>${esc(o.reference_no||"Pesanan")}</strong></div>
+    <div class="order-product"><div class="product-thumb ${o.order_type==="custom"?"thumb-custom":"thumb-display"}">${thumb}</div><div><strong>${esc(names)}</strong><small>${qty} pcs · ${o.order_type==="custom"?"Custom":"Display"}</small></div></div>
+    <div class="order-total">${money(total)}</div><div><span class="status ${cls}"><i></i>${esc(st)}</span></div>
+    <div><a class="detail-button" href="${detailUrl}?id=${encodeURIComponent(o.id)}">Lihat ›</a></div></article>`;
+  }).join("");
   empty.hidden=shown.length>0;
   document.querySelectorAll(".tab").forEach(tab=>{
     const key=tab.dataset.status;

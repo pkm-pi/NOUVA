@@ -230,8 +230,9 @@
           </div>
           <div class="field color-field">
             <span>Warna Kain Tersedia di Toko</span>
+            <small class="color-select-hint">Pilih 1 warna. Ingin warna lain? Klik “Tambah Produk”.</small>
             <div class="store-choice-grid fabric-color-options"><p class="choice-loading">Memuat pilihan warna kain...</p></div>
-            <small class="choice-note">Warna pada layar dapat berbeda dari warna kain asli karena pencahayaan dan pengaturan layar. Untuk menghindari kesalahpahaman, pelanggan disarankan melihat dan mencocokkan warna kain secara langsung di toko sebelum pesanan diproses.</small>
+            <div class="choice-note important-note"><strong>ⓘ Catatan warna</strong><span>Warna di layar bisa berbeda dari kain asli. Jika ragu, cek langsung di toko.</span></div>
             <input class="fabric-color-name" type="hidden"/>
             <input class="fabric-color-id" type="hidden"/>
           </div>
@@ -257,13 +258,14 @@
             <div class="store-choice-grid store-motif-options"><p class="choice-loading">Memuat katalog motif toko...</p></div>
             <input class="motif-store-name" type="hidden"/>
             <input class="motif-store-id" type="hidden"/>
-            <div class="custom-motif-upload">
-              <label class="custom-motif-label">Atau unggah foto motif sulaman sendiri (opsional)
-                <input class="motif-custom-image" type="file" accept="image/*"/>
-              </label>
-              <div class="preview-box motif-custom-preview"></div>
-            </div>
-            <small class="choice-note">Pilih motif yang tersedia di katalog toko atau unggah referensi motif sendiri. Jika mengunggah motif sendiri, admin akan memeriksa kemungkinan pengerjaan dan kebutuhan biayanya terlebih dahulu.</small>
+          </div>
+
+          <div class="field custom-motif-upload-field">
+            <label class="custom-motif-label">Atau unggah foto motif sendiri (opsional)
+              <input class="motif-custom-image" type="file" accept="image/*"/>
+            </label>
+            <div class="preview-box motif-custom-preview"></div>
+            <div class="choice-note important-note"><strong>ⓘ Catatan motif</strong><span>Motif unggahan akan dicek admin. Biaya bisa berbeda.</span></div>
           </div>
 
           <div class="field media-field model-image-field">
@@ -276,7 +278,7 @@
           </div>
           <label class="field description-field">
             <span>Catatan tambahan Motif / Model / Pakaian Produk</span>
-            <textarea class="product-description" placeholder="Tulis detail motif, model, atau permintaan pakaian"></textarea>
+            <textarea class="product-description" placeholder="Contoh: lengan panjang, motif di dada"></textarea>
           </label>
         </div>
       </div>
@@ -428,10 +430,15 @@ function setCustomerType(type) {
     function renderStoreChoices(item) {
       const colorWrap = item.querySelector(".fabric-color-options");
       const motifWrap = item.querySelector(".store-motif-options");
+      // Semua pilihan dalam satu produk harus memiliki nama radio yang sama.
+      // Setiap kartu produk mendapat grup berbeda agar warna produk lain tetap bisa dipilih.
+      const productIndex = [...productList.querySelectorAll(".product-item")].indexOf(item) + 1;
+      const colorGroupName = `color-product-${productIndex}`;
+      const motifGroupName = `motif-product-${productIndex}`;
       if (colorWrap) {
         colorWrap.innerHTML = customCatalog.colors.length ? customCatalog.colors.map(c => `
           <label class="store-choice">
-            <input type="radio" name="color-${item.dataset.productIndex || Math.random().toString(36).slice(2)}" value="${c.id}" data-choice-name="${escapeHtml(c.name)}">
+            <input type="radio" name="${colorGroupName}" value="${c.id}" data-choice-name="${escapeHtml(c.name)}">
             <img src="${escapeAttr(c.image_url)}" alt="${escapeAttr(c.name)}">
             <span><b>${escapeHtml(c.name)}</b>${c.description ? `<small>${escapeHtml(c.description)}</small>` : ""}</span>
           </label>`).join("") : '<p class="choice-empty">Belum ada warna kain aktif. Silakan hubungi admin toko.</p>';
@@ -443,7 +450,7 @@ function setCustomerType(type) {
       if (motifWrap) {
         motifWrap.innerHTML = customCatalog.motifs.length ? customCatalog.motifs.map(m => `
           <label class="store-choice">
-            <input type="radio" name="motif-${item.dataset.productIndex || Math.random().toString(36).slice(2)}" value="${m.id}" data-choice-name="${escapeHtml(m.name)}">
+            <input type="radio" name="${motifGroupName}" value="${m.id}" data-choice-name="${escapeHtml(m.name)}">
             <img src="${escapeAttr(m.image_url)}" alt="${escapeAttr(m.name)}">
             <span><b>${escapeHtml(m.name)}</b>${m.description ? `<small>${escapeHtml(m.description)}</small>` : ""}</span>
           </label>`).join("") : '<p class="choice-empty">Belum ada motif aktif. Pelanggan tetap dapat mengunggah referensi motif sendiri.</p>';

@@ -431,6 +431,8 @@ function addCustomItem(d){
  el.dataset.fabricColorHex=d.colorHex||"";
  el.dataset.storeMotifId=d.storeMotifId||"";
  el.dataset.fabricColorId=d.fabricColorId||"";
+ el.dataset.fabricType=d.fabricType||"";
+ el.dataset.customFabricType=d.customFabricType||"";
  el.querySelector(".item-name-input").value=d.name||"";
  el.querySelector(".item-category").value=d.category||"";
  el.querySelector(".item-qty").value=d.qty||1;
@@ -525,6 +527,7 @@ async function loadOrder(){
    addCustomItem({
     id:d.id,name:d.product_name,category:d.category,qty:d.quantity,price:0,
     description,fabric:d.custom_fabric_type||d.fabric_type,color,motif:motifName,
+    fabricType:d.fabric_type,customFabricType:d.custom_fabric_type,
     modelImage:d.model_image_url,motifImage:d.store_motif_image_url||motifRecord?.image_url||"",
     customMotifImage:d.custom_motif_image_url,fabricImage:d.fabric_image_url||colorRecord?.image_url||"",
     sizeBreakdown:breakdown,storeMotifId:d.store_motif_id,fabricColorId:d.fabric_color_id,
@@ -591,10 +594,12 @@ $("editForm").addEventListener("submit",async e=>{
     const motifName=el.querySelector(".motif-name").value.trim();
     const description=el.querySelector(".item-description").value.trim();
     const combinedDescription=[motifName?`Motif dari toko: ${motifName}`:"",description.replace(/^Motif dari toko:.*(?:\r?\n|$)/m,"").trim()].filter(Boolean).join("\n")||null;
+    const isCustomFabric=el.dataset.fabricType==="custom"||Boolean(el.dataset.customFabricType);
     const payload={order_id:id,product_name:name,category,quantity,size:Object.keys(breakdown).find(k=>breakdown[k]>0)||"M",size_breakdown:breakdown,
      design_description:combinedDescription,model_image_url:modelUrl,
      store_motif_image_url:motifUrl,custom_motif_image_url:customMotifUrl,fabric_image_url:fabricImageUrl,fabric_color:fabricColor,
-     fabric_type:fabric,custom_fabric_type:fabric,store_motif_id:el.dataset.storeMotifId||null,fabric_color_id:el.dataset.fabricColorId||null};
+     fabric_type:isCustomFabric?"custom":fabric,custom_fabric_type:isCustomFabric?fabric:null,
+     store_motif_id:el.dataset.storeMotifId||null,fabric_color_id:el.dataset.fabricColorId||null};
     if(el.dataset.detailId){const {error:de}=await sb.from("custom_order_details").update(payload).eq("id",el.dataset.detailId);if(de)throw de;existingIds.push(el.dataset.detailId);}
     else{const {data:created,error:de}=await sb.from("custom_order_details").insert(payload).select("id").single();if(de)throw de;if(created?.id)existingIds.push(created.id);}
    }
