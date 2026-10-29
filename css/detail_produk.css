@@ -917,3 +917,27 @@ body {
 
 .detail-status{margin:12px 0;padding:10px 12px;border-radius:10px;background:#fff7f7;color:#7b3440;font-size:13px;line-height:1.5}
 .order-btn:disabled{opacity:.55;cursor:not-allowed}
+
+/* Foto motif sulaman dan warna varian mengikuti data katalog Supabase */
+.motif-reference{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(100px,160px);
+  align-items:center;
+  gap:14px;
+  margin:14px 0;
+  padding:12px;
+  border:1px solid #e5d9eb;
+  border-radius:12px;
+  background:#fff;
+}
+.motif-reference[hidden]{display:none!important}
+.motif-reference>div{display:flex;flex-direction:column;gap:5px;min-width:0}
+.motif-reference .section-label{margin:0;color:#897395;font-size:11px}
+.motif-reference strong{color:var(--purple,#3e244b);font-size:13px;overflow-wrap:anywhere}
+.motif-reference img{display:block;width:100%;height:140px;object-fit:contain;background:#faf8fb;border:1px solid #e5d9eb;border-radius:9px;padding:5px}
+.color-dot[style*="background-image"]{background-repeat:no-repeat!important;border:2px solid #d8c6e2!important;box-shadow:inset 0 0 0 1px #fff}
+.color-dot.selected[style*="background-image"]{outline:2px solid #8b4db0;outline-offset:2px}
+@media(max-width:600px){
+ .motif-reference{grid-template-columns:minmax(0,1fr) 105px;gap:9px;padding:9px}
+ .motif-reference img{height:105px}
+}

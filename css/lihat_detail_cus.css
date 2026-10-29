@@ -227,3 +227,102 @@
     border-radius: 20px !important;
   }
 }
+
+/* Sinkronisasi gambar produk: foto tampil penuh dan rapi di dalam kotak */
+.customer-photo{height:150px;min-height:90px;overflow:hidden;border:1px solid #e4dce8;border-radius:7px;background:#faf8fb;display:flex;align-items:center;justify-content:center}
+.customer-photo img{width:100%;height:100%;object-fit:contain!important;display:block}
+.model-photo{height:180px}
+.product-main-photo{overflow:hidden;display:flex;align-items:center;justify-content:center;padding:0}
+.product-main-photo img{width:100%;height:100%;object-fit:cover!important;border-radius:9px}
+.product-main-photo .image-placeholder{width:100%;height:100%}
+.reference-images-grid{align-items:stretch}
+.reference-image-card{min-width:0}
+.color-dot{background-repeat:no-repeat;background-position:center}
+.status.siap-diambil{background:#fff0d2;color:#a96700}.status.selesai{background:#e1f4e8;color:#16824a}.status.dibatalkan{background:#fde6eb;color:#d93655}.status.sedang-disulam{background:#f2e4f8;color:#8b4eaa}
+.display-description{font-size:11px;line-height:1.6;color:#786b80;margin-top:12px}
+@media(max-width:700px){.reference-images-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.customer-photo{height:135px}.model-photo{height:190px}}
+
+/* NOUVA final polish: foto detail rapi, proporsional, dan tidak duplikat */
+.reference-images-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  align-items:stretch;
+  gap:12px;
+}
+.reference-images-grid .reference-image-card{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  padding:10px;
+  border:1px solid #e4dce8;
+  border-radius:10px;
+  background:#fff;
+}
+.reference-images-grid .field-label{
+  display:block;
+  min-height:2.4em;
+  margin:0;
+  color:#81728a;
+  font-size:11px;
+  line-height:1.4;
+  overflow-wrap:anywhere;
+}
+.reference-images-grid .customer-photo{
+  width:100%;
+  height:clamp(150px,18vw,230px);
+  min-height:130px;
+  margin:0;
+  padding:5px;
+  background:#faf8fb;
+}
+.reference-images-grid .customer-photo img{
+  object-fit:contain!important;
+  border-radius:6px;
+}
+.detail-extra{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  align-items:stretch;
+  gap:12px;
+}
+.detail-extra .detail-field,
+.detail-extra .reference-image-card{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  padding:10px;
+  border:1px solid #e4dce8;
+  border-radius:10px;
+  background:#fff;
+}
+.detail-extra .detail-field>span,
+.detail-extra .reference-image-card>.field-label{
+  display:block;
+  margin:0;
+  color:#81728a;
+  font-size:11px;
+  line-height:1.4;
+  min-height:1.4em;
+}
+.detail-extra .customer-photo{
+  width:100%;
+  height:clamp(150px,18vw,230px);
+  min-height:130px;
+  margin:0;
+  padding:5px;
+  background:#faf8fb;
+}
+.detail-extra .customer-photo img{
+  object-fit:contain!important;
+  border-radius:6px;
+}
+@media(max-width:700px){
+  .reference-images-grid,
+  .detail-extra{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .reference-images-grid .customer-photo,
+  .detail-extra .customer-photo{height:160px;min-height:120px}
+}
+@media(max-width:420px){
+  .reference-images-grid,
+  .detail-extra{grid-template-columns:1fr}
+}

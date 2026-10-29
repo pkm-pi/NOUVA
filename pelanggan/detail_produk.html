@@ -113,6 +113,14 @@
             </div>
           </div>
 
+          <section class="motif-reference" id="motifReference" hidden>
+            <div>
+              <span class="section-label">Foto Motif Sulaman</span>
+              <strong id="motifImageName">Motif</strong>
+            </div>
+            <img id="motifImage" alt="Foto motif sulaman produk">
+          </section>
+
           <div class="option-section">
             <div class="section-label">Warna Tersedia</div>
             <div class="color-options" id="colorOptions">
@@ -180,6 +188,7 @@
     function setVariant(){
       const size=$("sizeOptions").querySelector(".selected")?.dataset.size;
       const color=$("colorOptions").querySelector(".selected")?.dataset.color;
+      if(color) $("selectedColor").textContent=color;
       currentVariant=variants.find(v=>v.size===size&&v.color_name===color)||null;
       const avail=currentVariant?Number(availability[currentVariant.id] ?? currentVariant.stock):0;
       stockEl.textContent=`${avail} pcs`;
@@ -201,7 +210,7 @@
     }
     function renderOptions(){
       const colors=[...new Set(variants.map(v=>v.color_name))], sizes=[...new Set(variants.map(v=>v.size))];
-      $("colorOptions").innerHTML=colors.map((c,i)=>`<button class="color-dot ${i===1?'color-two':i===2?'color-three':''} ${i===0?'selected':''}" type="button" data-color="${esc(c)}" aria-label="${esc(c)}" title="${esc(c)}"></button>`).join("");
+      $("colorOptions").innerHTML=colors.map((c,i)=>{const variant=variants.find(v=>v.color_name===c&&v.color_image_url);const image=variant?.color_image_url;return `<button class="color-dot ${i===1?'color-two':i===2?'color-three':''} ${i===0?'selected':''}" type="button" data-color="${esc(c)}" aria-label="${esc(c)}" title="${esc(c)}" ${image?`style="background-image:url('${esc(image)}');background-size:cover;background-position:center;background-color:#fff"`:""}></button>`}).join("");
       $("sizeOptions").innerHTML=sizes.map((s,i)=>`<button class="size-btn ${i===0?'selected':''}" type="button" data-size="${esc(s)}">${esc(s)}</button>`).join("");
       $("colorOptions").querySelectorAll("button").forEach(b=>b.onclick=()=>{if(b.disabled)return;$("colorOptions").querySelectorAll("button").forEach(x=>x.classList.toggle("selected",x===b));$("selectedColor").textContent=b.dataset.color;const possible=variants.filter(v=>v.color_name===b.dataset.color);if(!possible.some(v=>v.size===$("sizeOptions").querySelector(".selected")?.dataset.size)){const first=possible[0];$("sizeOptions").querySelectorAll("button").forEach(x=>x.classList.toggle("selected",x.dataset.size===first?.size));}setVariant();});
       $("sizeOptions").querySelectorAll("button").forEach(b=>b.onclick=()=>{if(b.disabled)return;$("sizeOptions").querySelectorAll("button").forEach(x=>x.classList.toggle("selected",x===b));setVariant();});
@@ -219,6 +228,12 @@
     $("category").textContent=data.category||"—";$("motif").textContent=data.motif_name||"—";$("fabricType").textContent=data.fabric_type||"—";
     const images=(data.product_images||[]).sort((a,b)=>(a.sort_order||1)-(b.sort_order||1)).map(x=>x.image_url).filter(Boolean);
     buildGallery(images.length?images:[data.motif_image_url||selected.image].filter(Boolean));
+    const motifReferenceUrl=data.motif_image_url||(data.motif_name&&images.length>1?images[1]:"");
+    if(motifReferenceUrl){
+      $("motifImage").src=motifReferenceUrl;
+      $("motifImageName").textContent=data.motif_name||"Motif sulaman";
+      $("motifReference").hidden=false;
+    }
     renderOptions();
     $("minusBtn").onclick=()=>{qtyEl.textContent=String(Math.max(1,Number(qtyEl.textContent)-1));setVariant()};
     $("plusBtn").onclick=()=>{const max=Number(availability[currentVariant?.id]??currentVariant?.stock??0);if(Number(qtyEl.textContent)<max)qtyEl.textContent=String(Number(qtyEl.textContent)+1);setVariant()};

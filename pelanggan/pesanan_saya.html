@@ -11,7 +11,7 @@
 <style>
 .product-thumb{width:58px;height:70px;overflow:hidden;border-radius:12px;background:#eee6f1;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .product-thumb img{width:100%;height:100%;object-fit:cover}
-.custom-thumb-grid{display:grid;grid-template-columns:1fr 1fr;width:100%;height:100%;gap:1px}
+.custom-thumb-grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;width:100%;height:100%;gap:2px;background:#eee6f1}.custom-thumb-grid img{width:100%;height:100%;object-fit:cover;display:block}.thumb-custom .custom-thumb-grid img:first-child{grid-row:span 2}.thumb-display img{width:100%;height:100%;object-fit:cover;display:block}
 .custom-thumb-grid img{min-width:0;min-height:0}
 .detail-button{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;min-width:110px}
 .status.sewing{background:#e3edff;color:#2877e7}.status.embroidery{background:#f2e4f8;color:#8b4eaa}
@@ -87,7 +87,7 @@
     const img=imgs.slice().sort((a,b)=>(a.sort_order||0)-(b.sort_order||0))[0]?.image_url;
     thumb=img?`<img src="${esc(img)}" alt="" loading="lazy">`:`<span>DIS</span>`;
    }else{
-    const urls=[...new Set(customItems.flatMap(i=>[i.model_image_url,i.store_motif_image_url,i.custom_motif_image_url,i.fabric_image_url]).filter(Boolean))].slice(0,4);
+    const urls=[...new Set(customItems.flatMap(i=>[i.model_image_url,i.store_motif_image_url||i.custom_motif_image_url,i.fabric_image_url]).filter(Boolean))].slice(0,3);
     thumb=urls.length?`<div class="custom-thumb-grid">${urls.map(u=>`<img src="${esc(u)}" alt="" loading="lazy">`).join("")}</div>`:`<span>CUS</span>`;
    }
    const detailUrl=o.order_type==="custom"?"lihat_detail_cus.html":"lihat_detail_dis.html";

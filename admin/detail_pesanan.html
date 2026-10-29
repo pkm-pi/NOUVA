@@ -285,7 +285,7 @@
         const qty = Number(d.quantity || sizeKeys.reduce((sum, size) => sum + Number(breakdown[size] || 0), 0));
         const motifRecord = Array.isArray(d.custom_embroidery_motifs) ? d.custom_embroidery_motifs[0] : d.custom_embroidery_motifs;
         const colorRecord = Array.isArray(d.custom_fabric_colors) ? d.custom_fabric_colors[0] : d.custom_fabric_colors;
-        const color = d.fabric_color || colorRecord?.name || "Belum diisi";
+        const color = colorRecord?.name || d.fabric_color || "Belum diisi";
         const descriptionParts = String(d.design_description || "").split(/\r?\n/).filter(Boolean);
         const motifLine = descriptionParts.find(line => line.startsWith("Motif dari toko:"));
         const motifName = motifLine ? motifLine.replace("Motif dari toko:", "").trim() : (motifRecord?.name || "");
@@ -305,12 +305,12 @@
           description,
           fabric: d.custom_fabric_type || (d.fabric_type === "custom" ? "Kain custom" : d.fabric_type) || "",
           color,
-          fabricImage: d.fabric_image_url || colorRecord?.image_url || "",
+          fabricImage: colorRecord?.image_url || d.fabric_image_url || "",
           colorHex: colorRecord?.hex_code || colorRecord?.color_hex || "",
           modelImage: d.model_image_url || fallbackModel,
           customModel: d.model_image_url || "",
           motif: motifName || "Belum dipilih",
-          motifImage: d.store_motif_image_url || motifRecord?.image_url || "",
+          motifImage: motifRecord?.image_url || d.store_motif_image_url || "",
           customMotifImage: d.custom_motif_image_url || "",
           customMotif: "",
           sizeColumns: visibleSizes,
@@ -318,7 +318,7 @@
         };
       });
     } else {
-      items=(o.order_items||[]).map(it=>{const v=it.product_variants||{},p=v.products||{},imgs=(p.product_images||[]).slice().sort((a,b)=>(a.sort_order||0)-(b.sort_order||0)); const sz=String(it.size_snapshot||v.size||"").toUpperCase(); const sizes=["S","M","L","XL"]; const vals=sizes.map(s=>s===sz?Number(it.quantity||0):0); return {orderType:"display",productReference:p.reference_no||"",size:sz,name:it.product_name_snapshot||p.name||"Produk",category:p.category||"Produk",qty:it.quantity||0,price:Number(it.unit_price||0),description:p.motif_description||p.description||"",fabric:p.fabric_type||"",color:it.color_snapshot||v.color_name||"",modelImage:imgs[0]?.image_url||fallbackModel,customModel:"",motif:p.motif_name||"",motifImage:p.motif_image_url||"",customMotifImage:"",customMotif:"",colors:[[it.color_snapshot||v.color_name||"Belum diisi",...vals]]}; });
+      items=(o.order_items||[]).map(it=>{const v=it.product_variants||{},p=v.products||{},imgs=(p.product_images||[]).slice().sort((a,b)=>(a.sort_order||0)-(b.sort_order||0)); const sz=String(it.size_snapshot||v.size||"").toUpperCase(); const sizes=["S","M","L","XL"]; const vals=sizes.map(s=>s===sz?Number(it.quantity||0):0); return {orderType:"display",productReference:p.reference_no||"",size:sz,name:it.product_name_snapshot||p.name||"Produk",category:p.category||"Produk",qty:it.quantity||0,price:Number(it.unit_price||0),description:p.motif_description||p.description||"",fabric:p.fabric_type||"",color:it.color_snapshot||v.color_name||"",modelImage:imgs[0]?.image_url||fallbackModel,customModel:"",motif:p.motif_name||"",motifImage:p.motif_image_url||((p.motif_name&&imgs.length>1)?imgs[1].image_url:""),customMotifImage:"",customMotif:"",colors:[[it.color_snapshot||v.color_name||"Belum diisi",...vals]]}; });
     }
     if (isDisplay && items.length) {
       const first = o.order_items?.[0];
