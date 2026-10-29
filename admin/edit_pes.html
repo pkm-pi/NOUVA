@@ -211,7 +211,7 @@
             <input id="dp" type="number" min="0" value="0">
           </label>
           <label class="field" id="dpStatusField">
-            <span>Status Pembayaran</span>
+            <span id="dpStatusLabel">Status DP</span>
             <select id="dpStatus">
               <option>Belum Lunas</option>
               <option>Lunas</option>
@@ -224,7 +224,7 @@
             <strong id="remainingPreview">Rp 5.000.000</strong>
           </div>
           <div>
-            <span>Status Sisa</span>
+            <span>Status Sisa Pembayaran <small class="payment-status-hint">(aktif setelah DP lunas)</small></span>
             <select id="remainingStatus">
               <option>Belum Lunas</option>
               <option>Lunas</option>
@@ -293,15 +293,16 @@
 
       <div class="media-edit-grid">
         <div class="image-card">
-          <span>Motif sulaman dari toko</span>
+          <span>Motif sulaman dari stok toko</span>
+          <div class="catalog-choice-grid motif-choice-grid" aria-label="Pilihan motif sulaman"></div>
           <div class="image-preview motif-preview">
-            <img class="motif-image" src="../img/motif_karawo_bunga.svg" alt="Motif sulaman">
+            <div class="motif-empty-placeholder">Tidak dipilih</div>
+            <img class="motif-image" alt="Motif sulaman" style="display:none">
           </div>
-          <label class="upload-btn">
-            Pilih gambar
-            <input class="motif-upload" type="file" accept="image/*" hidden>
-          </label>
-          <input class="motif-name" type="text" placeholder="Nama motif, contoh: Motif Pinang">
+          <select class="motif-catalog-select catalog-select-native" aria-label="Pilih motif dari stok toko">
+            <option value="">Tidak dipilih</option>
+          </select>
+          <small class="catalog-hint">Pilihan diambil dari menu Stok Warna &amp; Motif.</small>
         </div>
 
         <div class="image-card">
@@ -314,16 +315,16 @@
         </div>
 
         <div class="image-card">
-          <span>Warna kain</span>
+          <span>Warna kain dari stok toko</span>
           <div class="fabric-color-preview">
             <div class="fabric-color-swatch"></div>
             <img class="fabric-color-image" alt="Foto warna kain" style="display:none">
           </div>
-          <label class="upload-btn">
-            Pilih gambar warna
-            <input class="fabric-color-upload" type="file" accept="image/*" hidden>
-          </label>
-          <input class="item-fabric-color" type="text" placeholder="Nama warna kain, contoh: Merah">
+          <div class="catalog-choice-grid fabric-choice-grid" aria-label="Pilihan warna kain"></div>
+          <select class="fabric-catalog-select catalog-select-native" aria-label="Pilih warna kain dari stok toko">
+            <option value="">Pilih warna kain</option>
+          </select>
+          <small class="catalog-hint">Pilihan diambil dari menu Stok Warna &amp; Motif.</small>
         </div>
       </div>
 
@@ -369,7 +370,7 @@ $("backBtn").href=`detail_pesanan.html?id=${encodeURIComponent(id||"")}`;
 $("cancelBtn").href=`detail_pesanan.html?id=${encodeURIComponent(id||"")}`;
 const money=v=>"Rp "+Number(v||0).toLocaleString("id-ID");
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let order=null, kind="custom", itemRows=[], customDetails=[], payment=null;
+let order=null, kind="custom", itemRows=[], customDetails=[], payment=null, motifCatalog=[], fabricCatalog=[];
 function show(el,yes){if(el)el.style.display=yes?"":"none";}
 function setupKind(){
  const display=kind==="display";
@@ -417,9 +418,39 @@ function updateTable(){
  updateRemaining();
 }
 function updateRemaining(){
- const total=Number($("total").value||0),dp=kind==="display"?0:Number($("dp").value||0);
- $("remainingPreview").textContent=money(Math.max(0,total-dp));
+ const total=Math.max(0,Number($("total").value||0)),dp=kind==="display"?0:Math.max(0,Number($("dp").value||0));
+ const dpPaid=$("dpStatus").value==="Lunas";
+ if(kind==="display"){
+  const fullyPaid=dpPaid;
+  $("remainingPreview").textContent=money(fullyPaid?0:total);
+  $("remainingStatus").value=fullyPaid?"Lunas":"Belum Lunas";
+  $("remainingStatus").disabled=true;
+  $("remainingStatus").title="Pesanan display tidak menggunakan DP; status ini mengikuti status pembayaran penuh.";
+ }else{
+  $("remainingStatus").disabled=!dpPaid;
+  $("remainingStatus").title=dpPaid?"Pilih Lunas setelah sisa pembayaran benar-benar diterima.":"Lunasi DP terlebih dahulu untuk mengubah status sisa pembayaran.";
+  if(!dpPaid) $("remainingStatus").value="Belum Lunas";
+  if(dp>=total&&total>0&&dpPaid) $("remainingStatus").value="Lunas";
+  const remaining=!dpPaid?total:($("remainingStatus").value==="Lunas"?0:Math.max(0,total-dp));
+  $("remainingPreview").textContent=money(remaining);
+ }
 }
+function renderCatalogChoices(el,type){
+ const isMotif=type==="motif", records=isMotif?motifCatalog:fabricCatalog;
+ const grid=el.querySelector(isMotif?".motif-choice-grid":".fabric-choice-grid");
+ const select=el.querySelector(isMotif?".motif-catalog-select":".fabric-catalog-select");
+ if(!grid||!select)return;
+ const selectedId=select.value;
+ grid.innerHTML=records.length?records.map(r=>{
+  const img=r.image_url?`<img src="${esc(r.image_url)}" alt="${esc(r.name)}" loading="lazy">`:`<div class="catalog-no-image">${isMotif?"Motif":"Warna"}</div>`;
+  return `<button type="button" class="catalog-choice ${r.id===selectedId?"selected":""}" data-id="${esc(r.id)}" aria-pressed="${r.id===selectedId}">${img}<span>${esc(r.name)}</span>${r.description?`<small>${esc(r.description)}</small>`:""}</button>`;
+ }).join(""):`<div class="catalog-empty">Belum ada ${isMotif?"motif sulaman":"warna kain"} aktif di menu Stok Warna &amp; Motif.</div>`;
+ grid.querySelectorAll(".catalog-choice").forEach(btn=>btn.addEventListener("click",()=>{
+  select.value=btn.dataset.id;select.dispatchEvent(new Event("change",{bubbles:true}));
+  grid.querySelectorAll(".catalog-choice").forEach(b=>{const yes=b===btn;b.classList.toggle("selected",yes);b.setAttribute("aria-pressed",String(yes));});
+ }));
+}
+
 function addCustomItem(d){
  const node=$("itemTemplate").content.cloneNode(true),el=node.querySelector(".edit-item");
  // Pertahankan identitas rincian dan URL yang sudah tersimpan saat mengedit.
@@ -439,13 +470,30 @@ function addCustomItem(d){
  el.querySelector(".item-fabric").value=d.fabric||"";
  el.querySelector(".item-price-input").value=d.price||0;
  el.querySelector(".item-description").value=d.description||"";
- el.querySelector(".motif-name").value=d.motif||"";
- el.querySelector(".item-fabric-color").value=d.color||"";
+ el.querySelector(".motif-catalog-select").innerHTML='<option value="">Tidak dipilih</option>'+motifCatalog.map(m=>`<option value="${esc(m.id)}">${esc(m.name)}</option>`).join("");
+ el.querySelector(".fabric-catalog-select").innerHTML='<option value="">Pilih warna kain</option>'+fabricCatalog.map(c=>`<option value="${esc(c.id)}">${esc(c.name)}</option>`).join("");
+ const selectedMotif=motifCatalog.find(m=>m.id===(d.storeMotifId||""))||motifCatalog.find(m=>m.name===(d.motif||""));
+ const selectedFabric=fabricCatalog.find(c=>c.id===(d.fabricColorId||""))||fabricCatalog.find(c=>c.name===(d.color||""));
+ el.querySelector(".motif-catalog-select").value=selectedMotif?.id||"";
+ el.querySelector(".fabric-catalog-select").value=selectedFabric?.id||"";
+ renderCatalogChoices(el,"motif");renderCatalogChoices(el,"fabric");
  if(d.modelImage)el.querySelector(".model-image").src=d.modelImage;
- if(d.motifImage)el.querySelector(".motif-image").src=d.motifImage;
+ const motifImg=el.querySelector(".motif-image"),motifPlaceholder=el.querySelector(".motif-empty-placeholder");
+ if(d.motifImage){motifImg.src=d.motifImage;motifImg.style.display="block";motifPlaceholder.style.display="none";}
+ else{motifImg.removeAttribute("src");motifImg.style.display="none";motifPlaceholder.style.display="grid";}
  if(d.customMotifImage){const preview=el.querySelector(".custom-preview");preview.classList.remove("empty");preview.innerHTML=`<img alt="Motif custom pelanggan" src="${esc(d.customMotifImage)}">`;}
- if(d.fabricImage){const img=el.querySelector(".fabric-color-image");img.src=d.fabricImage;img.style.display="block";el.querySelector(".fabric-color-swatch").style.display="none";}
+ if(selectedMotif?.image_url){motifImg.src=selectedMotif.image_url;motifImg.style.display="block";motifPlaceholder.style.display="none";}
+ if(selectedFabric?.image_url){const img=el.querySelector(".fabric-color-image");img.src=selectedFabric.image_url;img.style.display="block";el.querySelector(".fabric-color-swatch").style.display="none";}
  else if(d.colorHex){el.querySelector(".fabric-color-swatch").style.background=d.colorHex;}
+ el.querySelector(".motif-catalog-select").addEventListener("change",e=>{
+  const m=motifCatalog.find(x=>x.id===e.target.value);el.dataset.storeMotifId=m?.id||"";el.dataset.storeMotifImageUrl=m?.image_url||"";
+  if(m?.image_url){motifImg.src=m.image_url;motifImg.style.display="block";motifPlaceholder.style.display="none";}else{motifImg.removeAttribute("src");motifImg.style.display="none";motifPlaceholder.style.display="grid";}
+ });
+ el.querySelector(".fabric-catalog-select").addEventListener("change",e=>{
+  const c=fabricCatalog.find(x=>x.id===e.target.value);el.dataset.fabricColorId=c?.id||"";el.dataset.fabricImageUrl=c?.image_url||"";
+  const img=el.querySelector(".fabric-color-image"),swatch=el.querySelector(".fabric-color-swatch");
+  if(c?.image_url){img.src=c.image_url;img.style.display="block";swatch.style.display="none";}else{img.removeAttribute("src");img.style.display="none";swatch.style.display="block";}
+ });
  const breakdown=d.sizeBreakdown&&typeof d.sizeBreakdown==="object"?d.sizeBreakdown:{};
  el.querySelectorAll(".size-breakdown-input").forEach(input=>{input.value=Math.max(0,Number(breakdown[input.dataset.size]||0));});
  if(Object.values(breakdown).some(v=>Number(v)>0))el.querySelector(".item-qty").value=Object.values(breakdown).reduce((sum,v)=>sum+Number(v||0),0);
@@ -455,11 +503,8 @@ function addCustomItem(d){
  el.querySelector(".remove-item").addEventListener("click",()=>{if(document.querySelectorAll(".edit-item").length<=1)return alert("Minimal harus ada satu rincian.");el.remove();updateTable()});
  el.querySelectorAll(".item-qty,.item-price-input").forEach(x=>x.addEventListener("input",updateTable));
  // Upload preview only; persistent URL upload is not faked.
- for(const [sel,targetSel] of [[".model-upload",".model-image"],[".motif-upload",".motif-image"]]){
-  el.querySelector(sel).addEventListener("change",e=>{const f=e.target.files?.[0];if(f)el.querySelector(targetSel).src=URL.createObjectURL(f)});
- }
+ el.querySelector(".model-upload").addEventListener("change",e=>{const f=e.target.files?.[0];if(!f)return;el.querySelector(".model-image").src=URL.createObjectURL(f);});
  el.querySelector(".custom-motif-upload").addEventListener("change",e=>{const f=e.target.files?.[0];if(!f)return;const target=el.querySelector(".custom-preview");target.classList.remove("empty");target.innerHTML=`<img alt="Pratinjau motif custom" src="${URL.createObjectURL(f)}">`;});
- el.querySelector(".fabric-color-upload").addEventListener("change",e=>{const f=e.target.files?.[0];if(!f)return;const img=el.querySelector(".fabric-color-image");img.src=URL.createObjectURL(f);img.style.display="block";el.querySelector(".fabric-color-swatch").style.display="none";});
  $("items").appendChild(el);setupKind();updateTable();
 }
 async function loadOrder(){
@@ -475,9 +520,20 @@ async function loadOrder(){
  $("invoice").value=o.reference_no||"";$("orderDate").value=String(o.ordered_at||"").slice(0,10);$("deadline").value=o.deadline||"";
  $("note").value=o.notes||"";$("total").value=kind==="custom"?(o.quoted_price??o.total_amount??0):(o.total_amount??0);
  $("dp").value=payment?.dp_amount||0;$("dpStatus").value=payment?.payment_status||"Belum Lunas";
- $("dp").disabled=true;$("dpStatus").disabled=true;
- $("dp").title="Data pembayaran dikelola terpisah; perubahan detail pesanan tidak mengubah pembayaran.";
- $("dpStatus").title="Data pembayaran dikelola terpisah; perubahan detail pesanan tidak mengubah pembayaran.";
+ $("remainingStatus").value=o.paid_in_full?"Lunas":"Belum Lunas";
+ $("dp").disabled=kind==="display";
+ $("dpStatusLabel").textContent=kind==="display"?"Status Pembayaran":"Status DP";
+ $("dpStatus").disabled=false;
+ $("dp").title=kind==="display"?"DP hanya berlaku untuk pesanan custom.":"Ubah nominal DP; sisa pembayaran dihitung otomatis.";
+ $("dpStatus").title=kind==="display"?"Lunas mencatat pembayaran penuh.":"Lunas menandai DP sudah dibayar; sisa pembayaran dihitung terpisah.";
+ // Katalog warna dan motif dari stok/menu Stok Warna & Motif, bukan unggah ulang.
+ const [motifResult,fabricResult]=await Promise.all([
+  sb.from("custom_embroidery_motifs").select("id,name,image_url,description").eq("is_active",true).order("sort_order",{ascending:true}),
+  sb.from("custom_fabric_colors").select("id,name,image_url,description").eq("is_active",true).order("sort_order",{ascending:true})
+ ]);
+ if(motifResult.error)console.warn("Katalog motif toko:",motifResult.error);
+ if(fabricResult.error)console.warn("Katalog warna kain:",fabricResult.error);
+ motifCatalog=motifResult.data||[];fabricCatalog=fabricResult.data||[];
  $("status").value=o.process_status||"Menunggu Konfirmasi";
  itemRows=o.order_items||[];
  if(kind==="display"){
@@ -537,7 +593,7 @@ async function loadOrder(){
  }
  setupKind();$("status").value=o.process_status||"Menunggu Konfirmasi";updateTable();
 }
-$("total").addEventListener("input",updateRemaining);$("dp").addEventListener("input",updateRemaining);
+$("total").addEventListener("input",updateRemaining);$("dp").addEventListener("input",updateRemaining);$("dpStatus").addEventListener("change",updateRemaining);$("remainingStatus").addEventListener("change",updateRemaining);
 $("addItemBtn").addEventListener("click",()=>{if(kind==="custom")addCustomItem({qty:1})});
 $("editForm").addEventListener("submit",async e=>{
  e.preventDefault();
@@ -546,6 +602,7 @@ $("editForm").addEventListener("submit",async e=>{
   if(!order)throw new Error("Data pesanan belum termuat.");
   const total=Number($("total").value||0),dp=kind==="display"?0:Number($("dp").value||0);
   const status=$("status").value,deadline=$("deadline").value||null;
+  if(dp>total)throw new Error("Nominal DP tidak boleh lebih besar dari total harga.");
   const orderUpdate={
    customer_name:$("customer").value.trim(),customer_type:$("type").value==="Instansi"?"institution":"individual",
    institution_name:$("type").value==="Instansi"?$("institution").value.trim():null,
@@ -556,6 +613,14 @@ $("editForm").addEventListener("submit",async e=>{
    if(status==="Dibatalkan")orderUpdate.cancelled_at=new Date().toISOString();
   }
   const {error:oe}=await sb.from("orders").update(orderUpdate).eq("id",id);if(oe)throw oe;
+  const paymentStatus=$("dpStatus").value;
+  const remainingStatus=kind==="display"?paymentStatus:$("remainingStatus").value;
+  if(kind==="custom"&&paymentStatus!=="Lunas"&&remainingStatus==="Lunas")throw new Error("DP harus lunas sebelum sisa pembayaran dapat dilunasi.");
+  if(kind==="custom"&&paymentStatus==="Lunas"&&dp>total)throw new Error("Nominal DP tidak boleh lebih besar dari total harga.");
+  const {error:pe}=await sb.rpc("admin_update_order_payment",{
+   p_order_id:id,p_total_amount:total,p_dp_amount:dp,p_dp_status:paymentStatus,p_remaining_status:remainingStatus
+  });
+  if(pe)throw new Error("Pembayaran belum tersinkron ke pemasukan. Pastikan migration supabase/20261029_admin_order_payment.sql sudah dijalankan. Detail: "+pe.message);
   if(kind==="display"){
    const cards=[...document.querySelectorAll("#items .display-item")];
    for(const card of cards){
@@ -584,14 +649,16 @@ $("editForm").addEventListener("submit",async e=>{
     const breakdown=Object.fromEntries([...el.querySelectorAll(".size-breakdown-input")].map(x=>[x.dataset.size,Math.max(0,Math.floor(Number(x.value||0)))]));
     const quantity=Object.values(breakdown).reduce((a,b)=>a+b,0)||Math.max(1,Math.floor(Number(el.querySelector(".item-qty").value||1)));
     const modelFile=el.querySelector(".model-upload").files?.[0];
-    const motifFile=el.querySelector(".motif-upload").files?.[0],customMotifFile=el.querySelector(".custom-motif-upload").files?.[0],fabricImageFile=el.querySelector(".fabric-color-upload").files?.[0];
+    const customMotifFile=el.querySelector(".custom-motif-upload").files?.[0];
     const modelUrl=await uploadImage(modelFile)||el.dataset.modelImageUrl||null;
-    const motifUrl=await uploadImage(motifFile)||el.dataset.storeMotifImageUrl||null;
+    const motifRecord=motifCatalog.find(m=>m.id===el.querySelector(".motif-catalog-select").value);
+    const fabricRecord=fabricCatalog.find(c=>c.id===el.querySelector(".fabric-catalog-select").value);
+    const motifUrl=motifRecord?.image_url||null;
     const customMotifUrl=await uploadImage(customMotifFile)||el.dataset.customMotifImageUrl||null;
-    const fabricImageUrl=await uploadImage(fabricImageFile)||el.dataset.fabricImageUrl||null;
+    const fabricImageUrl=fabricRecord?.image_url||null;
     const fabric=el.querySelector(".item-fabric").value.trim()||null;
-    const fabricColor=el.querySelector(".item-fabric-color").value.trim()||null;
-    const motifName=el.querySelector(".motif-name").value.trim();
+    const fabricColor=fabricRecord?.name||null;
+    const motifName=motifRecord?.name||"";
     const description=el.querySelector(".item-description").value.trim();
     const combinedDescription=[motifName?`Motif dari toko: ${motifName}`:"",description.replace(/^Motif dari toko:.*(?:\r?\n|$)/m,"").trim()].filter(Boolean).join("\n")||null;
     const isCustomFabric=el.dataset.fabricType==="custom"||Boolean(el.dataset.customFabricType);
@@ -599,7 +666,7 @@ $("editForm").addEventListener("submit",async e=>{
      design_description:combinedDescription,model_image_url:modelUrl,
      store_motif_image_url:motifUrl,custom_motif_image_url:customMotifUrl,fabric_image_url:fabricImageUrl,fabric_color:fabricColor,
      fabric_type:isCustomFabric?"custom":fabric,custom_fabric_type:isCustomFabric?fabric:null,
-     store_motif_id:el.dataset.storeMotifId||null,fabric_color_id:el.dataset.fabricColorId||null};
+     store_motif_id:motifRecord?.id||null,fabric_color_id:fabricRecord?.id||null};
     if(el.dataset.detailId){const {error:de}=await sb.from("custom_order_details").update(payload).eq("id",el.dataset.detailId);if(de)throw de;existingIds.push(el.dataset.detailId);}
     else{const {data:created,error:de}=await sb.from("custom_order_details").insert(payload).select("id").single();if(de)throw de;if(created?.id)existingIds.push(created.id);}
    }

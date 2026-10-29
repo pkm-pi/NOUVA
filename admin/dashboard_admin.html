@@ -228,7 +228,14 @@
    const counts=statusNames.slice(0,5).map(s=>orders.filter(o=>o.process_status===s).length);
    const labels=statusNames.slice(0,5);
    if(statusChart){statusChart.data.labels=labels;statusChart.data.datasets[0].data=counts;statusChart.update();return}
-   statusChart=new Chart(document.getElementById("statusChart"),{type:"doughnut",data:{labels,datasets:[{data:counts,backgroundColor:["#8b6cff","#35c4dd","#ff8f8f","#ffb347","#70c99b"],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:"45%",plugins:{legend:{display:true,position:"bottom",labels:{boxWidth:9,padding:8,font:{size:10}}}}}});
+   statusChart=new Chart(document.getElementById("statusChart"),{type:"doughnut",data:{labels,datasets:[{data:counts,
+    backgroundColor: [
+      "#9CA3AF", // Menunggu Konfirmasi
+      "#794691", // Sedang Disulam — ungu
+      "#0568f9", // Sedang Dijahit
+      "#f78e13", // Siap Diambil
+      "#70c99b"  // Selesai
+    ],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:"45%",plugins:{legend:{display:true,position:"bottom",labels:{boxWidth:9,padding:8,font:{size:10}}}}}});
  }
  function renderOrders(){
    const body=document.getElementById("recentOrders");

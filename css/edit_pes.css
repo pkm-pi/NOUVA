@@ -389,3 +389,29 @@ select{cursor:pointer}
 input[readonly]{background:#f2eff4;color:#746779}
 @media(max-width:760px){.display-item .mini-fields{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:420px){.display-item .mini-fields{grid-template-columns:minmax(0,1fr)}}
+
+
+/* Placeholder netral untuk motif toko yang memang tidak dipilih. */
+.motif-empty-placeholder{display:grid;place-items:center;width:100%;min-height:120px;padding:16px;box-sizing:border-box;border-radius:10px;background:#f4eff6;color:#8a7891;font-size:14px;text-align:center;}
+.motif-preview{display:grid;place-items:stretch;}
+.motif-preview .motif-image{width:100%;height:100%;object-fit:contain;}
+
+
+/* Katalog warna dan motif dari stok toko */
+.catalog-hint { display:block; margin:8px 2px 0; color:#8a7892; font-size:12px; line-height:1.45; }
+.motif-catalog-select, .fabric-catalog-select { width:100%; min-height:42px; margin-top:10px; padding:10px 12px; border:1px solid #e3d4e9; border-radius:10px; background:#fff; color:#3e1d49; font:inherit; }
+.motif-catalog-select:focus, .fabric-catalog-select:focus { outline:2px solid #8b4cc2; outline-offset:1px; }
+
+
+/* Pilihan visual katalog stok: tampilkan foto dan nama, bukan dropdown teks saja. */
+.catalog-select-native{display:none!important}
+.catalog-choice-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin:10px 0 4px;max-height:230px;overflow:auto;padding:2px}
+.catalog-choice{display:flex;flex-direction:column;align-items:stretch;gap:5px;min-width:0;padding:7px;border:1px solid #e4d5eb;border-radius:10px;background:#fff;color:#3e1d49;text-align:left;cursor:pointer;font:inherit;transition:border-color .15s,box-shadow .15s,transform .15s}
+.catalog-choice:hover{border-color:#8b4cc2;transform:translateY(-1px)}
+.catalog-choice.selected{border:2px solid #7937bd;padding:6px;background:#fbf7ff;box-shadow:0 0 0 2px #eadcf8}
+.catalog-choice img,.catalog-no-image{display:block;width:100%;height:78px;object-fit:cover;border-radius:7px;background:#f4eff6}
+.catalog-no-image{display:grid;place-items:center;color:#88758f;font-size:11px}
+.catalog-choice span{font-size:11px;font-weight:700;line-height:1.3;overflow-wrap:anywhere}
+.catalog-choice small{font-size:10px;line-height:1.3;color:#82718a;overflow-wrap:anywhere}
+.catalog-empty{grid-column:1/-1;padding:15px;border-radius:9px;background:#f7f1f8;color:#81728a;font-size:12px}
+@media(max-width:600px){.catalog-choice-grid{grid-template-columns:repeat(2,minmax(0,1fr));max-height:260px}.catalog-choice img,.catalog-no-image{height:90px}}

@@ -986,3 +986,11 @@ footer small {
   background: #fff3dc;
   border: 1px solid #f5d69c;
 }
+
+
+/* Status Sedang Disulam — ungu, selaras dengan identitas NOUVA */
+.badge.purple {
+  color: #794691;
+  background: #f1e7fa;
+  border: 1px solid #712da6;
+}

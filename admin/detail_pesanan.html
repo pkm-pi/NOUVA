@@ -144,13 +144,7 @@
             </div>
           </div>
           <hr/>
-          <div class="admin-payment-editor" style="display:grid;gap:12px;margin-top:16px">
-            <label>Total Harga (Rp)<input id="adminTotalPrice" type="number" min="0" step="1000" value="0" style="width:100%;padding:10px;border:1px solid #dfcfe7;border-radius:10px"></label>
-            <label>Nominal DP (Rp)<input id="adminDpAmount" type="number" min="0" step="1000" value="0" style="width:100%;padding:10px;border:1px solid #dfcfe7;border-radius:10px"></label>
-            <label>Status Pembayaran<select id="adminPaymentStatus" style="width:100%;padding:10px;border:1px solid #dfcfe7;border-radius:10px"><option>Belum Lunas</option><option>Lunas</option></select></label>
-            <button id="saveAdminPayment" type="button" style="padding:12px;border:0;border-radius:10px;background:#3d1d49;color:white;font-weight:700;cursor:pointer">✓ Simpan Harga & Pembayaran</button>
-            <small>Harga per produk custom dapat diubah langsung pada rincian produk. Total dihitung dari harga produk × jumlah.</small>
-          </div>
+
         </section>
 
         <section class="card progress">
@@ -192,7 +186,7 @@
         </button>
         <div class="item-detail ${index===0?'show':''}">
           <div class="product-overview"><div class="model-preview"><span>Model pakaian dari toko</span>${image(it.modelImage,it.name)}</div>
-            <div class="product-summary"><div><small>Nama Produk</small><strong>${esc(it.name)}</strong></div><div><small>Kategori</small><strong>${esc(it.category||"Belum diisi")}</strong></div><div><small>Jumlah</small><strong>${Number(it.qty||0)} pcs</strong></div><div><small>Jenis Kain</small><strong>${esc(it.fabric||"Belum diisi")}</strong></div><div><small>Harga Produk (per pcs)</small>${it.orderType === "custom" ? `<input class="custom-unit-price" type="number" min="0" step="1000" value="${Number(it.price||0)}" aria-label="Harga per pcs ${esc(it.name)}" style="width:100%;padding:8px;border:1px solid #dfcfe7;border-radius:8px">` : `<strong>${money(it.price)}</strong>`}</div><div><small>Total Produk</small><strong class="accent item-subtotal">${it.orderType === "custom" && !it.price ? "Belum ditentukan" : money(subtotal)}</strong></div></div>
+            <div class="product-summary"><div><small>Nama Produk</small><strong>${esc(it.name)}</strong></div><div><small>Kategori</small><strong>${esc(it.category||"Belum diisi")}</strong></div><div><small>Jumlah</small><strong>${Number(it.qty||0)} pcs</strong></div><div><small>Jenis Kain</small><strong>${esc(it.fabric||"Belum diisi")}</strong></div><div><small>Harga Produk (per pcs)</small><strong>${it.orderType === "custom" && !it.price ? "Menunggu penawaran" : money(it.price)}</strong></div><div><small>Total Produk</small><strong class="accent item-subtotal">${it.orderType === "custom" && !it.price ? "Belum ditentukan" : money(subtotal)}</strong></div></div>
           </div>
           ${it.orderType === "display" ? `<div class="spec-grid"><div class="spec-box"><span>Ukuran</span><strong>${esc(it.size||"—")}</strong></div><div class="spec-box"><span>Warna</span><strong>${esc(it.color||"—")}</strong></div><div class="spec-box"><span>No. Referensi Produk</span><strong>${esc(it.productReference||"—")}</strong></div><div class="spec-box full"><span>Deskripsi Produk</span><strong>${esc(it.description||"Belum ada deskripsi.")}</strong></div></div>` : `<div class="media-grid custom-media-grid">${storeMotif}${customMotif}${fabricColor}</div>
           <div class="spec-grid"><div class="spec-box full"><span>Deskripsi Motif / Model / Pakaian</span><strong>${esc(it.description||"Belum ada deskripsi.")}</strong></div></div>
@@ -258,16 +252,22 @@
     } else {
       $("dpPaymentRow").style.display="";
       $("dpDivider").style.display="";
-      $("dpPayment").textContent=money(pay?.dp_amount||0);
-      $("remainingPayment").textContent=money(Math.max(0,orderTotal-Number(pay?.dp_amount||0)));
-      $("dpStatus").textContent=pay?(pay.payment_status||"Belum Lunas"):"Belum ada data pembayaran";
-      $("remainingStatus").textContent=pay?(Number(pay.remaining_amount||0)<=0?"Lunas":"Belum Lunas"):"Belum ada data pembayaran";
+      const dpAmount = Number(pay?.dp_amount || 0);
+      const dpStatusValue = pay?.payment_status || "Belum Lunas";
+      // Samakan perhitungan dengan halaman Edit Pesanan:
+      // sebelum DP lunas, seluruh total masih menjadi kewajiban pembayaran.
+      // Setelah DP lunas, sisa = total - DP; jika pesanan lunas penuh, sisa = 0.
+      const remainingStatusValue = o.paid_in_full ? "Lunas" : "Belum Lunas";
+      const remainingAmount = dpStatusValue !== "Lunas"
+        ? orderTotal
+        : (remainingStatusValue === "Lunas" ? 0 : Math.max(0, orderTotal - dpAmount));
+      $("dpPayment").textContent=money(dpAmount);
+      $("remainingPayment").textContent=money(remainingAmount);
+      $("dpStatus").textContent=pay?dpStatusValue:"Belum ada data pembayaran";
+      $("remainingStatus").textContent=pay?remainingStatusValue:"Belum ada data pembayaran";
     }
     if($("dpStatus").textContent!=="Lunas") { $("dpStatus").classList.remove("paid"); $("dpStatus").classList.add("unpaid"); }
     if($("remainingStatus").textContent==="Lunas") { $("remainingStatus").classList.remove("unpaid"); $("remainingStatus").classList.add("paid"); }
-    if ($("adminTotalPrice")) $("adminTotalPrice").value = String(orderTotal);
-    if ($("adminDpAmount")) $("adminDpAmount").value = String(Number(pay?.dp_amount||0));
-    if ($("adminPaymentStatus")) $("adminPaymentStatus").value = pay?.payment_status || "Belum Lunas";
     $("editOrderBtn").href=`edit_pes.html?id=${encodeURIComponent(orderId)}`;
     $("editOrderBtn").style.display="inline-flex";
     let items=[];
@@ -309,7 +309,7 @@
           colorHex: colorRecord?.hex_code || colorRecord?.color_hex || "",
           modelImage: d.model_image_url || fallbackModel,
           customModel: d.model_image_url || "",
-          motif: motifName || "Belum dipilih",
+          motif: motifName || "Tidak dipilih",
           motifImage: motifRecord?.image_url || d.store_motif_image_url || "",
           customMotifImage: d.custom_motif_image_url || "",
           customMotif: "",
@@ -326,58 +326,6 @@
       $("productReference").textContent = product?.reference_no || "—";
     }
     renderItems(items);
-    const recalcCustomTotal = () => {
-      const inputs = [...document.querySelectorAll(".custom-unit-price")];
-      if (!inputs.length) return;
-      let total = 0;
-      inputs.forEach(input => {
-        const wrap = input.closest(".order-detail-wrap");
-        const qtyText = wrap?.querySelector(".item-name small")?.textContent || "";
-        const qty = Number((qtyText.match(/(\d+)\s*pcs/i)||[])[1]||0);
-        const amount = Math.max(0,Number(input.value||0));
-        total += qty * amount;
-        const subtotalEl = wrap?.querySelector(".item-subtotal");
-        if(subtotalEl) subtotalEl.textContent = amount ? money(qty*amount) : "Belum ditentukan";
-      });
-      $("adminTotalPrice").value = String(total);
-      $("totalPayment").textContent = money(total);
-      $("remainingPayment").textContent = money(Math.max(0,total-Number($("adminDpAmount").value||0)));
-    };
-    document.querySelectorAll(".custom-unit-price").forEach(input => input.addEventListener("input",recalcCustomTotal));
-    $("adminDpAmount")?.addEventListener("input",()=>{$("remainingPayment").textContent=money(Math.max(0,Number($("adminTotalPrice").value||0)-Number($("adminDpAmount").value||0)))});
-    $("adminPaymentStatus")?.addEventListener("change",()=>{if($("adminPaymentStatus").value==="Lunas"){$("adminDpAmount").value=$("adminTotalPrice").value;$("remainingPayment").textContent=money(0)}});
-    $("saveAdminPayment")?.addEventListener("click",async()=>{
-      const button=$("saveAdminPayment");button.disabled=true;button.textContent="Menyimpan…";
-      try{
-        let total=Math.max(0,Number($("adminTotalPrice").value||0));
-        let dp=Math.max(0,Number($("adminDpAmount").value||0));
-        const paymentStatus=$("adminPaymentStatus").value;
-        if(paymentStatus==="Lunas")dp=total;
-        if(dp>total)throw new Error("Nominal DP tidak boleh melebihi total harga.");
-        if(o.order_type==="custom"){
-          for(const input of document.querySelectorAll(".custom-unit-price")){
-            const wrap=input.closest(".order-detail-wrap"),detailId=wrap?.dataset.customDetailId;
-            if(!detailId)throw new Error("ID rincian produk custom tidak ditemukan.");
-            const {error:de}=await sb.from("custom_order_details").update({unit_price:Math.max(0,Number(input.value||0))}).eq("id",detailId).eq("order_id",orderId);
-            if(de)throw de;
-          }
-          total=[...document.querySelectorAll(".custom-unit-price")].reduce((sum,input)=>{const wrap=input.closest(".order-detail-wrap"),qty=Number(((wrap?.querySelector(".item-name small")?.textContent||"").match(/(\d+)\s*pcs/i)||[])[1]||0);return sum+qty*Math.max(0,Number(input.value||0))},0);
-        } else {
-          const {data:itemsNow,error:itemsError}=await sb.from("order_items").select("quantity,unit_price").eq("order_id",orderId);
-          if(itemsError)throw itemsError;
-          total=(itemsNow||[]).reduce((sum,it)=>sum+Number(it.quantity||0)*Number(it.unit_price||0),0);
-        }
-        if(paymentStatus==="Lunas")dp=total;
-        const {error:orderError}=await sb.from("orders").update({total_amount:total,quoted_price:o.order_type==="custom"?total:o.quoted_price}).eq("id",orderId);
-        if(orderError)throw orderError;
-        const paymentPayload={order_id:orderId,total_amount:total,dp_amount:dp,remaining_amount:paymentStatus==="Lunas"?0:Math.max(0,total-dp),payment_status:paymentStatus,updated_at:new Date().toISOString()};
-        const {error:paymentError}=await sb.from("payments").upsert(paymentPayload,{onConflict:"order_id"});
-        if(paymentError)throw paymentError;
-        alert("Harga dan pembayaran berhasil disimpan. Detail pelanggan menggunakan data yang sama.");
-        location.reload();
-      }catch(err){console.error(err);alert("Gagal menyimpan harga/pembayaran: "+(err.message||err))}
-      finally{button.disabled=false;button.textContent="✓ Simpan Harga & Pembayaran"}
-    });
     renderProgress(o.process_status,o.ordered_at,o.deadline,o.order_type);
   } catch(e) {
     console.error(e); const wrap=$("orderItems"); if(wrap) wrap.innerHTML=`<p role="alert">Gagal memuat detail pesanan: ${String(e.message||e)}</p>`;

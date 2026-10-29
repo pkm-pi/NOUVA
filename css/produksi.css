@@ -256,7 +256,7 @@ body{overflow-x:hidden}
 }
 .production-status span{margin-left:4px}
 .status-waiting{color:#7451bd;background:#eee6fa}
-.status-sewing{color:#198da5;background:#e0f4f8}
+.status-sewing{color:#0568f9;background:#e0f4f8}
 .status-finishing{color:#c87b18;background:#fff1dc}
 .status-ready{color:#26854a;background:#e3f5e8}
 .deadline{color:#df3535!important;font-weight:800;white-space:nowrap}
@@ -712,8 +712,8 @@ body{overflow-x:hidden}
 
 /* Integrasi data pesanan Supabase */
 .order-kind-label{display:block;width:fit-content;margin:5px auto 0;padding:2px 7px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:.04em}
-.order-kind-label.custom{background:#f1e5fa;color:#7135a0}
-.order-kind-label.display{background:#e9e5f4;color:#56346c}
+.order-kind-label.custom{background:#fff3dc;color:#986000;border:1px solid #f5d69c}
+.order-kind-label.display{background:#f1e7fa;color:#6d35a5;border:1px solid #dec8ef}
 .status-pending{background:#f1edf5!important;color:#6d6075!important;cursor:default!important}
 .status-cancelled{background:#fdebec!important;color:#b42332!important;cursor:default!important}
 .status-menu button:disabled{opacity:.45;cursor:not-allowed}
